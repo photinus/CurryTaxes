@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "purpose": "Ready-to-use headline facts and example copy for the app's landing/summary section, computed from the FY2025-26 published data already in tax-districts-fy2025-26.json (county_wide_pie_breakdown_as_published). No new data collection needed -- these are just pre-written sentences using numbers already on hand.",
+    "created": "2026-08-21"
+  },
+  "headline_facts": [
+    {
+      "stat": "For every $1 you pay in property tax, about 7 cents goes to Curry County government -- the rest goes to schools, fire districts, and other local services.",
+      "source_value": 0.0678,
+      "source_field": "county_wide_pie_breakdown_as_published.county in tax-districts-fy2025-26.json"
+    },
+    {
+      "stat": "Schools take the biggest share of your tax bill -- about 56 cents of every dollar.",
+      "source_value": 0.5565,
+      "source_field": "county_wide_pie_breakdown_as_published.schools"
+    },
+    {
+      "stat": "If you live inside Port Orford, Gold Beach, or Brookings, city government adds about another 15 cents of every dollar. Outside city limits, that share goes to zero.",
+      "source_value": 0.1465,
+      "source_field": "county_wide_pie_breakdown_as_published.cities"
+    }
+  ],
+  "dollar_story_formula": {
+    "description": "Guidance for turning a district's rate into a plain dollar figure for a hypothetical home. Don't hardcode a single example value -- compute this live from whatever assessed value the user enters (or a sensible default like $300,000, the app's home page could default to Curry County's approximate median).",
+    "formula": "annual_dollar_amount = (bill_rate / 1000) * assessed_value",
+    "example_for_copy_only": "A $300,000 assessed home at a rate of $0.6609 per $1,000 pays about $198/year to that one district. (300000/1000)*0.6609 = 198.27"
+  },
+  "opening_section_copy_draft": "Curious where your property tax dollars actually go? Curry County collects tax on behalf of about 48 different local agencies -- your county government is just one of them, and usually the smallest slice. Enter your home's assessed value below to see your own estimated breakdown, or explore the countywide averages.",
+  "caveat_copy_draft": "This is an estimate based on published FY2025-26 tax rates and your area's typical mix of districts. Your actual bill may vary slightly and is set by the Curry County Assessor's Office -- see your tax statement or contact the Assessor for the exact figure."
+}

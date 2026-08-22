@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "purpose": "Plain-language layer for the Curry County tax breakdown app. Maps the ~40 taxing districts (already categorized in tax-districts-fy2025-26.json) into a smaller set of everyday-language groups, with one-line and longer explanations for each. Intended for a general community audience, not policy wonks.",
+    "source_categories_reference": "See tax-districts-fy2025-26.json for the underlying district-level data. The 'category' field on each district there maps to 'source_categories' below.",
+    "created": "2026-08-21"
+  },
+  "display_groups": [
+    {
+      "id": "schools",
+      "label": "Schools",
+      "source_categories": ["school"],
+      "one_liner": "Pays for K-12 public schools and the local community college.",
+      "explanation": "This is the single biggest slice of your tax bill -- typically over half. It covers your local school district (teachers, buildings, buses), a regional education service district that supports smaller schools, and Southwestern Oregon Community College. Some of this may include voter-approved bonds for specific building projects.",
+      "icon_suggestion": "graduation-cap"
+    },
+    {
+      "id": "fire",
+      "label": "Fire & Emergency",
+      "source_categories": ["fire"],
+      "one_liner": "Funds your local fire department -- staff, trucks, and equipment.",
+      "explanation": "Curry County has over a dozen separate fire districts, each covering a different area. You're only taxed by the one that covers your property. This pays for firefighters (often volunteer), fire trucks, and emergency response equipment.",
+      "icon_suggestion": "flame"
+    },
+    {
+      "id": "county",
+      "label": "County Government",
+      "source_categories": ["county"],
+      "one_liner": "Runs core county services: the Sheriff's Office, courts, roads, and administration.",
+      "explanation": "This is the slice that funds Curry County's own government -- things like the Sheriff's Office and jail, the District Attorney, road maintenance, and the offices that run elections and process your property records. It's a smaller share than most people expect: only about 7 cents of every property tax dollar.",
+      "icon_suggestion": "landmark"
+    },
+    {
+      "id": "cities",
+      "label": "City Government",
+      "source_categories": ["city"],
+      "one_liner": "Funds your city government, if you live inside city limits.",
+      "explanation": "Only applies if your property is inside Port Orford, Gold Beach, or Brookings. It pays for city services like police (where the city has its own department), parks, and city administration. Properties outside city limits don't pay this.",
+      "icon_suggestion": "building-2"
+    },
+    {
+      "id": "health",
+      "label": "Health District",
+      "source_categories": ["health"],
+      "one_liner": "Supports local public health services and facilities.",
+      "explanation": "Curry County has a health district that funds public health programs and, in part, healthcare facility costs. This includes a voter-approved bond for specific health facility projects.",
+      "icon_suggestion": "heart-pulse"
+    },
+    {
+      "id": "library",
+      "label": "Library",
+      "source_categories": ["library"],
+      "one_liner": "Funds your local public library.",
+      "explanation": "Curry County has several library districts covering different communities. Yours pays for library staff, books, programs, and building upkeep for whichever library district covers your property.",
+      "icon_suggestion": "book-open"
+    },
+    {
+      "id": "roads",
+      "label": "Roads",
+      "source_categories": ["road"],
+      "one_liner": "A small local levy for road maintenance in specific areas.",
+      "explanation": "Most road funding in Curry County comes from state gas tax revenue, not property tax -- so this line is usually small or zero. It only applies to a few specific road districts.",
+      "icon_suggestion": "road"
+    },
+    {
+      "id": "other_local",
+      "label": "Other Local Districts",
+      "source_categories": ["port", "cemetery", "water", "sanitary", "urban_renewal"],
+      "one_liner": "Smaller local districts: ports, cemeteries, water, sewer, and downtown revitalization projects.",
+      "explanation": "This bucket groups several smaller special districts that only apply in specific areas: port districts (harbor and marina upkeep), cemetery districts, water and sanitary (sewer) districts, and urban renewal districts (which fund downtown improvement projects in Brookings and Gold Beach). Most properties are only in one or two of these, not all.",
+      "icon_suggestion": "layers"
+    }
+  ]
+}

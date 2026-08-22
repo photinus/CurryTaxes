@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "purpose": "Plain-language glossary for terms used in the tax breakdown app. Intended for inline tooltips/definitions (e.g. a (?) icon next to the term), not a standalone glossary page nobody reads.",
+    "created": "2026-08-21"
+  },
+  "terms": [
+    {
+      "term": "Assessed Value",
+      "short_definition": "The dollar figure the county uses to calculate your tax bill -- usually lower than what your home would actually sell for.",
+      "longer_note": "Oregon law limits how fast assessed value can grow each year, so in many cases it's well below market value, especially for homes that have been owned a long time."
+    },
+    {
+      "term": "Real Market Value",
+      "short_definition": "The county's estimate of what your property would sell for today.",
+      "longer_note": "This is different from assessed value (see above) and is not what your tax bill is based on."
+    },
+    {
+      "term": "Tax Rate / Bill Rate",
+      "short_definition": "How much you pay per $1,000 of assessed value.",
+      "longer_note": "Example: a rate of $2.50 means you pay $2.50 for every $1,000 of your property's assessed value. A $300,000 assessed home at that rate pays $750/year for that one district."
+    },
+    {
+      "term": "Levy",
+      "short_definition": "A tax a district is authorized to collect.",
+      "longer_note": "Districts don't set their own rate freely -- their levy is approved either permanently (voted in once, applies every year) or as a local option (voted in for a limited number of years)."
+    },
+    {
+      "term": "Permanent Rate",
+      "short_definition": "A tax rate that was voted in once and continues every year without needing renewal.",
+      "longer_note": "Most of the county, school, and fire district base rates are permanent rates."
+    },
+    {
+      "term": "Local Option Levy",
+      "short_definition": "An additional tax rate voters approved for a limited number of years, on top of the permanent rate.",
+      "longer_note": "These expire and have to be renewed by voters, unlike permanent rates."
+    },
+    {
+      "term": "Bond",
+      "short_definition": "A tax specifically for paying back money borrowed for a big one-time project, like a new school or hospital building.",
+      "longer_note": "Bonds are temporary -- they end once the borrowed money is paid off, usually after 15-20 years. They're listed separately from a district's regular operating rate."
+    },
+    {
+      "term": "Urban Renewal",
+      "short_definition": "A program where a city sets aside a slice of tax growth in a specific district to fund improvement projects there (like downtown revitalization).",
+      "longer_note": "It doesn't directly add to your tax rate the way other districts do -- instead it redirects some of the growth in property value within the renewal area toward local improvement projects, which can mean other districts collect slightly less from that specific area."
+    },
+    {
+      "term": "Code Area",
+      "short_definition": "A small zone where every property is taxed by the exact same combination of districts.",
+      "longer_note": "Curry County has about 45 of these. Two neighbors can be in different code areas -- and pay different total rates -- if one is covered by a different fire or water district."
+    },
+    {
+      "term": "Taxing District",
+      "short_definition": "Any local government or agency allowed to collect property tax, like a school district, fire district, or library district.",
+      "longer_note": "Curry County has around 48 separate taxing districts. Most properties fall within somewhere between 6 and 12 of them at once."
+    },
+    {
+      "term": "Compression / Measure 5 (M5) Limit",
+      "short_definition": "A constitutional cap that can reduce your tax bill if the combined rate for schools or general government gets too high.",
+      "longer_note": "This is a technical Oregon-specific safeguard; most residents won't need this explained beyond 'there's a legal ceiling on how high your combined rate can go.'"
+    }
+  ]
+}

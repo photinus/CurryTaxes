@@ -39,6 +39,36 @@
     "Other Funds": "#868e96",
   };
 
+  // Colors for the 8 plain-language display groups from category-groups.json.
+  const GROUP_COLORS = {
+    schools: "#f59f00",
+    fire: "#e03131",
+    county: "#4c6ef5",
+    cities: "#12b886",
+    health: "#f06595",
+    library: "#5c940d",
+    roads: "#495057",
+    other_local: "#7048e8",
+  };
+
+  // Keyword patterns used to auto-link the first glossary term that shows up
+  // in a short, dynamically-rendered snippet of text (e.g. a district's
+  // source note). Order matters: first match wins, and only one term is
+  // linked per snippet so a short note doesn't turn into a wall of tooltips.
+  const GLOSSARY_KEYWORD_PATTERNS = [
+    ["real_market_value", /real market value/i],
+    ["assessed_value", /assessed value/i],
+    ["local_option_levy", /local option(?: levy)?/i],
+    ["permanent_rate", /permanent rate/i],
+    ["tax_rate", /\b(?:tax rate|bill rate)\b/i],
+    ["levy", /\blevy\b/i],
+    ["bond", /\bbond\b/i],
+    ["urban_renewal", /urban renewal/i],
+    ["code_area", /code area/i],
+    ["taxing_district", /taxing district/i],
+    ["compression_m5", /compression|measure 5/i],
+  ];
+
   const fmtUSD = (n) =>
     n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
   const fmtUSD2 = (n) =>
@@ -46,13 +76,98 @@
   const fmtPct = (n) => (n * 100).toLocaleString("en-US", { maximumFractionDigits: 1 }) + "%";
 
   let DATA = null;
+  let GROUP_BY_ID = {};
   let state = {
     areaIndex: 0,
     codeAreaCode: null,
     advanced: false,
     inputMode: "assessed", // or "bill"
     value: 300000,
+    openGroups: new Set(),
+    fullDetailOpen: false,
   };
+
+  // ---------- Inline glossary tooltips ----------
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  // Builds the interactive markup for one glossary term. `label` is the
+  // visible text (kept exactly as authored at the call site, so plurals /
+  // phrasing can differ slightly from the canonical term name).
+  function glossSpan(key, label) {
+    const entry = DATA.glossary[key];
+    if (!entry) return escapeHtml(label);
+    const long = entry.longer_note
+      ? `<button type="button" class="gloss-more">More</button>
+         <span class="gloss-long" hidden>${escapeHtml(entry.longer_note)}</span>`
+      : "";
+    return `<span class="gloss-wrap">
+      <button type="button" class="gloss-term">${escapeHtml(label)}<sup>?</sup></button>
+      <span class="gloss-pop" role="tooltip" hidden>
+        <span class="gloss-term-name">${escapeHtml(entry.term)}</span>
+        <span class="gloss-short">${escapeHtml(entry.short_definition)}</span>
+        ${long}
+      </span>
+    </span>`;
+  }
+
+  // For short dynamic strings (e.g. a district's source note): link the
+  // first glossary term that appears, if any, leaving the rest as plain text.
+  function autoGlossify(text) {
+    for (const [key, re] of GLOSSARY_KEYWORD_PATTERNS) {
+      const m = text.match(re);
+      if (m && DATA.glossary[key]) {
+        const before = text.slice(0, m.index);
+        const after = text.slice(m.index + m[0].length);
+        return escapeHtml(before) + glossSpan(key, m[0]) + escapeHtml(after);
+      }
+    }
+    return escapeHtml(text);
+  }
+
+  // Converts static `<span class="gloss-anchor" data-gloss="key">Label</span>`
+  // markup (written directly in index.html) into interactive tooltip markup.
+  // Runs once at startup, after DATA has loaded.
+  function initGlossaryAnchors() {
+    document.querySelectorAll(".gloss-anchor").forEach((el) => {
+      const key = el.dataset.gloss;
+      if (!DATA.glossary[key]) return;
+      el.outerHTML = glossSpan(key, el.textContent);
+    });
+  }
+
+  // Single delegated listener handles every glossary popover, including ones
+  // rendered later by chart/table re-renders. Click/tap toggles open state
+  // (not hover-only, so it works on phones); clicking outside closes it.
+  function setupGlossaryEvents() {
+    document.addEventListener("click", (e) => {
+      const moreBtn = e.target.closest(".gloss-more");
+      if (moreBtn) {
+        const long = moreBtn.nextElementSibling;
+        const isHidden = long.hidden;
+        long.hidden = !isHidden;
+        moreBtn.textContent = isHidden ? "Less" : "More";
+        return;
+      }
+
+      const term = e.target.closest(".gloss-term");
+      if (term) {
+        const pop = term.nextElementSibling;
+        const willOpen = pop.hidden;
+        document.querySelectorAll(".gloss-pop").forEach((p) => (p.hidden = true));
+        pop.hidden = !willOpen;
+        return;
+      }
+
+      if (!e.target.closest(".gloss-pop")) {
+        document.querySelectorAll(".gloss-pop").forEach((p) => (p.hidden = true));
+      }
+    });
+  }
 
   // ---------- SVG donut ----------
   function polarToCartesian(cx, cy, r, angleDeg) {
@@ -214,15 +329,26 @@
     });
   }
 
+  // The assessed value to use for "$ on your value" context, regardless of
+  // which input mode is active (back out an implied assessed value from a
+  // total-bill entry using the currently selected code area's rate).
+  function effectiveAssessedValue() {
+    if (state.inputMode === "assessed") return state.value;
+    const rate = currentCodeArea().computed_rate;
+    return rate > 0 ? (state.value / rate) * 1000 : 0;
+  }
+
   function renderCodePicker() {
     const select = document.getElementById("code-picker");
     select.innerHTML = "";
     const area = currentArea();
+    const assessedValue = effectiveAssessedValue();
     area.code_areas.forEach((ca) => {
       const opt = document.createElement("option");
       opt.value = ca.code;
       const flag = ca.flagged ? " ⚠️" : "";
-      opt.textContent = `Code ${ca.code}${ca.representative ? " (representative)" : ""} — ${ca.computed_rate.toFixed(4)}/$1,000${flag}`;
+      const yearly = (assessedValue / 1000) * ca.computed_rate;
+      opt.textContent = `Code ${ca.code}${ca.representative ? " (representative)" : ""} — ${ca.computed_rate.toFixed(4)}/$1,000 ≈ ${fmtUSD(yearly)}/yr${flag}`;
       select.appendChild(opt);
     });
     const cur = currentCodeArea();
@@ -269,31 +395,40 @@
     const districtAmounts = ca.districts.map((d) => ({
       name: d.name,
       category: d.category,
+      group: d.group,
       bill_rate: d.bill_rate,
+      note: d.note,
       amount: (assessedValue / 1000) * d.bill_rate,
     }));
 
-    // Group by category for donut + legend
-    const byCategory = {};
+    // Group into the 8 plain-language display groups for the default view.
+    const byGroup = {};
     districtAmounts.forEach((d) => {
-      byCategory[d.category] = (byCategory[d.category] || 0) + d.amount;
+      (byGroup[d.group] = byGroup[d.group] || []).push(d);
     });
-    const segments = Object.entries(byCategory)
-      .filter(([, v]) => v > 0)
-      .map(([cat, v]) => ({
-        label: CATEGORY_LABELS[cat] || cat,
-        value: v,
-        color: CATEGORY_COLORS[cat] || "#adb5bd",
-      }));
+    const groupSegments = Object.entries(byGroup)
+      .map(([groupId, ds]) => ({
+        groupId,
+        meta: GROUP_BY_ID[groupId],
+        value: ds.reduce((s, d) => s + d.amount, 0),
+        districts: ds.slice().sort((a, b) => b.amount - a.amount),
+      }))
+      .filter((g) => g.value > 0)
+      .sort((a, b) => b.value - a.value);
 
-    renderDonut(document.getElementById("bill-donut"), segments, {
-      ariaLabel: "Tax bill by category",
-      centerTop: fmtUSD(totalBill),
-      centerBottom: "per year",
-    });
-    renderLegend(document.getElementById("bill-legend"), segments);
+    renderDonut(
+      document.getElementById("bill-donut"),
+      groupSegments.map((g) => ({ label: g.meta.label, value: g.value, color: GROUP_COLORS[g.groupId] })),
+      {
+        ariaLabel: "Tax bill by category",
+        centerTop: fmtUSD(totalBill),
+        centerBottom: "per year",
+      }
+    );
 
-    // District table, sorted by amount desc
+    renderGroupAccordion(groupSegments, totalBill);
+
+    // Full-precision district table, sorted by amount desc
     const tbody = document.querySelector("#bill-table tbody");
     tbody.innerHTML = "";
     districtAmounts
@@ -301,8 +436,9 @@
       .sort((a, b) => b.amount - a.amount)
       .forEach((d) => {
         const tr = document.createElement("tr");
+        const noteHtml = d.note ? `<div class="dim" style="margin-top:0.15rem">${autoGlossify(d.note)}</div>` : "";
         tr.innerHTML = `
-          <td>${d.name}</td>
+          <td>${autoGlossify(d.name)}${noteHtml}</td>
           <td class="dim">${CATEGORY_LABELS[d.category] || d.category}</td>
           <td>${d.bill_rate.toFixed(4)}</td>
           <td>${fmtUSD2(d.amount)}</td>
@@ -318,6 +454,55 @@
       <div class="row"><span>Assessed value used</span><span>${fmtUSD(assessedValue)}</span></div>
       <div class="row"><span>Districts stacked here</span><span>${ca.districts.length}</span></div>
     `;
+
+    document.getElementById("bill-caveat").textContent = DATA.headline_stats.caveat_copy;
+  }
+
+  function renderGroupAccordion(groupSegments, totalBill) {
+    const wrap = document.getElementById("bill-groups");
+    wrap.innerHTML = "";
+    groupSegments.forEach((g) => {
+      const isOpen = state.openGroups.has(g.groupId);
+      const row = document.createElement("div");
+      row.className = "group-row" + (isOpen ? " open" : "");
+
+      const detailLines = g.districts
+        .map(
+          (d) => `
+            <div class="group-detail-line">
+              <span class="group-detail-name">${autoGlossify(d.name)} <span class="dim">(${d.bill_rate.toFixed(4)}/$1,000)</span></span>
+              <span class="group-detail-amount">${fmtUSD2(d.amount)}</span>
+            </div>`
+        )
+        .join("");
+
+      row.innerHTML = `
+        <button type="button" class="group-row-header" aria-expanded="${isOpen}">
+          <span class="group-swatch" style="background:${GROUP_COLORS[g.groupId]}"></span>
+          <span class="group-row-main">
+            <span class="group-row-label">${g.meta.label}</span>
+            <span class="group-row-oneliner">${g.meta.one_liner}</span>
+          </span>
+          <span class="group-row-amounts">
+            <span class="group-row-amount">${fmtUSD(g.value)}</span>
+            <span class="group-row-pct">${totalBill > 0 ? fmtPct(g.value / totalBill) : "0%"}</span>
+          </span>
+          <span class="group-row-chevron" aria-hidden="true">&#9656;</span>
+        </button>
+        <div class="group-row-detail" ${isOpen ? "" : "hidden"}>${detailLines}</div>
+      `;
+
+      row.querySelector(".group-row-header").addEventListener("click", () => {
+        if (state.openGroups.has(g.groupId)) {
+          state.openGroups.delete(g.groupId);
+        } else {
+          state.openGroups.add(g.groupId);
+        }
+        renderBillTab();
+      });
+
+      wrap.appendChild(row);
+    });
   }
 
   function setupBillControls() {
@@ -349,11 +534,15 @@
         }
         state.inputMode = newMode;
         document.getElementById("value-input").value = state.value;
-        document.getElementById("value-hint").textContent =
+        const hint = document.getElementById("value-hint");
+        hint.innerHTML =
           newMode === "assessed"
-            ? "Assessed value is usually well below market value in Oregon — check your tax statement or the Assessor's records for your parcel's actual figure."
-            : "Enter the total annual property tax amount from a bill; this app will back out an implied assessed value using the composite rate for the selected area.";
+            ? `${glossSpan("assessed_value", "Assessed value")} is usually well below ${glossSpan("real_market_value", "real market value")} in Oregon — check your tax statement or the Assessor's records for your parcel's actual figure.`
+            : autoGlossify(
+                "Enter the total annual property tax amount from a bill; this app will back out an implied assessed value using the composite rate for the selected area."
+              );
         renderBillTab();
+        renderCodePicker();
       });
     });
 
@@ -361,6 +550,16 @@
       const v = parseFloat(e.target.value);
       state.value = isNaN(v) ? 0 : v;
       renderBillTab();
+      renderCodePicker();
+    });
+
+    document.getElementById("full-detail-btn").addEventListener("click", (e) => {
+      state.fullDetailOpen = !state.fullDetailOpen;
+      document.getElementById("full-detail-body").hidden = !state.fullDetailOpen;
+      e.currentTarget.setAttribute("aria-expanded", String(state.fullDetailOpen));
+      e.currentTarget.textContent = state.fullDetailOpen
+        ? "Hide full detail"
+        : "Show full detail — every taxing district";
     });
   }
 
@@ -437,18 +636,39 @@
     });
   }
 
+  // ---------- Plain-language intro ----------
+  function renderIntro() {
+    document.getElementById("intro-opening").textContent = DATA.headline_stats.opening_section_copy;
+    const list = document.getElementById("intro-facts");
+    list.innerHTML = "";
+    // Two of the three headline facts: the county's small share and the
+    // schools' large share are the most universally-true (the city one is
+    // conditional on living in city limits, so it's covered in depth in the
+    // district breakdown instead of the lead).
+    DATA.headline_stats.headline_facts.slice(0, 2).forEach((f) => {
+      const li = document.createElement("li");
+      li.textContent = f.stat;
+      list.appendChild(li);
+    });
+  }
+
   // ---------- Init ----------
   async function init() {
     const res = await fetch("data/app-data.json");
     DATA = await res.json();
+    GROUP_BY_ID = {};
+    DATA.category_groups.forEach((g) => (GROUP_BY_ID[g.id] = g));
 
     setupTabs();
+    setupGlossaryEvents();
+    renderIntro();
     renderAreaPicker();
     renderCodePicker();
     setupBillControls();
     renderBillTab();
     renderCountyTab();
     renderAboutTab();
+    initGlossaryAnchors();
   }
 
   document.addEventListener("DOMContentLoaded", init);

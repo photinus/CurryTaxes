@@ -28,6 +28,12 @@
 
   <!-- TAX BILL TAB -->
   <section id="tab-bill" class="tab-panel" aria-hidden="false">
+
+    <div class="card intro-card">
+      <p id="intro-opening"></p>
+      <ul class="headline-facts" id="intro-facts"></ul>
+    </div>
+
     <div class="panel-grid">
       <div class="controls-card card">
         <h2>1. Pick where the property is</h2>
@@ -36,7 +42,7 @@
         <div class="advanced-toggle">
           <label>
             <input type="checkbox" id="advanced-toggle" />
-            Show exact code areas (advanced &mdash; ~45 sub-areas)
+            Show exact <span class="gloss-anchor" data-gloss="code_area">code areas</span> (advanced &mdash; ~45 sub-areas)
           </label>
         </div>
         <div id="code-picker-wrap" class="code-picker-wrap" hidden>
@@ -55,24 +61,40 @@
           <span class="dollar-prefix">$</span>
           <input type="number" id="value-input" inputmode="numeric" min="0" step="1000" value="300000" />
         </div>
-        <p class="hint" id="value-hint">Assessed value is usually well below market value in Oregon &mdash; check your tax statement or the Assessor's records for your parcel's actual figure.</p>
+        <p class="hint" id="value-hint">
+          <span class="gloss-anchor" data-gloss="assessed_value">Assessed value</span> is usually well below
+          <span class="gloss-anchor" data-gloss="real_market_value">real market value</span> in Oregon &mdash;
+          check your tax statement or the Assessor's records for your parcel's actual figure.
+        </p>
 
         <div class="rate-summary" id="rate-summary"></div>
+        <p class="estimate-caveat" id="bill-caveat"></p>
       </div>
 
       <div class="chart-card card">
         <h2 id="bill-chart-title">Tax bill breakdown</h2>
         <div class="chart-area">
           <div class="donut-wrap" id="bill-donut"></div>
-          <div class="legend" id="bill-legend"></div>
         </div>
-        <div class="district-table-wrap">
-          <table class="district-table" id="bill-table">
-            <thead>
-              <tr><th>Taxing district</th><th>Category</th><th>Rate&nbsp;/$1,000</th><th>Your&nbsp;share</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div class="group-accordion" id="bill-groups"></div>
+
+        <div class="full-detail-toggle">
+          <button type="button" class="full-detail-btn" id="full-detail-btn" aria-expanded="false">Show full detail &mdash; every taxing district</button>
+          <div class="full-detail-body" id="full-detail-body" hidden>
+            <div class="district-table-wrap">
+              <table class="district-table" id="bill-table">
+                <thead>
+                  <tr>
+                    <th><span class="gloss-anchor" data-gloss="taxing_district">Taxing district</span></th>
+                    <th>Category</th>
+                    <th><span class="gloss-anchor" data-gloss="tax_rate">Rate&nbsp;/$1,000</span></th>
+                    <th>Your&nbsp;share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -83,12 +105,12 @@
     <div class="panel-grid">
       <div class="controls-card card">
         <h2>The county's own slice</h2>
-        <p>Curry County government itself keeps only its permanent rate of
+        <p>Curry County government itself keeps only its <span class="gloss-anchor" data-gloss="permanent_rate">permanent rate</span> of
           <strong>$0.5996 per $1,000</strong> of assessed value &mdash; roughly
           <strong>7&cent; of every property tax dollar</strong> collected in the county.
           Everything else on a tax bill (schools, fire districts, cities, ports,
-          libraries, health districts, urban renewal) is collected by the County
-          Assessor but spent by ~48 separate independent taxing jurisdictions,
+          libraries, health districts, <span class="gloss-anchor" data-gloss="urban_renewal">urban renewal</span>) is collected by the County
+          Assessor but spent by ~48 separate independent <span class="gloss-anchor" data-gloss="taxing_district">taxing districts</span>,
           not by county government.</p>
         <p>This view shows only what the county government itself budgets and
           spends, from the FY2025&ndash;26 <em>proposed</em> budget.</p>
@@ -127,7 +149,7 @@
         Curry County, Oregon's property tax system easier to understand &mdash;
         it is <strong>not</strong> an official tax calculator and should not be
         used to predict an exact bill. Actual bills depend on your parcel's exact
-        code area, any exemptions, compression (Oregon's Measure 5 rate limits),
+        code area, any exemptions, <span class="gloss-anchor" data-gloss="compression_m5">compression</span> (Oregon's Measure 5 rate limits),
         special assessments, and mid-year changes. For your exact bill, contact
         the <strong>Curry County Assessor's Office</strong>.</p>
 
