@@ -117,6 +117,10 @@ def load(name):
         return json.load(f)
 
 
+def fmt_money_py(n):
+    return f"${n:,.0f}"
+
+
 def main():
     budget = load("county-budget-fy2025-26.json")
     districts_doc = load("tax-districts-fy2025-26.json")
@@ -131,6 +135,11 @@ def main():
     health_explainer_doc = load("health-district-explainer.json")
     upcoming_changes_doc = load("upcoming-changes.json")
     fire_context_doc = load("fire-district-context.json")
+    district_budget_docs = {
+        "Central Curry School District 1": load("central-curry-budget-detail.json"),
+        "Brookings-Harbor School District 17C": load("brookings-harbor-budget-detail.json"),
+        "Port Orford-Langlois School District 2CJ": load("port-orford-langlois-budget-detail.json"),
+    }
 
     districts = districts_doc["districts"]
     rate_by_name = {d["name"]: d["bill_rate"] for d in districts}
@@ -325,6 +334,138 @@ def main():
         # bond line, where one exists).
         return round(sum(rate_by_name.get(c, 0.0) for c in codes), 4)
 
+    # Each district's own *-budget-detail.json includes a `budget_message_
+    # highlights` list written for a general narrative, not a single clean
+    # pull-quote -- and Port Orford-Langlois's source (a monthly business-
+    # office report) has no enrollment/funding narrative at all, unlike the
+    # other two districts' full adopted-budget messages. Hand-picked here
+    # per the source material rather than passed through as one big blob.
+    BUDGET_PULL_QUOTES = {
+        "Central Curry School District 1": {
+            "quote": (
+                "Declining enrollment coupled with a decrease in the teacher "
+                "experience adjustment is negatively impacting our state "
+                "funding. The district continues to receive more funds from "
+                "property taxes than the state school fund."
+            ),
+            "attribution": "From Central Curry's own FY2025-26 adopted budget message",
+            "extra_context": None,
+        },
+        "Brookings-Harbor School District 17C": {
+            "quote": (
+                "School districts in Oregon are funded based on student "
+                "enrollment. BHSD continues to experience a slow, long-term "
+                "decline in enrollment. Fewer students result in less "
+                "funding, which requires careful planning and ongoing "
+                "adjustments to staffing levels."
+            ),
+            "attribution": "From Brookings-Harbor's own FY2025-26 adopted budget message",
+            "extra_context": (
+                "The 2025-26 budget cuts 11 licensed and 4.75 classified "
+                "positions, and the district anticipates needing about $1.7 "
+                "million in further reductions in 2026-27, since two "
+                "one-time revenue sources propping up this year's budget (a "
+                "delayed federal forest-fee payment and a fund carryover) "
+                "won't repeat."
+            ),
+        },
+        "Port Orford-Langlois School District 2CJ": {
+            "quote": None,
+            "attribution": None,
+            "extra_context": (
+                "Port Orford-Langlois ran a free breakfast and lunch program "
+                "open to all children 18 and under (not just enrolled "
+                "students) from June 22 to August 6, 2026, alongside its "
+                "summer Ready-Set-Learn, Extended School Year, and Credit "
+                "Recovery programs -- a concrete example of how a small "
+                "district uses federal and state child nutrition funding to "
+                "serve the wider community."
+            ),
+        },
+    }
+
+    # Same reasoning as BUDGET_PULL_QUOTES: source scale_note fields are
+    # already reader-clean prose, but only two of the three districts have
+    # one (Central Curry's file doesn't include a size comparison).
+    BUDGET_SCALE_NOTES = {
+        "Brookings-Harbor School District 17C": (
+            "Brookings-Harbor's General Fund ($21.68M) is roughly 2.8x the "
+            "size of Central Curry's ($7.68M), consistent with its much "
+            "larger enrollment (~1,300+ students vs. ~240) -- a size "
+            "difference that tracks enrollment, not funding adequacy."
+        ),
+        "Port Orford-Langlois School District 2CJ": (
+            "Port Orford-Langlois's General Fund (~$6.5-6.6M) is the "
+            "smallest of the three districts, consistent with having the "
+            "smallest enrollment of the three (roughly 220-300 students)."
+        ),
+    }
+
+    BUDGET_RECONCILE_TOLERANCE = 25  # dollars; source files carry $0-1 rounding at most when clean
+
+    def build_budget_detail(official_name):
+        raw = district_budget_docs.get(official_name)
+        if raw is None:
+            return None
+
+        exp = raw["general_fund_expenditures_by_program"]
+        categories = {}
+        recon_notes = []
+        subtotal_sum = 0.0
+        for cat_key in ("instruction", "support_services", "other"):
+            cat = exp[cat_key]
+            subtotal = cat["subtotal"]
+            subtotal_sum += subtotal
+            programs_raw = cat.get("programs", {})
+            programs = {k: v for k, v in programs_raw.items() if isinstance(v, (int, float))}
+            program_sum = round(sum(programs.values()), 2) if programs else None
+            flagged = program_sum is not None and abs(program_sum - subtotal) > BUDGET_RECONCILE_TOLERANCE
+            if flagged:
+                diff = round(program_sum - subtotal, 2)
+                recon_notes.append(
+                    f"{cat_key.replace('_', ' ').title()}: the district's own line-item programs sum to "
+                    f"{fmt_money_py(program_sum)}, {fmt_money_py(abs(diff))} {'more' if diff > 0 else 'less'} than "
+                    f"its published {cat_key.replace('_', ' ')} subtotal of {fmt_money_py(subtotal)} -- a "
+                    f"discrepancy in the source document, not resolved here."
+                )
+            categories[cat_key] = {
+                "subtotal": subtotal,
+                "programs": programs if programs else None,
+                "program_sum": program_sum,
+                "flagged": flagged,
+                "note": cat.get("note"),
+            }
+
+        exp_total = exp["total"]
+        subtotal_sum = round(subtotal_sum, 2)
+        if abs(subtotal_sum - exp_total) > BUDGET_RECONCILE_TOLERANCE:
+            diff = round(subtotal_sum - exp_total, 2)
+            recon_notes.append(
+                f"The district's own Instruction/Support Services/Other subtotals add up to "
+                f"{fmt_money_py(subtotal_sum)}, {fmt_money_py(abs(diff))} {'more' if diff > 0 else 'less'} than its "
+                f"published General Fund total of {fmt_money_py(exp_total)} -- another discrepancy in the source "
+                f"document itself, not something we introduced or resolved."
+            )
+
+        by_object = exp.get("by_object_alternate_view")
+
+        quotes = BUDGET_PULL_QUOTES.get(official_name, {})
+
+        return {
+            "fiscal_year": raw["_meta"]["fiscal_year"],
+            "source": raw["_meta"]["source"],
+            "confidence": raw["_meta"]["confidence"],
+            "revenue_total": raw["general_fund_revenue"]["total"],
+            "expenditure_total": exp_total,
+            "categories": categories,
+            "reconciliation_notes": recon_notes,
+            "pull_quote": quotes.get("quote"),
+            "pull_quote_attribution": quotes.get("attribution"),
+            "extra_context": quotes.get("extra_context"),
+            "scale_note": BUDGET_SCALE_NOTES.get(official_name),
+            "by_object_alternate_view": by_object,
+        }
+
     k12_out = []
     for d in school_districts_doc["k12_districts"]:
         codes = [d["code_in_tax_data"]] + ([d["code_in_tax_data_bond"]] if d.get("code_in_tax_data_bond") else [])
@@ -343,8 +484,15 @@ def main():
                 "enrollment_note": d.get("enrollment_note"),
                 "current_news_note": NEWS_NOTE_OVERRIDES.get(d["code_in_tax_data"], d.get("current_news_note")),
                 "funding": funding,
+                "budget_detail": build_budget_detail(d["official_name"]),
             }
         )
+
+    missing_budget_detail = [
+        name for name in district_budget_docs if name not in {d["official_name"] for d in school_districts_doc["k12_districts"]}
+    ]
+    if missing_budget_detail:
+        raise SystemExit(f"Budget detail files loaded for unknown districts: {missing_budget_detail}")
 
     regional_out = []
     for d in school_districts_doc["regional_education_entities"]:

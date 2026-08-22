@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "district": "Port Orford-Langlois School District 2CJ",
+    "source": "Business Office School Board Report, August 17, 2026 (includes FY2026-27 budget/appropriations detail as of 07/31/2026)",
+    "source_type": "Monthly business-office board report, not a full adopted-budget narrative document -- user-supplied upload, not independently fetched.",
+    "fund": "General Fund (Fund 100) only.",
+    "fiscal_year": "2026-2027 Budget (as adopted/appropriated -- this report is dated one month into the fiscal year)",
+    "extracted": "2026-08-22",
+    "confidence": "High for the underlying figures (transcribed directly from the district's own report tables) -- but see fiscal_year_mismatch_warning and small_reconciliation_gap below before using alongside the other two districts.",
+    "fiscal_year_mismatch_warning": "Central Curry and Brookings-Harbor's data in this project are both FY2025-26 Adopted. This Port Orford-Langlois data is FY2026-27. That's a one-year offset -- state and local revenue figures will reflect a different year's rates and enrollment, so a direct side-by-side dollar comparison across all three districts would be comparing different fiscal years. If the app wants strict comparability, either source Port Orford-Langlois's FY2025-26 figures separately, or clearly label each district's fiscal year in the UI (the existing per-district fiscal_year field already supports this) and avoid implying the three numbers are contemporaneous.",
+    "small_reconciliation_gap": "The report's revenue/expenditure-by-OBJECT total ($6,575,069.28) and its expenditure-by-FUNCTION total ($6,549,069.28, from the 'General Fund (100) Appropriations' table) differ by $26,000. This is a small gap in the source document itself (likely a rounding or presentation difference between the two tables in this monthly report, not an error in transcription) -- flagged rather than silently resolved. Use the by-function total ($6,549,069.28) for the Instruction/Support Services/Other breakdown below, and the by-object total ($6,575,069.28) for the revenue-side total, matching how each table is labeled in the source."
+  },
+  "budget_message_highlights": [
+    "No enrollment-decline or funding-pressure narrative was available for this district in this pass -- unlike Central Curry and Brookings-Harbor, this source is a monthly business-office report, not an annual adopted-budget message with that kind of commentary. If a fuller Port Orford-Langlois budget document turns up later, check it for a comparable pull-quote.",
+    "District mission statement (from the report header): 'We are here to help our Students... Navigate Challenges with Grace, Prepare for Their Futures and Anchor Themselves in Our Community.'",
+    "The district ran a free breakfast and lunch program for ALL children 18 and under (not limited to enrolled students) from June 22 to August 6, 2026, timed to coincide with its summer Ready-Set-Learn, Extended School Year, and Credit Recovery programs -- a concrete example of a small district's community-facing use of federal/state child nutrition funding, worth a mention if the app covers food service programs.",
+    "Superintendent: Aaron Miller."
+  ],
+  "general_fund_revenue": {
+    "total": 6575069.28,
+    "by_source": {
+      "local": {
+        "total": 2487000,
+        "detail": {
+          "current_year_taxes": 2355000,
+          "prior_year_taxes": 25000,
+          "county_tax_sales_back_tax": 22000,
+          "interest_on_investments": 75000,
+          "miscellaneous_revenues": 10000
+        }
+      },
+      "intermediate": {
+        "total": 350,
+        "detail": {
+          "county_school_funds": 350
+        },
+        "note": "Same 'intermediate' category pattern seen in Brookings-Harbor's budget -- very small for this district."
+      },
+      "state": {
+        "total": 2287719.28,
+        "detail": {
+          "state_school_fund_general_support": 2257719.28,
+          "common_school_fund": 30000
+        }
+      },
+      "federal": {
+        "total": 0,
+        "detail": {
+          "federal_forest_fees": 0
+        },
+        "note": "Budgeted at $0 for FY2026-27, unlike Central Curry ($75,000) and Brookings-Harbor ($1,013,025), both of which budgeted federal forest fee revenue. Worth double-checking against next year's actuals or an earlier fiscal year -- this could reflect real district-specific circumstances (e.g. different federal land holdings in this district's boundary) or simply a conservative $0 budget placeholder pending uncertain federal payments, consistent with the O&C/SRS funding uncertainty already noted in non-property-tax-revenue.json from an earlier pass."
+      },
+      "other_beginning_fund_balance": 1800000
+    }
+  },
+  "general_fund_expenditures_by_program": {
+    "total": 6549069.28,
+    "note": "This total is $26,000 less than the revenue-side total -- see small_reconciliation_gap above.",
+    "instruction": {
+      "subtotal": 2980965.51,
+      "programs": {
+        "note": "This district's report only provided the Instruction total, not a further breakdown into elementary/middle/high/special-ed sub-programs the way Central Curry's and Brookings-Harbor's adopted budgets did. If a more detailed Port Orford-Langlois budget document is found later, break this out to match the other two districts' granularity."
+      }
+    },
+    "support_services": {
+      "subtotal": 3288451.07,
+      "programs": {
+        "note": "Same limitation as above -- only the Support Services total was available in this source, not a function-by-function breakdown (guidance, library, transportation, plant operations, etc.)."
+      }
+    },
+    "other": {
+      "subtotal": 279652.7,
+      "programs": {
+        "community_services": 0,
+        "building_acquisition": 10000,
+        "debt_service": 0,
+        "transfers": 0,
+        "contingency": 0,
+        "reserved_for_next_year": 269652.7
+      }
+    },
+    "by_object_alternate_view": {
+      "total": 6575069.28,
+      "note": "The source report also breaks expenditures down by OBJECT rather than function/program -- included here as an alternate view since it's a different useful cut of the same budget (e.g. 'how much goes to salaries' vs. 'how much goes to instruction').",
+      "salaries": 2786122.47,
+      "payroll_benefits": 2021760.46,
+      "professional_services": 875300,
+      "supplies": 369600,
+      "capital_outlay": 25000,
+      "other": 202633.65,
+      "transfers": 25000,
+      "contingency": 269652.7
+    }
+  },
+  "app_display_guidance": {
+    "suggested_grouping": "Use the same Instruction / Support Services / Other framing as the other two districts for the primary view, using the by-function figures above ($6,549,069.28 total). Note in the UI (or in a footnote) that Port Orford-Langlois's data reflects a different fiscal year (2026-27) than Central Curry and Brookings-Harbor (2025-26) -- don't present all three as if they're the same snapshot in time.",
+    "biggest_single_program": "Support Services ($3,288,451.07) is actually larger than Instruction ($2,980,965.51) for this district -- the opposite pattern from what the object-level detail alone would suggest, and worth double-checking against a fuller budget document if one is found, since it's a notable data point (a small district where support/administrative costs slightly exceed direct instruction costs).",
+    "scale_note": "Port Orford-Langlois's General Fund (~$6.5-6.6M) is the smallest of the three districts -- smaller than Central Curry (~$7.7M) despite Central Curry also being a small district, and much smaller than Brookings-Harbor (~$21.7M). Consistent with it having the smallest enrollment of the three (roughly 220-300 students).",
+    "missing_detail_flag": "Unlike the other two districts, this data doesn't include a granular program-by-program breakdown (elementary vs. middle vs. high school instruction, or guidance vs. library vs. transportation within support services). If the app's 'see every program' expand view is important for consistency across all three districts, flag this district as showing summary-level detail only, or seek out a fuller Port Orford-Langlois budget document to fill in the gap -- see the district and BoardBook links already noted in remaining-districts-to-fetch.md from the earlier pass."
+  }
+}

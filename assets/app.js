@@ -86,6 +86,30 @@
     other: "County and ESD pass-through funds, plus small one-time items.",
   };
 
+  // Expenditure-side breakdown (what a district's own General Fund budget
+  // is spent on), distinct from the revenue-side FUNDING_* constants above
+  // (where the money comes from).
+  const EXPENDITURE_COLORS = {
+    instruction: "#4c6ef5",
+    support_services: "#f59f00",
+    other: "#adb5bd",
+  };
+  const EXPENDITURE_LABELS = {
+    instruction: "Instruction",
+    support_services: "Support Services",
+    other: "Other",
+  };
+
+  const BUDGET_KEY_ACRONYMS = {
+    esd: "ESD", tag: "TAG", ell: "ELL", ot: "OT", pt: "PT", k6: "K-6", k12: "K-12", 7: "7", 8: "8",
+  };
+  function humanizeBudgetKey(key) {
+    return key
+      .split("_")
+      .map((w) => BUDGET_KEY_ACRONYMS[w] || w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+
   // Keyword patterns used to auto-link the first glossary term that shows up
   // in a short, dynamically-rendered snippet of text (e.g. a district's
   // source note). Order matters: first match wins, and only one term is
@@ -134,6 +158,8 @@
     charterStudents: 3,
     healthDrilldownOpen: false,
     fireDrilldownOpen: false,
+    budgetProgramsOpen: new Set(),
+    budgetByObjectOpen: false,
   };
 
   // ---------- Inline glossary tooltips ----------
@@ -612,6 +638,22 @@
           });
         }
 
+        row.querySelectorAll('[data-role="budget-programs-toggle"]').forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const k = btn.getAttribute("data-key");
+            if (state.budgetProgramsOpen.has(k)) state.budgetProgramsOpen.delete(k);
+            else state.budgetProgramsOpen.add(k);
+            renderBillTab();
+          });
+        });
+
+        row.querySelectorAll('[data-role="budget-byobject-toggle"]').forEach((btn) => {
+          btn.addEventListener("click", () => {
+            state.budgetByObjectOpen = !state.budgetByObjectOpen;
+            renderBillTab();
+          });
+        });
+
         const charterSlider = row.querySelector("#charter-slider");
         if (charterSlider) {
           // Update the label/output text directly rather than calling
@@ -707,6 +749,136 @@
     `;
   }
 
+  function expenditureBreakdownHTML(district) {
+    const bd = district.budget_detail;
+    if (!bd) return "";
+    const key = district.key;
+    const order = ["instruction", "support_services", "other"];
+    // Percentages (both the bar widths and the legend text) are computed
+    // against the sum of the three category subtotals shown, NOT the
+    // district's declared General Fund total -- for Brookings-Harbor those
+    // two numbers don't match (see reconciliation_notes below), and using
+    // the declared total here would make the bar segments overflow past
+    // 100% width, visually clipping and mismatching the legend text.
+    const categorySum = order.reduce((s, k) => s + bd.categories[k].subtotal, 0);
+
+    const segs = bar_segments_from_categories(bd.categories, categorySum, order);
+    const bar = segs
+      .map((s) => `<span class="funding-bar-seg" style="background:${EXPENDITURE_COLORS[s.key]};width:${s.pct.toFixed(2)}%"></span>`)
+      .join("");
+    const legend = segs
+      .map(
+        (s) => `
+          <div class="funding-legend-row">
+            <span class="funding-legend-swatch" style="background:${EXPENDITURE_COLORS[s.key]}"></span>
+            <span class="funding-legend-label">${EXPENDITURE_LABELS[s.key]}</span>
+            <span class="funding-legend-amount">${fmtUSD(s.value)} (${(s.pct).toFixed(1)}%)</span>
+          </div>`
+      )
+      .join("");
+
+    // Fiscal year for the BUDGET data can differ from the app's overall
+    // FY2025-26 vintage (Port Orford-Langlois's is FY2026-27) -- called out
+    // distinctly rather than left to blend in with everything else.
+    const isDifferentFY = !bd.fiscal_year.startsWith("2025-2026") && !bd.fiscal_year.startsWith("2025-26");
+    const fyLine = `<p class="school-card-meta" style="margin:0.5rem 0 0.3rem">Budget data: <strong>${escapeHtml(bd.fiscal_year)}</strong>${
+      isDifferentFY ? ' <span class="fy-mismatch-flag">— a different fiscal year than the tax-rate data above</span>' : ""
+    }</p>`;
+
+    const isProgramsOpen = state.budgetProgramsOpen.has(key);
+    const anyPrograms = order.some((k) => bd.categories[k].programs);
+    let programsSection = "";
+    if (anyPrograms) {
+      const body = order
+        .map((k) => {
+          const cat = bd.categories[k];
+          if (!cat.programs) {
+            return `<p class="dim" style="font-size:0.78rem;margin:0.5rem 0">${EXPENDITURE_LABELS[k]}: only a summary total was available for this district — no program-level detail in the source.</p>`;
+          }
+          const lines = Object.entries(cat.programs)
+            .sort((a, b) => b[1] - a[1])
+            .map(
+              ([name, amt]) => `
+                <div class="group-detail-line">
+                  <span class="group-detail-name">${escapeHtml(humanizeBudgetKey(name))}</span>
+                  <span class="group-detail-amount">${fmtUSD(amt)}</span>
+                </div>`
+            )
+            .join("");
+          return `<p class="school-card-total" style="margin:0.6rem 0 0.3rem"><strong>${EXPENDITURE_LABELS[k]}</strong></p>${lines}`;
+        })
+        .join("");
+      programsSection = `
+        <div class="explainer-toggle">
+          <button type="button" class="school-drilldown-btn" data-role="budget-programs-toggle" data-key="${key}" aria-expanded="${isProgramsOpen}">
+            ${isProgramsOpen ? "Hide programs" : "See every program"}
+          </button>
+          <div class="school-drilldown-body" ${isProgramsOpen ? "" : "hidden"}>${isProgramsOpen ? body : ""}</div>
+        </div>
+      `;
+    }
+
+    let byObjectSection = "";
+    if (bd.by_object_alternate_view) {
+      const ov = bd.by_object_alternate_view;
+      const isOpen = state.budgetByObjectOpen;
+      const objKeys = Object.keys(ov).filter((k) => k !== "total" && k !== "note" && typeof ov[k] === "number");
+      const lines = objKeys
+        .sort((a, b) => ov[b] - ov[a])
+        .map(
+          (k) => `
+            <div class="group-detail-line">
+              <span class="group-detail-name">${escapeHtml(humanizeBudgetKey(k))}</span>
+              <span class="group-detail-amount">${fmtUSD(ov[k])}</span>
+            </div>`
+        )
+        .join("");
+      byObjectSection = `
+        <div class="explainer-toggle">
+          <button type="button" class="school-drilldown-btn" data-role="budget-byobject-toggle" aria-expanded="${isOpen}">
+            ${isOpen ? "Hide" : "Bonus view: spending by type (salaries, benefits, supplies...)"}
+          </button>
+          <div class="school-drilldown-body" ${isOpen ? "" : "hidden"}>${isOpen ? `<p class="dim" style="font-size:0.76rem">${escapeHtml(ov.note || "")}</p>${lines}` : ""}</div>
+        </div>
+      `;
+    }
+
+    const reconNotes = bd.reconciliation_notes.length
+      ? `<div class="school-note school-heads-up">
+           <span class="school-note-label">Data note:</span>
+           ${bd.reconciliation_notes.map((n) => `<div style="margin-top:0.3rem">${escapeHtml(n)}</div>`).join("")}
+         </div>`
+      : "";
+
+    const pullQuote = bd.pull_quote
+      ? `<blockquote class="budget-pull-quote">&ldquo;${escapeHtml(bd.pull_quote)}&rdquo;<footer>${escapeHtml(bd.pull_quote_attribution)}</footer></blockquote>`
+      : "";
+    const extraContext = bd.extra_context ? `<p class="school-note">${escapeHtml(bd.extra_context)}</p>` : "";
+    const scaleNote = bd.scale_note ? `<p class="dim" style="font-size:0.78rem">${escapeHtml(bd.scale_note)}</p>` : "";
+
+    return `
+      <div class="explainer-card" style="margin-top:0.7rem">
+        <p class="school-card-name" style="margin-bottom:0.2rem">Where the money goes</p>
+        <p class="school-card-total">General Fund budget: <strong>${fmtUSD(bd.expenditure_total)}</strong></p>
+        ${fyLine}
+        <div class="funding-bar" style="margin-top:0.4rem">${bar}</div>
+        <div class="funding-legend">${legend}</div>
+        ${programsSection}
+        ${byObjectSection}
+        ${reconNotes}
+        ${pullQuote}
+        ${extraContext}
+        ${scaleNote}
+      </div>
+    `;
+  }
+
+  function bar_segments_from_categories(categories, total, order) {
+    return order
+      .map((key) => ({ key, value: categories[key].subtotal }))
+      .map((s) => ({ ...s, pct: total > 0 ? (s.value / total) * 100 : 0 }));
+  }
+
   function schoolCardHTML(district, extraNoteHtml) {
     const identityBits = [];
     if (district.communities_served && district.communities_served.length) {
@@ -731,6 +903,7 @@
         ${identityLine}
         ${fundingBarHTML(district)}
         ${backgroundNote ? `<p class="school-note">${escapeHtml(backgroundNote)}</p>` : ""}
+        ${expenditureBreakdownHTML(district)}
         ${extraNoteHtml || ""}
       </div>
     `;
@@ -841,12 +1014,16 @@
       }
       body += schoolCardHTML(k12, extraNote);
     }
-    DATA.schools.regional_education_entities.forEach((e) => {
-      body += regionalCardHTML(e);
-    });
+    // The "how does per-student funding work?" explainer sits right after
+    // the resident's own K-12 district card -- the most relevant spot --
+    // rather than after the ESD/SWOCC cards, so it's not easy to miss by
+    // stopping short of scrolling past those.
     if (isOpen) {
       body += enrollmentExplainerMarkup(k12);
     }
+    DATA.schools.regional_education_entities.forEach((e) => {
+      body += regionalCardHTML(e);
+    });
 
     return `
       <div class="school-drilldown-toggle">
