@@ -2,11 +2,19 @@
 """
 Build data/app-data.json from the raw source files in data/.
 
-Rerun this each year after refreshing the three raw source files:
+Rerun this each year after refreshing the three fiscal-year source files:
   data/county-budget-fy2025-26.json
   data/tax-districts-fy2025-26.json
   data/code-areas-fy2025-26.json
 (rename them for the new fiscal year and update the paths below).
+
+Also folds in the plain-language content layer (does not change annually
+the way the fiscal-year files do, but only needs to stay in sync with the
+`category` values used in tax-districts-fy2025-26.json and the vocabulary
+actually used in the app's copy):
+  data/category-groups.json
+  data/glossary.json
+  data/headline-stats.json
 
 This script does NOT fetch anything from the network. It only reconciles
 and reshapes data that has already been transcribed from the official PDFs.
@@ -34,6 +42,24 @@ NAME_ALIASES = {
 
 ROUNDING_TOLERANCE = 0.02  # $ per $1,000 assessed value
 
+# Explicit slugs for glossary.json terms, so the app can look up a
+# definition by a stable key instead of matching on the display string.
+# Add an entry here (and use the term verbatim from glossary.json) whenever
+# a new term is added to the glossary.
+GLOSSARY_SLUGS = {
+    "Assessed Value": "assessed_value",
+    "Real Market Value": "real_market_value",
+    "Tax Rate / Bill Rate": "tax_rate",
+    "Levy": "levy",
+    "Permanent Rate": "permanent_rate",
+    "Local Option Levy": "local_option_levy",
+    "Bond": "bond",
+    "Urban Renewal": "urban_renewal",
+    "Code Area": "code_area",
+    "Taxing District": "taxing_district",
+    "Compression / Measure 5 (M5) Limit": "compression_m5",
+}
+
 
 def load(name):
     with open(os.path.join(DATA, name)) as f:
@@ -44,10 +70,56 @@ def main():
     budget = load("county-budget-fy2025-26.json")
     districts_doc = load("tax-districts-fy2025-26.json")
     code_areas_doc = load("code-areas-fy2025-26.json")
+    category_groups_doc = load("category-groups.json")
+    glossary_doc = load("glossary.json")
+    headline_stats_doc = load("headline-stats.json")
 
     districts = districts_doc["districts"]
     rate_by_name = {d["name"]: d["bill_rate"] for d in districts}
     district_by_name = {d["name"]: d for d in districts}
+
+    # Map each raw `category` (school, fire, county, ...) to its plain-
+    # language display group id (schools, fire, county, cities, health,
+    # library, roads, other_local). Fail loudly if a category has no home,
+    # or a group claims a category no district actually uses -- both mean
+    # category-groups.json is out of sync with tax-districts-fy2025-26.json.
+    category_to_group = {}
+    for g in category_groups_doc["display_groups"]:
+        for cat in g["source_categories"]:
+            category_to_group[cat] = g["id"]
+
+    used_categories = {d["category"] for d in districts}
+    unmapped = used_categories - set(category_to_group)
+    if unmapped:
+        raise SystemExit(
+            f"category-groups.json does not map these district categories: "
+            f"{unmapped} -- add them to a display group."
+        )
+    unused = set(category_to_group) - used_categories
+    if unused:
+        raise SystemExit(
+            f"category-groups.json maps categories no district uses: "
+            f"{unused} -- likely stale, double check."
+        )
+
+    for d in districts:
+        d["group"] = category_to_group[d["category"]]
+
+    # Glossary: key by an explicit slug (GLOSSARY_SLUGS) rather than the
+    # display string, so the app can look up a definition by a stable key.
+    glossary_by_slug = {}
+    for term in glossary_doc["terms"]:
+        slug = GLOSSARY_SLUGS.get(term["term"])
+        if slug is None:
+            raise SystemExit(
+                f"glossary.json has a term with no slug mapping: "
+                f"{term['term']!r} -- add it to GLOSSARY_SLUGS."
+            )
+        glossary_by_slug[slug] = {
+            "term": term["term"],
+            "short_definition": term["short_definition"],
+            "longer_note": term.get("longer_note"),
+        }
 
     def resolve(name):
         return NAME_ALIASES.get(name, name)
@@ -79,6 +151,7 @@ def main():
                     {
                         "name": n,
                         "category": district_by_name[n]["category"],
+                        "group": district_by_name[n]["group"],
                         "bill_rate": district_by_name[n]["bill_rate"],
                         "note": district_by_name[n].get("note"),
                     }
@@ -182,6 +255,14 @@ def main():
             "non_departmental": non_dept,
             "road_capital_reserve": road_reserve,
             "officials": budget["county_officials_fy2025_26"],
+        },
+        "category_groups": category_groups_doc["display_groups"],
+        "glossary": glossary_by_slug,
+        "headline_stats": {
+            "headline_facts": headline_stats_doc["headline_facts"],
+            "dollar_story_formula": headline_stats_doc["dollar_story_formula"],
+            "opening_section_copy": headline_stats_doc["opening_section_copy_draft"],
+            "caveat_copy": headline_stats_doc["caveat_copy_draft"],
         },
     }
 

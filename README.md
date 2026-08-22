@@ -15,10 +15,12 @@ Two views:
 1. **Your Tax Bill** — pick one of six named areas (Port Orford/Langlois,
    Agness, Ophir/Nesika Beach, Gold Beach, Pistol River, Brookings-Harbor),
    enter an assessed value or an annual tax bill amount, and see the amount
-   split by taxing district and category (schools, fire, city, port,
-   library, health, cemetery, sanitary, water, road, urban renewal, and the
-   county's own general levy). An "advanced" toggle exposes all ~45 actual
-   code areas for more precision.
+   split into 8 plain-language groups (Schools, Fire & Emergency, County
+   Government, City Government, Health, Library, Roads, Other Local
+   Districts) — each expandable to the exact districts and rates behind it.
+   A "Show full detail" toggle reveals the full ~40-district, full-precision
+   table for anyone who wants it, and an "advanced" toggle exposes all ~45
+   actual code areas for more precision than the six named areas.
 2. **County's Own Budget** — Curry County government's FY2025-26 proposed
    budget broken down by department/fund (Sheriff's Office, Road Fund,
    General Fund departments, Vehicle Services, other funds). This is the
@@ -38,10 +40,23 @@ runtime fetching, no backend). Fiscal year **2025-2026**.
   Summary.
 - `data/code-areas-fy2025-26.json` — which districts stack together in each
   of Curry County's ~45 geographic code areas.
-- `data/app-data.json` — **generated**. Combines and reconciles the three
-  files above into the shape the app consumes. Regenerate it with
-  `python3 scripts/build_data.py` after updating any raw source file; do not
-  hand-edit it.
+- `data/category-groups.json` — maps the ~12 raw district categories into 8
+  plain-language display groups (Schools, Fire & Emergency, County
+  Government, City Government, Health, Library, Roads, Other Local
+  Districts) shown by default in Your Tax Bill, each with a one-line and a
+  longer explanation.
+- `data/glossary.json` — short/long definitions for jargon (assessed value,
+  levy, permanent rate, local option levy, bond, urban renewal, code area,
+  taxing district, compression/Measure 5), surfaced as inline tap/click
+  tooltips rather than a separate glossary page.
+- `data/headline-stats.json` — the plain-language lead copy and headline
+  facts shown above the calculator, plus the caveat text shown near every
+  computed estimate.
+- `data/app-data.json` — **generated**. Combines and reconciles all six
+  files above into the shape the app consumes, and validates that every
+  district category has a display group and every glossary term has a
+  stable lookup key. Regenerate it with `python3 scripts/build_data.py`
+  after updating any raw source file; do not hand-edit it.
 
 ### A data-quality note worth reading
 
@@ -81,8 +96,14 @@ context figures in the app.
    format example).
 3. Update the filenames/paths at the top of `scripts/build_data.py`.
 4. Run `python3 scripts/build_data.py` and check its console output for
-   newly flagged rate discrepancies.
+   newly flagged rate discrepancies. The script will also fail loudly if a
+   district's `category` isn't covered by `category-groups.json` — if a
+   brand-new district category shows up, add it to a display group there.
 5. Commit the new raw files and the regenerated `data/app-data.json`.
+
+`category-groups.json`, `glossary.json`, and `headline-stats.json` don't
+change annually the way the fiscal-year files do — they only need updating
+if a district category or a new piece of jargon isn't covered yet.
 
 ## Running locally
 
