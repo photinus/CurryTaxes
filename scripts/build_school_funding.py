@@ -21,9 +21,11 @@ Revenue source codes follow Oregon's standard chart of accounts and are
 bucketed as:
   1000-1999  Local            (property tax, investment earnings, fees, ...)
   2000-2999  Intermediate     (county school funds, ESD pass-through funds)
-             -- folded into "other" since the app's 4-bucket model
-                (state/local/federal/other) has no separate slot for it
+             -- folded into "other" since the app's bucket model has no
+                separate slot for it
   3000-3999  State            (State School Fund, Common School Fund, ...)
+             -- split further into `state_operating` vs
+                `state_capital_oscim`, see below
   4000-4999  Federal          (Title I/IDEA pass-through, federal forest fees)
   5000-5999  Other one-time   (sale of fixed assets -> "other")
 
@@ -36,6 +38,23 @@ would inflate the total and misrepresent "where the money comes from" for
 the year, which is the whole point of this file. Excluded amounts are kept
 in the output under `excluded_from_total` for transparency, not silently
 dropped.
+
+Splitting state operating aid from one-time capital grants (OSCIM etc.):
+the CSV has no source code or description that says "OSCIM" outright, but
+Oregon's chart of accounts still makes a one-time capital grant identifiable
+-- it's a 3000-series (state) source code whose revenue lands in a
+"Capital Projects Funds" fund, rather than the General Fund where ongoing
+State School Fund operating aid lands. Confirmed against the 2024-25 data:
+Central Curry SD 1 has exactly one such line, $4,000,000, which lines up
+with its 2023 voter-approved bond in tax-districts-fy2025-26.json and with
+the size the state's OSCIM program typically pays out -- about as close to
+a smoking gun as this dataset gets without an explicit label. Port
+Orford-Langlois has a much smaller one ($40,000); Brookings-Harbor and
+South Coast ESD have none this year (Brookings-Harbor's bond hasn't passed
+yet -- see its `current_news_note`). Any state (3xxx) revenue in a Capital
+Projects Fund is bucketed as `state_capital_oscim` instead of
+`state_operating`, so a construction-bond-driven windfall year doesn't make
+a district's ongoing, enrollment-based state support look inflated.
 """
 import csv
 import json
@@ -78,15 +97,24 @@ DISTRICTS = {
 
 EXCLUDED_CODES = {"5400", "5200"}
 
+BUCKETS = ("local", "state_operating", "state_capital_oscim", "federal", "other")
 
-def bucket_for(code):
+
+def fmt_money(n):
+    return f"${n:,.0f}"
+
+
+def bucket_for(code, fund_desc):
     c = int(code)
     if 1000 <= c < 2000:
         return "local"
     if 2000 <= c < 3000:
         return "other"  # intermediate sources
     if 3000 <= c < 4000:
-        return "state"
+        # A state source landing in the Capital Projects Fund is a one-time
+        # capital grant (OSCIM or similar bond-matching aid), not ongoing
+        # State School Fund operating support -- see module docstring.
+        return "state_capital_oscim" if fund_desc == "Capital Projects Funds" else "state_operating"
     if 4000 <= c < 5000:
         return "federal"
     return "other"  # remaining 5000s (e.g. sale of fixed assets)
@@ -100,7 +128,10 @@ def main():
     tax_districts_doc = json.load(open(os.path.join(DATA, "tax-districts-fy2025-26.json")))
     tax_rate_by_name = {d["name"]: d for d in tax_districts_doc["districts"]}
 
-    raw = {info["key"]: {"revenue": {}, "excluded": {}, "property_tax_only": 0.0} for info in DISTRICTS.values()}
+    raw = {
+        info["key"]: {"revenue": {}, "excluded": {}, "property_tax_only": 0.0, "oscim_lines": []}
+        for info in DISTRICTS.values()
+    }
     seen_institutions = set()
 
     with open(csv_path, newline="", encoding="utf-8-sig") as f:
@@ -118,10 +149,12 @@ def main():
                 raw[key]["excluded"][row["SourceDesc"]] = raw[key]["excluded"].get(row["SourceDesc"], 0.0) + amt
                 continue
 
-            b = bucket_for(code)
+            b = bucket_for(code, row["FundDesc"])
             raw[key]["revenue"][b] = raw[key]["revenue"].get(b, 0.0) + amt
             if code == "1110":
                 raw[key]["property_tax_only"] += amt
+            if b == "state_capital_oscim":
+                raw[key]["oscim_lines"].append((row["SourceDesc"], amt))
 
     missing = set(DISTRICTS) - seen_institutions
     if missing:
@@ -144,9 +177,19 @@ def main():
         total = round(sum(r["revenue"].values()), 2)
         by_source = {k: round(v, 2) for k, v in r["revenue"].items()}
         by_source_pct = {k: round(v / total, 4) if total else None for k, v in by_source.items()}
-        for bucket in ("state", "local", "federal", "other"):
+        for bucket in BUCKETS:
             by_source.setdefault(bucket, 0.0)
             by_source_pct.setdefault(bucket, 0.0)
+
+        oscim_note = None
+        if by_source["state_capital_oscim"] > 0:
+            oscim_note = (
+                f"Includes a one-time {fmt_money(by_source['state_capital_oscim'])} state capital grant "
+                f"(most likely Oregon School Capital Improvement Matching -- OSCIM) tied to a school "
+                f"construction bond, landed in the Capital Projects Fund rather than the General Fund. "
+                f"Kept separate from ongoing State School Fund operating aid so a bond-driven windfall "
+                f"year doesn't make the district's normal annual state support look inflated."
+            )
 
         # Reconciliation: compare the CSV's property-tax-only local revenue
         # (source code 1110, this fiscal year's ACTUAL receipts, FY2024-25)
@@ -171,6 +214,7 @@ def main():
                 "total_revenue": total,
                 "revenue_by_source": by_source,
                 "revenue_by_source_pct": by_source_pct,
+                "state_capital_oscim_note": oscim_note,
                 "excluded_from_total": {k: round(v, 2) for k, v in r["excluded"].items()},
                 "tax_data_comparison": {
                     "csv_property_tax_fy2024_25": csv_property_tax,
@@ -199,12 +243,16 @@ def main():
             ),
             "bucketing_note": (
                 "Local = source codes 1000-1999 (property tax plus other local revenue "
-                "like investment earnings and fees). State = 3000-3999 (mainly the "
-                "State School Fund and Common School Fund). Federal = 4000-4999. "
-                "Other = 2000-2999 intermediate sources (county school funds, ESD "
-                "pass-through funds) plus minor one-time items like sale of fixed "
-                "assets. Beginning Fund Balance and Interfund Transfers are excluded "
-                "from every total: neither is new revenue for the year."
+                "like investment earnings and fees). State operating = 3000-3999 landed "
+                "in a district's operating funds (mainly the State School Fund and "
+                "Common School Fund). State capital/OSCIM = 3000-3999 landed "
+                "specifically in a Capital Projects Fund -- a one-time bond-matching "
+                "grant, not ongoing operating support; see state_capital_oscim_note on "
+                "any district where this applies. Federal = 4000-4999. Other = "
+                "2000-2999 intermediate sources (county school funds, ESD pass-through "
+                "funds) plus minor one-time items like sale of fixed assets. Beginning "
+                "Fund Balance and Interfund Transfers are excluded from every total: "
+                "neither is new revenue for the year."
             ),
             "swocc_note": (
                 "Southwestern Oregon Community College does not appear in this "
@@ -221,13 +269,20 @@ def main():
         json.dump(out, f, indent=2)
     print(f"Wrote {out_path}")
     for d in districts_out:
-        if d["available"]:
-            print(f"  {d['name']}: total ${d['total_revenue']:,.0f}, local/state/federal/other = "
-                  f"{d['revenue_by_source_pct']['local']:.0%}/{d['revenue_by_source_pct']['state']:.0%}/"
-                  f"{d['revenue_by_source_pct']['federal']:.0%}/{d['revenue_by_source_pct']['other']:.0%}, "
-                  f"tax-roll diff {d['tax_data_comparison']['diff_pct']:+.1%}" if d['tax_data_comparison']['diff_pct'] is not None else "")
-        else:
+        if not d["available"]:
             print(f"  {d['name']}: NOT AVAILABLE ({d['note']})")
+            continue
+        pct = d["revenue_by_source_pct"]
+        diff_pct = d["tax_data_comparison"]["diff_pct"]
+        diff_str = f"{diff_pct:+.1%}" if diff_pct is not None else "n/a"
+        print(
+            f"  {d['name']}: total ${d['total_revenue']:,.0f}, "
+            f"local/state-op/state-oscim/federal/other = "
+            f"{pct['local']:.0%}/{pct['state_operating']:.0%}/{pct['state_capital_oscim']:.0%}/"
+            f"{pct['federal']:.0%}/{pct['other']:.0%}, tax-roll diff {diff_str}"
+        )
+        if d["state_capital_oscim_note"]:
+            print(f"    OSCIM/capital: ${d['revenue_by_source']['state_capital_oscim']:,.0f}")
 
 
 if __name__ == "__main__":

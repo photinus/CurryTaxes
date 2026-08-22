@@ -53,23 +53,35 @@
 
   // Funding-source buckets for the school drill-down (state/federal/local/
   // other revenue, not property-tax categories, so a distinct palette).
+  // Order also controls left-to-right position in the funding bar. The two
+  // state buckets sit next to each other since they're both "state" money,
+  // but state_capital_oscim gets a visually distinct color (striped-looking
+  // via a different hue, not just a shade of the same blue) plus a label
+  // that can't be mistaken for ongoing support -- a one-time construction-
+  // bond match should never blend into "how the state funds this district
+  // every year."
+  const FUNDING_BUCKET_ORDER = ["local", "state_operating", "state_capital_oscim", "federal", "other"];
+
   const FUNDING_COLORS = {
-    state: "#4c6ef5",
     local: "#12b886",
+    state_operating: "#4c6ef5",
+    state_capital_oscim: "#f59f00",
     federal: "#7048e8",
     other: "#adb5bd",
   };
 
   const FUNDING_LABELS = {
-    state: "State",
     local: "Local",
+    state_operating: "State",
+    state_capital_oscim: "State (one-time bond match)",
     federal: "Federal",
     other: "Other",
   };
 
   const FUNDING_EXPLAINERS = {
-    state: "Mostly Oregon's State School Fund, distributed based on enrollment and student need.",
     local: "Property tax collected in the district, plus smaller local revenue like fees and interest.",
+    state_operating: "Mostly Oregon's State School Fund, distributed based on enrollment and student need.",
+    state_capital_oscim: "A one-time state grant tied to a specific construction bond (OSCIM) -- not part of the district's normal annual state support.",
     federal: "Targeted programs like Title I and special education funding.",
     other: "County and ESD pass-through funds, plus small one-time items.",
   };
@@ -548,7 +560,7 @@
       )}</p>`;
     }
     const f = district.funding;
-    const order = ["local", "state", "federal", "other"];
+    const order = FUNDING_BUCKET_ORDER;
     const segs = order
       .filter((k) => f.revenue_by_source[k] > 0)
       .map(
@@ -569,6 +581,10 @@
       )
       .join("");
 
+    const oscimNote = f.state_capital_oscim_note
+      ? `<p class="school-note school-heads-up"><span class="school-note-label">One-time grant:</span>${escapeHtml(f.state_capital_oscim_note)}</p>`
+      : "";
+
     let reconciliation = "";
     const cmp = f.tax_data_comparison;
     if (district.multi_county) {
@@ -581,6 +597,7 @@
       <p class="school-card-total">Total revenue ${DATA.schools.funding_meta.fiscal_year}: <strong>${fmtUSD(f.total_revenue)}</strong></p>
       <div class="funding-bar">${segs}</div>
       <div class="funding-legend">${legend}</div>
+      ${oscimNote}
       ${reconciliation}
     `;
   }
