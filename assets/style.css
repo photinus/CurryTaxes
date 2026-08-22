@@ -778,6 +778,27 @@ select, input[type="number"] {
   font-style: italic;
 }
 
+.fy-mismatch-flag {
+  color: var(--banner-text);
+  font-weight: 600;
+}
+
+.budget-pull-quote {
+  margin: 0.6rem 0 0;
+  padding: 0.5rem 0.8rem;
+  border-left: 3px solid var(--accent, #4c6ef5);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text);
+}
+
+.budget-pull-quote footer {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-style: normal;
+  color: var(--text-muted);
+}
+
 /* ---------- Enrollment funding explainer ---------- */
 
 .explainer-toggle {

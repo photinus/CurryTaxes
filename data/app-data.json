@@ -5460,6 +5460,74 @@
             "diff_pct": -0.0658,
             "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
           }
+        },
+        "budget_detail": {
+          "fiscal_year": "2025-2026 Adopted",
+          "source": "2025-26 Adopted Budget (Condensed), District Business Services",
+          "confidence": "High -- transcribed directly from the district's own published, adopted budget document. Function totals reconciled exactly against the district's own General Fund total ($7,679,054).",
+          "revenue_total": 7679054,
+          "expenditure_total": 7679054,
+          "categories": {
+            "instruction": {
+              "subtotal": 3633548,
+              "programs": {
+                "elementary_k6_instruction": 1352336,
+                "junior_high_7_8_instruction": 709115,
+                "junior_high_extracurricular": 45119,
+                "high_school_instruction": 898261,
+                "high_school_extracurricular": 206806,
+                "talented_and_gifted_program": 4630,
+                "restricted_programs_students_with_disabilities": 10000,
+                "resource_rooms_special_education": 405281,
+                "early_intervention": 1000,
+                "alternative_education": 0,
+                "english_language_learner": 1000
+              },
+              "program_sum": 3633548,
+              "flagged": false,
+              "note": null
+            },
+            "support_services": {
+              "subtotal": 3618232,
+              "programs": {
+                "guidance_services": 12497,
+                "health_services": 2500,
+                "student_treatment_services": 0,
+                "service_direction_student_support": 132000,
+                "improvement_of_instruction": 15500,
+                "educational_media_services_library": 142882,
+                "assessment_and_testing": 8264,
+                "board_of_education": 52731,
+                "executive_administration_superintendent": 239770,
+                "office_of_the_principal_all_schools": 725750,
+                "fiscal_services": 404380,
+                "operation_and_maintenance_of_plant": 961259,
+                "student_transportation": 609123,
+                "staff_services": 3772,
+                "technology_services": 307804
+              },
+              "program_sum": 3618232,
+              "flagged": false,
+              "note": null
+            },
+            "other": {
+              "subtotal": 427275,
+              "programs": {
+                "custody_and_care_of_children": 1000,
+                "transfers_of_funds_to_other_district_funds": 286275,
+                "operating_contingency_reserve": 140000
+              },
+              "program_sum": 427275,
+              "flagged": false,
+              "note": null
+            }
+          },
+          "reconciliation_notes": [],
+          "pull_quote": "Declining enrollment coupled with a decrease in the teacher experience adjustment is negatively impacting our state funding. The district continues to receive more funds from property taxes than the state school fund.",
+          "pull_quote_attribution": "From Central Curry's own FY2025-26 adopted budget message",
+          "extra_context": null,
+          "scale_note": null,
+          "by_object_alternate_view": null
         }
       },
       {
@@ -5516,6 +5584,60 @@
             "diff": 211202.34,
             "diff_pct": 0.1016,
             "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
+          }
+        },
+        "budget_detail": {
+          "fiscal_year": "2026-2027 Budget (as adopted/appropriated -- this report is dated one month into the fiscal year)",
+          "source": "Business Office School Board Report, August 17, 2026 (includes FY2026-27 budget/appropriations detail as of 07/31/2026)",
+          "confidence": "High for the underlying figures (transcribed directly from the district's own report tables) -- but see fiscal_year_mismatch_warning and small_reconciliation_gap below before using alongside the other two districts.",
+          "revenue_total": 6575069.28,
+          "expenditure_total": 6549069.28,
+          "categories": {
+            "instruction": {
+              "subtotal": 2980965.51,
+              "programs": null,
+              "program_sum": null,
+              "flagged": false,
+              "note": null
+            },
+            "support_services": {
+              "subtotal": 3288451.07,
+              "programs": null,
+              "program_sum": null,
+              "flagged": false,
+              "note": null
+            },
+            "other": {
+              "subtotal": 279652.7,
+              "programs": {
+                "community_services": 0,
+                "building_acquisition": 10000,
+                "debt_service": 0,
+                "transfers": 0,
+                "contingency": 0,
+                "reserved_for_next_year": 269652.7
+              },
+              "program_sum": 279652.7,
+              "flagged": false,
+              "note": null
+            }
+          },
+          "reconciliation_notes": [],
+          "pull_quote": null,
+          "pull_quote_attribution": null,
+          "extra_context": "Port Orford-Langlois ran a free breakfast and lunch program open to all children 18 and under (not just enrolled students) from June 22 to August 6, 2026, alongside its summer Ready-Set-Learn, Extended School Year, and Credit Recovery programs -- a concrete example of how a small district uses federal and state child nutrition funding to serve the wider community.",
+          "scale_note": "Port Orford-Langlois's General Fund (~$6.5-6.6M) is the smallest of the three districts, consistent with having the smallest enrollment of the three (roughly 220-300 students).",
+          "by_object_alternate_view": {
+            "total": 6575069.28,
+            "note": "The source report also breaks expenditures down by OBJECT rather than function/program -- included here as an alternate view since it's a different useful cut of the same budget (e.g. 'how much goes to salaries' vs. 'how much goes to instruction').",
+            "salaries": 2786122.47,
+            "payroll_benefits": 2021760.46,
+            "professional_services": 875300,
+            "supplies": 369600,
+            "capital_outlay": 25000,
+            "other": 202633.65,
+            "transfers": 25000,
+            "contingency": 269652.7
           }
         }
       },
@@ -5574,6 +5696,97 @@
             "diff_pct": -0.0677,
             "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
           }
+        },
+        "budget_detail": {
+          "fiscal_year": "2025-2026 Adopted",
+          "source": "2025-2026 Adopted Budget Document, adopted June 18, 2025",
+          "confidence": "High -- transcribed directly from the district's own published, adopted budget tables (GF Revenue/Expense Summary, General Fund Revenue detail, General Fund by Function). All three tables reconcile exactly to the same $21,680,639 General Fund total.",
+          "revenue_total": 21680639,
+          "expenditure_total": 21680639,
+          "categories": {
+            "instruction": {
+              "subtotal": 8542949,
+              "programs": {
+                "elementary": 2981388,
+                "intermediate_programs": 0,
+                "middle_junior_high": 1732393,
+                "middle_junior_high_extracurricular": 23840,
+                "high_school": 2432930,
+                "high_school_extracurricular": 119452,
+                "talented_and_gifted": 10000,
+                "life_skills": 997420,
+                "students_with_disabilities": 852681,
+                "alternative_education": 58250,
+                "ell_programs": 143776,
+                "other_special_programs_indian_ed": 65000,
+                "summer_school": 28115,
+                "special_summer_instruction": 0
+              },
+              "program_sum": 9445245,
+              "flagged": true,
+              "note": null
+            },
+            "support_services": {
+              "subtotal": 9640953,
+              "programs": {
+                "student_safety": 88700,
+                "guidance_services": 643021,
+                "youth_transition_program": 0,
+                "other_guidance_services": 0,
+                "nurse_services": 33039,
+                "psychological_services": 155000,
+                "speech_pathology": 280396,
+                "other_student_treatment_ot_pt": 220313,
+                "special_education_director": 299112,
+                "improvement_of_instruction": 0,
+                "instructional_services_area": 0,
+                "educational_media_services_library": 245943,
+                "instructional_staff_development": 19815,
+                "board_of_directors": 273000,
+                "office_of_superintendent": 354534,
+                "human_resources": 0,
+                "office_of_the_principal": 1631098,
+                "fiscal_services": 466925,
+                "care_and_upkeep_of_buildings": 952469,
+                "care_and_upkeep_of_grounds": 112251,
+                "maintenance_services": 1004311,
+                "other_plant_operation_maintenance": 511,
+                "student_transportation": 1396605,
+                "planning_research_development": 0,
+                "information_services": 104203,
+                "staff_services": 113635,
+                "technology_services": 538765,
+                "technology_director": 170748,
+                "interpretation_and_translation": 0
+              },
+              "program_sum": 9104394,
+              "flagged": true,
+              "note": null
+            },
+            "other": {
+              "subtotal": 4131000,
+              "programs": {
+                "debt_service": 0,
+                "transfer_of_funds_to_other_district_funds": 1131000,
+                "operating_contingency_reserve": 200000,
+                "unappropriated_ending_fund_balance": 1800000
+              },
+              "program_sum": 3131000,
+              "flagged": true,
+              "note": "unappropriated_ending_fund_balance ($1.8M, ~8% of expenditures) is the deliberately-tapering reserve described in the budget message highlights -- worth keeping visible as its own line rather than folding silently into 'other,' since the district itself is treating it as a a strategic, shrinking cushion, not routine spending."
+            }
+          },
+          "reconciliation_notes": [
+            "Instruction: the district's own line-item programs sum to $9,445,245, $902,296 more than its published instruction subtotal of $8,542,949 -- a discrepancy in the source document, not resolved here.",
+            "Support Services: the district's own line-item programs sum to $9,104,394, $536,559 less than its published support services subtotal of $9,640,953 -- a discrepancy in the source document, not resolved here.",
+            "Other: the district's own line-item programs sum to $3,131,000, $1,000,000 less than its published other subtotal of $4,131,000 -- a discrepancy in the source document, not resolved here.",
+            "The district's own Instruction/Support Services/Other subtotals add up to $22,314,902, $634,263 more than its published General Fund total of $21,680,639 -- another discrepancy in the source document itself, not something we introduced or resolved."
+          ],
+          "pull_quote": "School districts in Oregon are funded based on student enrollment. BHSD continues to experience a slow, long-term decline in enrollment. Fewer students result in less funding, which requires careful planning and ongoing adjustments to staffing levels.",
+          "pull_quote_attribution": "From Brookings-Harbor's own FY2025-26 adopted budget message",
+          "extra_context": "The 2025-26 budget cuts 11 licensed and 4.75 classified positions, and the district anticipates needing about $1.7 million in further reductions in 2026-27, since two one-time revenue sources propping up this year's budget (a delayed federal forest-fee payment and a fund carryover) won't repeat.",
+          "scale_note": "Brookings-Harbor's General Fund ($21.68M) is roughly 2.8x the size of Central Curry's ($7.68M), consistent with its much larger enrollment (~1,300+ students vs. ~240) -- a size difference that tracks enrollment, not funding adequacy.",
+          "by_object_alternate_view": null
         }
       }
     ],

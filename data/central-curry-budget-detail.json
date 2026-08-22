@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "district": "Central Curry School District 1",
+    "source": "2025-26 Adopted Budget (Condensed), District Business Services",
+    "source_url": "https://www.ccsd.k12.or.us/files/user/50/file/2025-26-Adopted-Budget-Condensed.pdf",
+    "fund": "General Fund (Fund 100) only -- this excludes special revenue funds like Title I, IDEA, Student Investment Account, food service, and student body accounts, which are grant-restricted and less relevant to a general 'where does the tax dollar go' story. Full fund list is in the source PDF if wanted later.",
+    "fiscal_year": "2025-2026 Adopted",
+    "extracted": "2026-08-22",
+    "confidence": "High -- transcribed directly from the district's own published, adopted budget document. Function totals reconciled exactly against the district's own General Fund total ($7,679,054)."
+  },
+  "budget_message_highlights": [
+    "General Fund resource totals: 2021-22 $7,821,367 (audited), 2022-23 $8,164,371 (audited), 2023-24 $8,487,264 (audited), 2024-25 $7,672,884 (budgeted), 2025-26 $7,679,054 (adopted) -- a declining trend after peaking in 2023-24.",
+    "Direct quote from the district's own budget message: 'Declining enrollment coupled with a decrease in the teacher experience adjustment is negatively impacting our state funding. The district continues to receive more funds from property taxes than the state school fund.' -- this directly confirms and illustrates the enrollment-based funding mechanism explained elsewhere in this project.",
+    "The State School Fund projection this budget was built on: $11.359 billion of statewide education funding for the 2025-27 biennium, split 49/51 between the two years.",
+    "There are no wage increases built into the 2025-26 budget; expenditures were cut across the general fund, with no funds for textbook adoption or classroom furniture this year.",
+    "The district is still spending down a May 2023 voter-approved bond for facility projects, expected substantially complete by fall 2025."
+  ],
+  "general_fund_revenue": {
+    "total": 7679054,
+    "by_source": {
+      "local": {
+        "total": 4257054,
+        "detail": {
+          "current_year_property_taxes": 3913054,
+          "prior_year_property_taxes": 100000,
+          "payments_in_lieu_of_property_taxes": 43000,
+          "interest_on_investments": 80000,
+          "extracurricular_admissions": 11000,
+          "rentals": 25000,
+          "miscellaneous": 85000
+        }
+      },
+      "state": {
+        "total": 1997000,
+        "detail": {
+          "state_school_fund_general_support": 1940000,
+          "state_school_fund_lunch_match": 2000,
+          "common_school_fund": 55000
+        }
+      },
+      "federal": {
+        "total": 75000,
+        "detail": {
+          "federal_forest_fees": 75000
+        }
+      },
+      "other_beginning_fund_balance": 1350000
+    }
+  },
+  "general_fund_expenditures_by_program": {
+    "total": 7679054,
+    "instruction": {
+      "subtotal": 3633548,
+      "programs": {
+        "elementary_k6_instruction": 1352336,
+        "junior_high_7_8_instruction": 709115,
+        "junior_high_extracurricular": 45119,
+        "high_school_instruction": 898261,
+        "high_school_extracurricular": 206806,
+        "talented_and_gifted_program": 4630,
+        "restricted_programs_students_with_disabilities": 10000,
+        "resource_rooms_special_education": 405281,
+        "early_intervention": 1000,
+        "alternative_education": 0,
+        "english_language_learner": 1000
+      }
+    },
+    "support_services": {
+      "subtotal": 3618232,
+      "programs": {
+        "guidance_services": 12497,
+        "health_services": 2500,
+        "student_treatment_services": 0,
+        "service_direction_student_support": 132000,
+        "improvement_of_instruction": 15500,
+        "educational_media_services_library": 142882,
+        "assessment_and_testing": 8264,
+        "board_of_education": 52731,
+        "executive_administration_superintendent": 239770,
+        "office_of_the_principal_all_schools": 725750,
+        "fiscal_services": 404380,
+        "operation_and_maintenance_of_plant": 961259,
+        "student_transportation": 609123,
+        "staff_services": 3772,
+        "technology_services": 307804
+      }
+    },
+    "other": {
+      "subtotal": 427275,
+      "programs": {
+        "custody_and_care_of_children": 1000,
+        "transfers_of_funds_to_other_district_funds": 286275,
+        "operating_contingency_reserve": 140000
+      }
+    }
+  },
+  "app_display_guidance": {
+    "suggested_grouping": "Instruction vs. Support Services vs. Other is a standard, recognizable framing in education finance -- consider using it as the primary breakdown, with the individual programs (elementary instruction, transportation, plant operations, etc.) as a drill-down within each.",
+    "good_pull_quote_for_app": "Central Curry's own budget message says it plainly: enrollment decline and a lower teacher-experience adjustment are hurting state funding, and the district now gets more from local property taxes than from the State School Fund -- a real, current example of the enrollment-funding mechanism explained elsewhere in this app.",
+    "biggest_single_program": "Office of the Principal (school-level administration) is the single largest support-services line at $725,750 -- larger than technology, transportation, or fiscal services individually. Operation & Maintenance of Plant ($961,259) is the single largest support line overall."
+  }
+}

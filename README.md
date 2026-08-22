@@ -127,7 +127,21 @@ runtime fetching, no backend). Fiscal year **2025-2026**.
   on why fire district rates vary, for a short explainer on the Fire &
   Emergency group. Deliberately doesn't claim per-district staffing/service
   detail that wasn't researched.
-- `data/app-data.json` — **generated**. Combines and reconciles all thirteen
+- `data/central-curry-budget-detail.json`,
+  `data/brookings-harbor-budget-detail.json`,
+  `data/port-orford-langlois-budget-detail.json` — each K-12 district's own
+  **General Fund** expenditures (Fund 100 only — no grant-restricted special
+  revenue, debt service, or capital projects funds, e.g. Brookings-Harbor's
+  Fund 415 Seismic project), grouped into Instruction / Support Services /
+  Other, for the "where the money goes" spending breakdown inside each
+  district's Schools card. This is separate from, and more current/granular
+  than, the statewide ODE revenue-by-source data above. Central Curry and
+  Brookings-Harbor are FY2025-26 Adopted with full program-level detail;
+  Port Orford-Langlois is **FY2026-27** (one year ahead of the other two)
+  from a monthly business-office report with summary-level detail only —
+  see the data-quality note below before treating all three as directly
+  comparable.
+- `data/app-data.json` — **generated**. Combines and reconciles all sixteen
   files above into the shape the app consumes, and validates that every
   district category has a display group, every glossary term has a
   stable lookup key, and every code area matches exactly one K-12 school
@@ -200,6 +214,42 @@ $40,000 one; Brookings-Harbor and South Coast ESD have none this year
 see the Recent & Upcoming Changes tab). Shown as a distinctly colored,
 distinctly labeled segment in the funding bar rather than merged into
 "State".
+
+**Port Orford-Langlois's expenditure detail is a different fiscal year than
+the other two districts' — flagged in the UI, not hidden.** Its card labels
+its budget data "2026-2027 Budget..." with an explicit "a different fiscal
+year than the tax-rate data above" flag next to it, since Central Curry and
+Brookings-Harbor's expenditure detail is FY2025-26. Its source (a monthly
+business-office report) also only breaks spending into Instruction and
+Support Services totals, without Central Curry's and Brookings-Harbor's
+program-level detail (elementary/middle/high, guidance/library/
+transportation, etc.) — so its "See every program" toggle only expands the
+"Other" category, the only one with itemized programs in the source; the
+other two categories say plainly that only a summary total was available.
+Its own revenue-side and expenditure-side totals also disagree by about
+$26,000 (a small gap in the source document itself) — the app uses the
+by-function total for the Instruction/Support Services/Other breakdown and
+the by-object total for the revenue-side total, matching how the source
+document itself labels each table, rather than picking one number to make
+them match.
+
+**Brookings-Harbor's own budget document doesn't reconcile internally**,
+despite its `_meta.confidence` claiming all three of its tables tie out to
+the same $21,680,639 General Fund total. Recomputing from the source's own
+line-item programs: Instruction's programs sum to $902,296 more than its
+published subtotal, Support Services' programs sum to $536,559 less than
+its published subtotal, Other's programs sum to exactly $1,000,000 less
+than its published subtotal, and the three published subtotals together are
+$634,263 more than the district's own declared General Fund total. None of
+this is resolved by picking a "correct" number — `scripts/build_data.py`
+recomputes each check from the source's own itemized figures (tolerance
+$25) and the app surfaces every discrepancy it finds as an explicit "Data
+note" in Brookings-Harbor's card, with the exact computed dollar amounts.
+The expenditure bar and legend percentages are computed against the sum of
+the three category subtotals (not the district's mismatched declared
+total), so the bar always adds up to 100% and matches the legend even
+though it doesn't match the district's own stated total — which is shown,
+and explained, separately.
 
 **A few source files contain notes written for whoever builds this data,
 not for the app's readers** — e.g. one said a fact "should be
