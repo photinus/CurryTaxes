@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "purpose": "A 'what's changing' section pulling together ballot measures that affect (or nearly affected) Curry County tax districts, so the app can show residents what's recently happened or might come up for a vote again.",
+    "created": "2026-08-22",
+    "correction_notice": "An earlier data pass in this project described the Brookings-Harbor school bond as an upcoming May 2026 ballot measure, framed as a neutral 'heads up, may change' item. That vote has since occurred -- the outcome is now known and is corrected below. If that earlier 'heads up' framing was already built into the app (from the school drill-down or enrollment-funding passes), it needs to be updated to reflect the actual result, not left as a future-tense 'may happen' note."
+  },
+  "recent_measures": [
+    {
+      "measure": "Brookings-Harbor School District Bond Measure 8-118",
+      "election_date": "May 19, 2026",
+      "status": "FAILED",
+      "result_detail": "Rejected by voters, approximately 58% against.",
+      "what_it_would_have_done": "Authorized up to $12.5 million in bonds (at an estimated $0.55 per $1,000 assessed value) for facility repairs -- electrical, plumbing, HVAC, roofing, accessibility, and safety upgrades -- across the district's three schools, which average 72 years old. The district's last successful bond was in 2000.",
+      "consequence_of_failure": "The district does not receive the $6.1 million in Oregon School Capital Improvement Matching (OSCIM) state funds that were contingent on the bond passing. Needed facility repairs will likely need to be delayed or funded through the district's limited general operating budget instead.",
+      "relevant_to_existing_data": "This affects the Brookings-Harbor / School 17-C entries already in school-districts.json and tax-districts-fy2025-26.json -- no new property tax rate takes effect from this measure since it did not pass. The district's current School 17-C rate in tax-districts-fy2025-26.json remains accurate and unaffected.",
+      "worth_noting_for_context": "The district has since (as of the most recent update available) received a separate seismic safety grant funding auditorium/music room and science wing improvements at the high school, with construction expected summer 2027 -- a smaller, differently-funded project, not a revival of the failed bond."
+    }
+  ],
+  "statewide_context_worth_including": {
+    "fact": "In the same May 2026 election, roughly 100 local ballot measures were on primary ballots across about 30 Oregon counties -- a notably high number, with many aimed at funding financially struggling fire districts (28 fire districts across 12 counties alone). Voters statewide tended to renew or continue funding for districts that already had an existing bond or levy, but resisted brand-new tax measures.",
+    "why_it_matters_here": "This is useful framing context: Curry County's own taxing districts (fire, school, library, etc.) operate in the same funding-constrained environment as the rest of rural Oregon. It's not unique to Curry County that districts periodically go back to voters -- it's a statewide pattern worth a sentence of context so residents don't read every local levy request as some kind of local mismanagement.",
+    "source": "Oregon School Boards Association and Oregon Capital Chronicle coverage of the May 2026 primary."
+  },
+  "known_gaps": {
+    "fire_district_measures": "No Curry County-specific fire district levy or bond measure was confirmed in this pass -- the 'struggling fire districts' story found was largely about other counties (e.g. Jackson County's Evans Valley Fire District). If a Curry County fire district does have a measure on a future ballot, it should be added here specifically -- don't assume the statewide pattern applies locally without confirming.",
+    "future_measures": "This file only covers what was found as of this data-collection date (August 2026). Any future Curry County measure (school, fire, library, port, health district) should be added here as it's announced, and the 'recent_measures' entries should be moved/archived once their tax impact (if any) is folded into the annual tax-districts-fy2025-26.json refresh."
+  },
+  "app_display_guidance": {
+    "suggested_placement": "A distinct 'Recent & Upcoming Changes' section, separate from the main tax breakdown, so it doesn't get stale-looking mixed into the core data views.",
+    "tone": "Neutral and factual, consistent with the earlier enrollment-funding pass's framing guidance -- report outcomes and consequences, don't editorialize about whether the community should have voted differently.",
+    "maintenance_note": "This section needs the most frequent manual updates of anything in the app, since ballot measures happen multiple times a year (May primary, November general, occasional special elections). See the maintenance plan file for a suggested update cadence."
+  }
+}

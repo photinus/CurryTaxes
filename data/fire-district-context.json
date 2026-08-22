@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "purpose": "Light context on what fire district rates buy, since the app currently shows ~13 fire district rates with no explanation of what varies between them. This is a lighter-weight pass than the school/health drill-downs -- full per-district service-level detail (volunteer vs. paid staffing, response times, coverage specifics) was NOT researched here and is flagged as a future data-collection task, not fabricated.",
+    "created": "2026-08-22"
+  },
+  "general_context": {
+    "headline": "Curry County has about 13 separate fire districts, each covering a different area, and rates vary a lot -- from $0 (Fire-Agness-Illahe RFPD, which currently levies no tax) to $1.89 per $1,000 (Fire-Sixes). That range itself is worth explaining, since a resident comparing their rate to a neighbor's in a different district may otherwise assume something is wrong.",
+    "why_rates_vary_generally": "In Oregon, most small rural fire districts rely heavily or entirely on volunteer firefighters and operate with limited equipment budgets, while districts covering more populated or commercially developed areas may support paid or partially-paid staff and larger apparatus. Response coverage, station count, and whether a district contracts with a neighboring district for mutual aid also affect what a given rate buys. None of these specifics were confirmed per-district in this pass -- see 'known_gaps' below."
+  },
+  "known_gaps": {
+    "not_yet_researched": "Per-district staffing model (volunteer/paid/mixed), station locations and count, apparatus/equipment age, typical response times, and any recent levy history for each of the ~13 individual fire districts (Fire-G B Wedd, Fire-Cape Ferrelo, Fire-Winchuck, Fire-Upper Chetco, Fire-Harbor, Fire-Brookings RFPD, Fire-Ophir, Fire-Langlois, Fire-Port Orford, Fire-Sixes, Fire-Pistol River, Fire-Agness-Illahe RFPD, Fire-CDR VL-N Bank).",
+    "how_to_fill_this_in": "Each Oregon fire district is typically its own small special district with its own website or Facebook page (search '[district name] fire district Oregon'), and many publish annual reports or board meeting minutes with staffing/budget detail. This would need to be done one district at a time -- there isn't a single statewide source with this level of local operational detail the way there is for school district finances (ODE) or property tax rates (the Assessor's Tax Roll Summary already used elsewhere in this project).",
+    "honest_framing_for_now": "Until per-district detail is collected, the app should present the general context above (why rates vary) without implying it has confirmed which specific model (volunteer/paid) applies to which of the 13 districts. Do not guess or infer a district's staffing model from its rate alone -- a higher rate doesn't necessarily mean paid staff, and a lower rate doesn't necessarily mean an under-resourced department."
+  },
+  "app_display_guidance": {
+    "suggested_placement": "A short explainer paragraph near the Fire & Emergency plain-language category (from the earlier grouping pass), using only the general_context content above -- not a per-district breakdown, since that data doesn't exist yet.",
+    "suggested_future_work": "If the community group values fire district detail specifically, that's a good candidate for a future dedicated pass (similar to the school drill-down), rather than something to rush into this build with unverified specifics."
+  }
+}

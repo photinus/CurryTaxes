@@ -1,0 +1,43 @@
+{
+  "_meta": {
+    "purpose": "Explains what the 'Health District' line item in the tax data actually funds -- currently just a name and a rate in the app, with no context on what it buys.",
+    "sources": [
+      "Oregon Health Authority, 2022 Community Health Improvement Plan for Curry Health Network",
+      "Wikipedia: Curry General Hospital",
+      "Curry Health Network / Curry Health Foundation websites",
+      "Rep. Val Hoyle press release, March 2024, on federal chemotherapy project funding"
+    ],
+    "created": "2026-08-22"
+  },
+  "official_name": "Curry Health District, doing business as Curry Health Network (CHN)",
+  "what_it_is": "An Oregon special health district -- a form of local government -- that owns and operates the county's hospital and several medical clinics. It is NOT the same thing as county government's Public Health department (Curry County transferred its local public health authority to the Oregon Health Authority in 2021, which is a separate, unrelated arrangement).",
+  "important_scope_note": "The Health District's boundaries do not cover the entire county -- so unlike the county's own permanent tax rate, not every Curry County property pays the Health District rate. This should already be reflected in which code areas include 'Health District - Curry' in code-areas-fy2025-26.json; worth double-checking that mapping against this fact.",
+  "what_it_operates": [
+    {
+      "facility": "Curry General Hospital",
+      "location": "Gold Beach",
+      "detail": "An 18-bed critical-access hospital -- the only hospital in Curry County. The current building opened in 2017, replacing a 1949-era facility that no longer met code. Voters approved a $10 million bond for the new hospital in November 2013; USDA Rural Development also provided about $21 million in low-interest loans."
+    },
+    {
+      "facility": "Curry Medical Practice",
+      "location": "Gold Beach (within the hospital)",
+      "detail": "Primary care practice."
+    },
+    {
+      "facility": "Curry Medical Center",
+      "location": "Brookings",
+      "detail": "Primary and specialty care, a same-day clinic, and what's described as the state's first satellite emergency department."
+    },
+    {
+      "facility": "Curry Family Medical",
+      "location": "Port Orford",
+      "detail": "A rural health clinic serving the Port Orford area."
+    }
+  ],
+  "why_this_matters_for_a_rural_coastal_county": "Highway 101 is the single road connecting Curry County north to south, and it's periodically closed by landslides. Local access to the hospital -- and gaps like chemotherapy, which historically wasn't available locally, meaning patients traveled up to seven hours for treatment -- is a real access-to-care issue specific to this geography, not just a generic 'hospitals cost money' story. A federal appropriation (~$2 million, secured in 2024) is funding a new local chemotherapy treatment center at Curry General Hospital for exactly this reason.",
+  "app_display_guidance": {
+    "suggested_placement": "Add a one-paragraph explainer + facility list when a user clicks into 'Health' in the plain-language category grouping, matching the drill-down pattern already used for Schools.",
+    "suggested_one_liner_replacement": "Funds Curry County's only hospital (Curry General in Gold Beach) plus clinics in Brookings and Port Orford -- not the same thing as county government's public health office, which is now run by the state.",
+    "caution": "Don't state hospital/clinic services as exhaustive or current beyond what's sourced here -- health facility offerings change; if the app wants a live services list, link out to curryhealthnetwork.com rather than asserting specifics not confirmed in this file."
+  }
+}

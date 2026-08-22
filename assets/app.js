@@ -90,18 +90,26 @@
   // in a short, dynamically-rendered snippet of text (e.g. a district's
   // source note). Order matters: first match wins, and only one term is
   // linked per snippet so a short note doesn't turn into a wall of tooltips.
+  // Each pattern tolerates a trailing "s" (code area/areas, bond/bonds, ...)
+  // so a plural in the source text doesn't get cut in half by the match --
+  // e.g. matching only "public charter school" inside "public charter
+  // schools" would wrap the term and strand a bare "s" right after it.
   const GLOSSARY_KEYWORD_PATTERNS = [
-    ["real_market_value", /real market value/i],
-    ["assessed_value", /assessed value/i],
-    ["local_option_levy", /local option(?: levy)?/i],
-    ["permanent_rate", /permanent rate/i],
-    ["tax_rate", /\b(?:tax rate|bill rate)\b/i],
-    ["levy", /\blevy\b/i],
-    ["bond", /\bbond\b/i],
+    ["real_market_value", /real market values?/i],
+    ["assessed_value", /assessed values?/i],
+    ["local_option_levy", /local option(?: levy| levies)?/i],
+    ["permanent_rate", /permanent rates?/i],
+    ["tax_rate", /\b(?:tax rates?|bill rates?)\b/i],
+    ["levy", /\blev(?:y|ies)\b/i],
+    ["bond", /\bbonds?\b/i],
     ["urban_renewal", /urban renewal/i],
-    ["code_area", /code area/i],
-    ["taxing_district", /taxing district/i],
+    ["code_area", /code areas?/i],
+    ["taxing_district", /taxing districts?/i],
     ["compression_m5", /compression|measure 5/i],
+    ["state_school_fund", /state school fund/i],
+    ["general_purpose_grant", /general purpose grants?/i],
+    ["public_charter_school", /public charter schools?/i],
+    ["admw", /\bADMw\b/],
   ];
 
   const fmtUSD = (n) =>
@@ -121,6 +129,11 @@
     openGroups: new Set(),
     fullDetailOpen: false,
     schoolDrilldownOpen: false,
+    enrollmentExplainerOpen: false,
+    weightingListOpen: false,
+    charterStudents: 3,
+    healthDrilldownOpen: false,
+    fireDrilldownOpen: false,
   };
 
   // ---------- Inline glossary tooltips ----------
@@ -151,18 +164,25 @@
     </span>`;
   }
 
-  // For short dynamic strings (e.g. a district's source note): link the
-  // first glossary term that appears, if any, leaving the rest as plain text.
+  // For dynamic strings (e.g. a district's source note or an explainer
+  // paragraph): link the glossary term that appears earliest in the text,
+  // if any, leaving the rest as plain text. Picking by text position
+  // (rather than by GLOSSARY_KEYWORD_PATTERNS array order) matters once a
+  // paragraph mentions multiple terms -- a reader expects the first term
+  // they read to be the one that's clickable, not whichever pattern
+  // happens to sit first in this list.
   function autoGlossify(text) {
+    let best = null;
     for (const [key, re] of GLOSSARY_KEYWORD_PATTERNS) {
       const m = text.match(re);
-      if (m && DATA.glossary[key]) {
-        const before = text.slice(0, m.index);
-        const after = text.slice(m.index + m[0].length);
-        return escapeHtml(before) + glossSpan(key, m[0]) + escapeHtml(after);
+      if (m && DATA.glossary[key] && (best === null || m.index < best.index)) {
+        best = { key, match: m, index: m.index };
       }
     }
-    return escapeHtml(text);
+    if (!best) return escapeHtml(text);
+    const before = text.slice(0, best.index);
+    const after = text.slice(best.index + best.match[0].length);
+    return escapeHtml(before) + glossSpan(best.key, best.match[0]) + escapeHtml(after);
   }
 
   // Converts static `<span class="gloss-anchor" data-gloss="key">Label</span>`
@@ -492,6 +512,42 @@
     `;
 
     document.getElementById("bill-caveat").textContent = DATA.headline_stats.caveat_copy;
+
+    lastBillSnapshot = { ca, area: currentArea(), compositeRate, assessedValue, totalBill, groupSegments };
+  }
+
+  // ---------- Print summary ----------
+  let lastBillSnapshot = null;
+
+  function renderPrintSummary() {
+    if (!lastBillSnapshot) return;
+    const { ca, area, assessedValue, totalBill, groupSegments } = lastBillSnapshot;
+
+    const headlineList = DATA.headline_stats.headline_facts
+      .slice(0, 2)
+      .map((f) => `<p>${escapeHtml(f.stat)}</p>`)
+      .join("");
+    document.getElementById("print-headline").innerHTML = headlineList;
+
+    document.getElementById("print-area-title").textContent = `${area.area_name}, code ${ca.code}`;
+    document.getElementById("print-rate-summary").innerHTML = `
+      <span class="big">${fmtUSD(totalBill)} / year</span><br />
+      Based on an assessed value of ${fmtUSD(assessedValue)}
+    `;
+
+    const tbody = document.querySelector("#print-table tbody");
+    tbody.innerHTML = groupSegments
+      .map(
+        (g) => `
+          <tr>
+            <td>${escapeHtml(g.meta.label)}</td>
+            <td>${escapeHtml(g.meta.one_liner)}</td>
+            <td>${fmtUSD(g.value)}</td>
+          </tr>`
+      )
+      .join("");
+
+    document.getElementById("print-caveat").textContent = DATA.headline_stats.caveat_copy;
   }
 
   function renderGroupAccordion(groupSegments, totalBill, schoolDistrictKey) {
@@ -512,7 +568,10 @@
         )
         .join("");
 
-      const schoolsExtra = g.groupId === "schools" ? schoolDrilldownMarkup(schoolDistrictKey) : "";
+      let extraDrilldown = "";
+      if (g.groupId === "schools") extraDrilldown = schoolDrilldownMarkup(schoolDistrictKey);
+      else if (g.groupId === "health") extraDrilldown = healthDrilldownMarkup();
+      else if (g.groupId === "fire") extraDrilldown = fireDrilldownMarkup();
 
       row.innerHTML = `
         <button type="button" class="group-row-header" aria-expanded="${isOpen}">
@@ -527,13 +586,59 @@
           </span>
           <span class="group-row-chevron" aria-hidden="true">&#9656;</span>
         </button>
-        <div class="group-row-detail" ${isOpen ? "" : "hidden"}>${detailLines}${schoolsExtra}</div>
+        <div class="group-row-detail" ${isOpen ? "" : "hidden"}>${detailLines}${extraDrilldown}</div>
       `;
 
       if (g.groupId === "schools") {
         const toggleBtn = row.querySelector(".school-drilldown-btn");
         toggleBtn.addEventListener("click", () => {
           state.schoolDrilldownOpen = !state.schoolDrilldownOpen;
+          renderBillTab();
+        });
+
+        const explainerToggle = row.querySelector('[data-role="explainer-toggle"]');
+        if (explainerToggle) {
+          explainerToggle.addEventListener("click", () => {
+            state.enrollmentExplainerOpen = !state.enrollmentExplainerOpen;
+            renderBillTab();
+          });
+        }
+
+        const weightingMore = row.querySelector('[data-role="weighting-more"]');
+        if (weightingMore) {
+          weightingMore.addEventListener("click", () => {
+            state.weightingListOpen = !state.weightingListOpen;
+            renderBillTab();
+          });
+        }
+
+        const charterSlider = row.querySelector("#charter-slider");
+        if (charterSlider) {
+          // Update the label/output text directly rather than calling
+          // renderBillTab(): a full re-render would destroy and recreate
+          // this <input type="range"> on every tick, which interrupts an
+          // in-progress drag in some browsers.
+          const k12ForSlider = DATA.schools.k12_districts.find((d) => d.key === schoolDistrictKey);
+          const districtName = k12ForSlider ? k12ForSlider.official_name : "a Curry County district";
+          charterSlider.addEventListener("input", (e) => {
+            const n = parseInt(e.target.value, 10);
+            state.charterStudents = n;
+            const label = row.querySelector(".charter-slider-label strong");
+            const output = row.querySelector(".charter-slider-output");
+            if (label) label.textContent = n;
+            if (output) output.innerHTML = charterSliderOutputText(n, districtName);
+          });
+        }
+      } else if (g.groupId === "health") {
+        const toggleBtn = row.querySelector(".school-drilldown-btn");
+        toggleBtn.addEventListener("click", () => {
+          state.healthDrilldownOpen = !state.healthDrilldownOpen;
+          renderBillTab();
+        });
+      } else if (g.groupId === "fire") {
+        const toggleBtn = row.querySelector(".school-drilldown-btn");
+        toggleBtn.addEventListener("click", () => {
+          state.fireDrilldownOpen = !state.fireDrilldownOpen;
           renderBillTab();
         });
       }
@@ -658,6 +763,69 @@
     `;
   }
 
+  function healthDrilldownMarkup() {
+    const isOpen = state.healthDrilldownOpen;
+    if (!isOpen) {
+      return `
+        <div class="school-drilldown-toggle">
+          <button type="button" class="school-drilldown-btn" aria-expanded="false">
+            What does the Health District actually fund?
+          </button>
+        </div>
+      `;
+    }
+    const h = DATA.health_district_explainer;
+    const facilities = h.what_it_operates
+      .map(
+        (f) => `
+          <p class="weighting-full-item"><strong>${escapeHtml(f.facility)} &mdash; ${escapeHtml(f.location)}</strong><span>${escapeHtml(f.detail)}</span></p>`
+      )
+      .join("");
+
+    return `
+      <div class="school-drilldown-toggle">
+        <button type="button" class="school-drilldown-btn" aria-expanded="true">Hide &mdash; what the Health District funds</button>
+        <div class="school-drilldown-body">
+          <div class="school-card">
+            <p class="school-card-name" style="margin-bottom:0.4rem">${escapeHtml(h.official_name)}</p>
+            <p>${escapeHtml(h.what_it_is)}</p>
+            <p class="school-note school-heads-up"><span class="school-note-label">Scope:</span>${escapeHtml(h.important_scope_note)}</p>
+            <div class="weighting-full-list" style="border-top:none;padding-top:0;margin-top:0.6rem">${facilities}</div>
+            <p style="margin-top:0.6rem">${escapeHtml(h.why_this_matters_for_a_rural_coastal_county)}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function fireDrilldownMarkup() {
+    const isOpen = state.fireDrilldownOpen;
+    if (!isOpen) {
+      return `
+        <div class="school-drilldown-toggle">
+          <button type="button" class="school-drilldown-btn" aria-expanded="false">
+            Why do fire district rates vary so much?
+          </button>
+        </div>
+      `;
+    }
+    const fc = DATA.fire_district_context;
+    return `
+      <div class="school-drilldown-toggle">
+        <button type="button" class="school-drilldown-btn" aria-expanded="true">Hide &mdash; why fire rates vary</button>
+        <div class="school-drilldown-body">
+          <div class="school-card">
+            <p>${escapeHtml(fc.headline)}</p>
+            <p>${escapeHtml(fc.why_rates_vary_generally)}</p>
+            <p class="dim" style="font-size:0.78rem">This app hasn't collected per-district detail (staffing model, station
+              count, response times) for Curry County's ~13 fire districts yet &mdash; a rate difference alone doesn't tell
+              you whether a district relies on volunteers or paid staff, so we're not guessing.</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   function schoolDrilldownMarkup(schoolDistrictKey) {
     const isOpen = state.schoolDrilldownOpen;
     const k12 = DATA.schools.k12_districts.find((d) => d.key === schoolDistrictKey);
@@ -669,13 +837,16 @@
         extraNote += `<p class="school-note">${escapeHtml(DATA.schools.already_sourced_facts[0].fact)}</p>`;
       }
       if (k12.current_news_note) {
-        extraNote += `<p class="school-note school-heads-up"><span class="school-note-label">Heads up:</span>${escapeHtml(k12.current_news_note)}</p>`;
+        extraNote += `<p class="school-note school-heads-up"><span class="school-note-label">Note:</span>${escapeHtml(k12.current_news_note)}</p>`;
       }
       body += schoolCardHTML(k12, extraNote);
     }
     DATA.schools.regional_education_entities.forEach((e) => {
       body += regionalCardHTML(e);
     });
+    if (isOpen) {
+      body += enrollmentExplainerMarkup(k12);
+    }
 
     return `
       <div class="school-drilldown-toggle">
@@ -683,6 +854,107 @@
           ${isOpen ? "Hide" : "See where the rest of the money comes from"} &mdash; state, federal &amp; more
         </button>
         <div class="school-drilldown-body" ${isOpen ? "" : "hidden"}>${isOpen ? body : ""}</div>
+      </div>
+    `;
+  }
+
+  function charterSliderOutputText(n, districtName) {
+    if (n <= 0) {
+      return `Move the slider to see the effect of resident students enrolling in an online charter school instead of ${escapeHtml(districtName)}.`;
+    }
+    const s = n === 1 ? "" : "s";
+    const verbS = n === 1 ? "s" : "";
+    return (
+      `If ${n} student${s} who live${verbS} in ${escapeHtml(districtName)}'s boundary enroll${verbS} in an online ` +
+      `charter school instead, the district loses funding for roughly ${n} weighted student${s} &mdash; at least 80% ` +
+      `of normal per-K-8-student funding, or 95% for high schoolers &mdash; for as long as they stay enrolled elsewhere.`
+    );
+  }
+
+  function enrollmentExplainerMarkup(k12) {
+    const ex = DATA.schools.enrollment_funding_explainer;
+    const alloc = ex.allocation;
+    const charter = ex.charter_transfer;
+    const isOpen = state.enrollmentExplainerOpen;
+
+    if (!isOpen) {
+      return `
+        <div class="explainer-toggle">
+          <button type="button" class="school-drilldown-btn" data-role="explainer-toggle" aria-expanded="false">
+            How does per-student funding actually work?
+          </button>
+        </div>
+      `;
+    }
+
+    const chipCategories = alloc.weighting_categories.slice(0, 4);
+    const chips = chipCategories
+      .map((c) => `<span class="weighting-chip">${escapeHtml(c.category.replace(/\s*\(.*\)$/, ""))}</span>`)
+      .join("");
+
+    const weightingListOpen = state.weightingListOpen;
+    const fullList = alloc.weighting_categories
+      .map(
+        (c) => `
+          <p class="weighting-full-item"><strong>${escapeHtml(c.category)}</strong><span>${escapeHtml(c.weight_note)}</span></p>`
+      )
+      .join("");
+
+    const districtName = k12 ? k12.official_name : "a Curry County district";
+    const n = state.charterStudents;
+    const sliderOutput = charterSliderOutputText(n, districtName);
+
+    return `
+      <div class="explainer-toggle">
+        <button type="button" class="school-drilldown-btn" data-role="explainer-toggle" aria-expanded="true">
+          Hide &mdash; how per-student funding works
+        </button>
+        <div class="explainer-body">
+
+          <div class="explainer-card">
+            <p class="explainer-headline">${escapeHtml(alloc.headline)}</p>
+            <p>${autoGlossify(alloc.the_basic_formula)}</p>
+            <p>${escapeHtml(alloc.why_weighted_not_just_a_headcount)}</p>
+            <p class="dim" style="font-size:0.78rem">Districts get more funding for:</p>
+            <div class="weighting-chips">${chips}</div>
+            <button type="button" class="weighting-more-btn" data-role="weighting-more">
+              ${weightingListOpen ? "Show less" : `Show all ${alloc.weighting_categories.length} weighting categories`}
+            </button>
+            <div class="weighting-full-list" ${weightingListOpen ? "" : "hidden"}>
+              ${fullList}
+              <p class="dim" style="font-size:0.78rem;margin-top:0.5rem">${escapeHtml(alloc.the_smoothing_rule)}</p>
+              <p class="dim" style="font-size:0.78rem">${escapeHtml(alloc.state_vs_local_share)}</p>
+            </div>
+          </div>
+
+          <div class="explainer-card">
+            <p class="explainer-headline">${escapeHtml(charter.headline)}</p>
+            <p>${autoGlossify(charter.plain_language_summary)}</p>
+            <div class="charter-rate-badges">
+              <div class="charter-rate-badge">
+                <span class="big-pct">80%</span>
+                <span class="badge-caption">minimum transfer, grades K&ndash;8</span>
+              </div>
+              <div class="charter-rate-badge">
+                <span class="big-pct">95%</span>
+                <span class="badge-caption">minimum transfer, grades 9&ndash;12</span>
+              </div>
+            </div>
+            <p class="dim" style="font-size:0.76rem">${escapeHtml(charter.statutory_minimum_transfer_rates.note)} (${escapeHtml(charter.statutory_minimum_transfer_rates.source)})</p>
+            <p>${autoGlossify(charter.how_this_applies_to_online_charter_schools)}</p>
+            <p>${escapeHtml(charter.the_takeaway_for_a_small_rural_county)}</p>
+
+            <div class="charter-slider-row">
+              <div class="charter-slider-label">
+                <span>Students leaving for an online charter school</span>
+                <strong>${n}</strong>
+              </div>
+              <input type="range" min="0" max="15" step="1" value="${n}" id="charter-slider" />
+              <p class="charter-slider-output">${sliderOutput}</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     `;
   }
@@ -785,6 +1057,33 @@
       <div class="row"><span>Road Capital Improvement reserve (excluded above)</span><span>${fmtUSD(cb.road_capital_reserve.total_requirements)}</span></div>
       <div class="row"><span>Total combined budget (all funds)</span><span>${fmtUSD(cb.total_combined_budget.all_funds_all_revenue_and_expenditure)}</span></div>
     `;
+
+    renderNonPropertyTaxRevenue(cb.non_property_tax_revenue);
+  }
+
+  const REVENUE_SOURCE_COLORS = [
+    "#4c6ef5", "#12b886", "#f59f00", "#7048e8", "#e03131",
+    "#099268", "#f06595", "#495057", "#1c7ed6",
+  ];
+
+  function renderNonPropertyTaxRevenue(rev) {
+    document.getElementById("nonprop-headline").textContent = rev.headline;
+    document.getElementById("nonprop-pullquote").innerHTML =
+      `<span class="school-note-label">Worth knowing:</span>${escapeHtml(rev.pull_quote)}`;
+
+    const total = rev.sources.reduce((s, r) => s + r.fy2025_26_amount, 0);
+    const segments = rev.sources.map((r, i) => ({
+      label: r.name,
+      value: r.fy2025_26_amount,
+      color: REVENUE_SOURCE_COLORS[i % REVENUE_SOURCE_COLORS.length],
+    }));
+
+    renderDonut(document.getElementById("nonprop-donut"), segments, {
+      ariaLabel: "County revenue by source",
+      centerTop: fmtUSD(total),
+      centerBottom: "FY25-26",
+    });
+    renderLegend(document.getElementById("nonprop-legend"), segments);
   }
 
   // ---------- About tab ----------
@@ -818,6 +1117,35 @@
     });
   }
 
+  // ---------- Recent & Upcoming Changes tab ----------
+  function renderChangesTab() {
+    const uc = DATA.upcoming_changes;
+    const wrap = document.getElementById("recent-measures");
+    wrap.innerHTML = uc.recent_measures
+      .map((m) => {
+        const statusClass = m.status === "FAILED" ? "school-heads-up" : "";
+        return `
+          <div class="school-card" style="margin-top:0.8rem">
+            <div class="school-card-header">
+              <span class="school-card-name">${escapeHtml(m.measure)}</span>
+              <span class="school-card-meta">${escapeHtml(m.election_date)}</span>
+            </div>
+            <p class="school-note ${statusClass}"><span class="school-note-label">${escapeHtml(m.status)}:</span>${escapeHtml(m.result_detail)}</p>
+            <p>${escapeHtml(m.what_it_would_have_done)}</p>
+            <p>${escapeHtml(m.consequence_of_failure || m.consequence || "")}</p>
+            ${m.worth_noting_for_context ? `<p class="dim" style="font-size:0.78rem">${escapeHtml(m.worth_noting_for_context)}</p>` : ""}
+          </div>
+        `;
+      })
+      .join("");
+
+    const sc = uc.statewide_context;
+    document.getElementById("statewide-context-card").innerHTML = `
+      <p class="school-card-total"><strong>Statewide context:</strong> ${escapeHtml(sc.fact)}</p>
+      <p>${escapeHtml(sc.why_it_matters_here)}</p>
+    `;
+  }
+
   // ---------- Plain-language intro ----------
   function renderIntro() {
     document.getElementById("intro-opening").textContent = DATA.headline_stats.opening_section_copy;
@@ -849,8 +1177,17 @@
     setupBillControls();
     renderBillTab();
     renderCountyTab();
+    renderChangesTab();
     renderAboutTab();
     initGlossaryAnchors();
+    setupPrintButton();
+  }
+
+  function setupPrintButton() {
+    document.getElementById("print-summary-btn").addEventListener("click", () => {
+      renderPrintSummary();
+      window.print();
+    });
   }
 
   document.addEventListener("DOMContentLoaded", init);

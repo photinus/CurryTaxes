@@ -5104,6 +5104,59 @@
       "district_attorney": "Josh Spansail",
       "sheriff": "John Ward",
       "treasurer": "Nicholas Vicino"
+    },
+    "non_property_tax_revenue": {
+      "headline": "Property tax is Curry County government's single biggest revenue source, but it's well under half the story -- federal timber payments, tourism tax, and several smaller fees and shared state taxes round out the rest.",
+      "sources": [
+        {
+          "name": "Property tax (County General)",
+          "fy2025_26_amount": 2008500,
+          "plain_explanation": "The county's own permanent tax rate, already covered elsewhere in this app -- about 7 cents of every property tax dollar residents pay countywide."
+        },
+        {
+          "name": "O&C Timber Payments",
+          "fy2025_26_amount": 944000,
+          "plain_explanation": "A federal payment tied to \"O&C lands\" -- former Oregon & California Railroad land grant timberland that the federal government now manages and shares timber-harvest-related revenue from with the counties it sits in. This is a distinctly Oregon-coast-counties story, not something most U.S. counties receive.",
+          "note_worth_flagging": "The county's FY2025-26 budget message states Curry County received NO Secure Rural Schools (SRS) funds this year and instead elected to take O&C timber payments -- SRS is a related but separate federal safety-net program for timber counties, and its funding has been uncertain/lapsing in recent years. This is a genuine budget risk worth explaining: a meaningful chunk of county revenue depends on federal decisions Curry County doesn't control."
+        },
+        {
+          "name": "Federal Payment in Lieu of Taxes (PILT)",
+          "fy2025_26_amount": 900000,
+          "plain_explanation": "A federal payment that compensates counties for having large amounts of tax-exempt federal land within their borders (national forests, BLM land, etc.) -- land the county can't collect property tax on, so the federal government sends a substitute payment instead."
+        },
+        {
+          "name": "Transient Lodging Tax (TLT)",
+          "fy2025_26_amount": 535998,
+          "plain_explanation": "A tax on hotel, campground, and short-term rental stays -- paid mostly by visitors, not residents. In early 2025 the Board of Commissioners raised the TLT rate; the increase is estimated to add about $700,000 to the General Fund and about $1.6 million specifically earmarked for tourism and economic development uses (by law, a portion of lodging tax revenue has to go toward tourism promotion, not general spending).",
+          "note_worth_flagging": "This is a good 'visitors help pay for county services too' fact for a tourism-dependent coastal county."
+        },
+        {
+          "name": "Electric Co-Op Franchise Fees",
+          "fy2025_26_amount": 425000,
+          "plain_explanation": "A fee the county charges the local electric cooperative for use of public rights-of-way."
+        },
+        {
+          "name": "State-Shared Marijuana Tax",
+          "fy2025_26_amount": 150000,
+          "plain_explanation": "Curry County's share of Oregon's statewide marijuana tax, distributed back to counties and cities."
+        },
+        {
+          "name": "State-Shared Alcohol Tax",
+          "fy2025_26_amount": 125000,
+          "plain_explanation": "Curry County's share of Oregon's statewide alcohol tax revenue."
+        },
+        {
+          "name": "Cable Franchise Fees",
+          "fy2025_26_amount": 125000,
+          "plain_explanation": "A fee charged to cable providers for use of public infrastructure."
+        },
+        {
+          "name": "State-Shared Tobacco Tax",
+          "fy2025_26_amount": 9500,
+          "plain_explanation": "Curry County's share of Oregon's statewide tobacco tax."
+        }
+      ],
+      "pull_quote": "Curry County received zero federal Secure Rural Schools (SRS) funding this year -- a reminder that timber-dependent Oregon coastal counties still depend heavily on federal decisions made far from Gold Beach."
     }
   },
   "category_groups": [
@@ -5153,8 +5206,8 @@
       "source_categories": [
         "health"
       ],
-      "one_liner": "Supports local public health services and facilities.",
-      "explanation": "Curry County has a health district that funds public health programs and, in part, healthcare facility costs. This includes a voter-approved bond for specific health facility projects.",
+      "one_liner": "Funds Curry County's only hospital (Curry General in Gold Beach) plus clinics in Brookings and Port Orford -- not the same thing as county government's public health office, which is now run by the state.",
+      "explanation": "Curry Health District (doing business as Curry Health Network) owns and operates Curry General Hospital plus several clinics. This includes a voter-approved bond for the current hospital building. It is a separate special district from county government's Public Health department, which Curry County transferred to the Oregon Health Authority in 2021.",
       "icon_suggestion": "heart-pulse"
     },
     {
@@ -5247,6 +5300,77 @@
       "term": "Compression / Measure 5 (M5) Limit",
       "short_definition": "A constitutional cap that can reduce your tax bill if the combined rate for schools or general government gets too high.",
       "longer_note": "This is a technical Oregon-specific safeguard; most residents won't need this explained beyond 'there's a legal ceiling on how high your combined rate can go.'"
+    },
+    "admw": {
+      "term": "ADMw (Weighted Average Daily Membership)",
+      "short_definition": "A district's student count, adjusted upward for students who need extra support -- this is what Oregon actually uses to calculate state funding, not a simple headcount.",
+      "longer_note": "A district with 500 students might have an ADMw of 600+ once special education, English-learner, poverty, and other weights are added in."
+    },
+    "state_school_fund": {
+      "term": "State School Fund",
+      "short_definition": "Oregon's main pot of state money for K-12 schools, distributed to districts based on their weighted enrollment (ADMw).",
+      "longer_note": "Makes up roughly two-thirds of total school funding statewide, with local property tax making up most of the rest."
+    },
+    "general_purpose_grant": {
+      "term": "General Purpose Grant",
+      "short_definition": "A district's main annual funding amount from the State School Fund -- calculated per weighted student (ADMw).",
+      "longer_note": "This is the number that charter school 'in lieu of' transfer payments are calculated as a percentage of."
+    },
+    "public_charter_school": {
+      "term": "Public Charter School",
+      "short_definition": "A publicly funded school that operates outside the traditional district structure but is still funded per-student through the same state formula -- including online/virtual charter schools.",
+      "longer_note": "A student's home district is required to transfer most of that student's per-student state funding to the charter school they attend, whether it's a physical charter school or a fully online one."
+    }
+  },
+  "health_district_explainer": {
+    "official_name": "Curry Health District, doing business as Curry Health Network (CHN)",
+    "what_it_is": "An Oregon special health district -- a form of local government -- that owns and operates the county's hospital and several medical clinics. It is NOT the same thing as county government's Public Health department (Curry County transferred its local public health authority to the Oregon Health Authority in 2021, which is a separate, unrelated arrangement).",
+    "important_scope_note": "The Health District's boundaries do not cover the entire county -- only 24 of the county's 56 code areas include a Health District rate, and the Brookings-Harbor area has none of it at all. Unlike the county's own permanent rate, not every Curry County property pays this one.",
+    "what_it_operates": [
+      {
+        "facility": "Curry General Hospital",
+        "location": "Gold Beach",
+        "detail": "An 18-bed critical-access hospital -- the only hospital in Curry County. The current building opened in 2017, replacing a 1949-era facility that no longer met code. Voters approved a $10 million bond for the new hospital in November 2013; USDA Rural Development also provided about $21 million in low-interest loans."
+      },
+      {
+        "facility": "Curry Medical Practice",
+        "location": "Gold Beach (within the hospital)",
+        "detail": "Primary care practice."
+      },
+      {
+        "facility": "Curry Medical Center",
+        "location": "Brookings",
+        "detail": "Primary and specialty care, a same-day clinic, and what's described as the state's first satellite emergency department."
+      },
+      {
+        "facility": "Curry Family Medical",
+        "location": "Port Orford",
+        "detail": "A rural health clinic serving the Port Orford area."
+      }
+    ],
+    "why_this_matters_for_a_rural_coastal_county": "Highway 101 is the single road connecting Curry County north to south, and it's periodically closed by landslides. Local access to the hospital -- and gaps like chemotherapy, which historically wasn't available locally, meaning patients traveled up to seven hours for treatment -- is a real access-to-care issue specific to this geography, not just a generic 'hospitals cost money' story. A federal appropriation (~$2 million, secured in 2024) is funding a new local chemotherapy treatment center at Curry General Hospital for exactly this reason."
+  },
+  "fire_district_context": {
+    "headline": "Curry County has about 13 separate fire districts, each covering a different area, and rates vary a lot -- from $0 (Fire-Agness-Illahe RFPD, which currently levies no tax) to $1.89 per $1,000 (Fire-Sixes). That range itself is worth explaining, since a resident comparing their rate to a neighbor's in a different district may otherwise assume something is wrong.",
+    "why_rates_vary_generally": "In Oregon, most small rural fire districts rely heavily or entirely on volunteer firefighters and operate with limited equipment budgets, while districts covering more populated or commercially developed areas may support paid or partially-paid staff and larger apparatus. Response coverage, station count, and whether a district contracts with a neighboring district for mutual aid also affect what a given rate buys."
+  },
+  "upcoming_changes": {
+    "recent_measures": [
+      {
+        "measure": "Brookings-Harbor School District Bond Measure 8-118",
+        "election_date": "May 19, 2026",
+        "status": "FAILED",
+        "result_detail": "Rejected by voters, approximately 58% against.",
+        "what_it_would_have_done": "Authorized up to $12.5 million in bonds (at an estimated $0.55 per $1,000 assessed value) for facility repairs -- electrical, plumbing, HVAC, roofing, accessibility, and safety upgrades -- across the district's three schools, which average 72 years old. The district's last successful bond was in 2000.",
+        "consequence_of_failure": "The district does not receive the $6.1 million in Oregon School Capital Improvement Matching (OSCIM) state funds that were contingent on the bond passing. Needed facility repairs will likely need to be delayed or funded through the district's limited general operating budget instead.",
+        "relevant_to_existing_data": "This affects the Brookings-Harbor / School 17-C entries already in school-districts.json and tax-districts-fy2025-26.json -- no new property tax rate takes effect from this measure since it did not pass. The district's current School 17-C rate in tax-districts-fy2025-26.json remains accurate and unaffected.",
+        "worth_noting_for_context": "The district has since (as of the most recent update available) received a separate seismic safety grant funding auditorium/music room and science wing improvements at the high school, with construction expected summer 2027 -- a smaller, differently-funded project, not a revival of the failed bond."
+      }
+    ],
+    "statewide_context": {
+      "fact": "In the same May 2026 election, roughly 100 local ballot measures were on primary ballots across about 30 Oregon counties -- a notably high number, with many aimed at funding financially struggling fire districts (28 fire districts across 12 counties alone). Voters statewide tended to renew or continue funding for districts that already had an existing bond or levy, but resisted brand-new tax measures.",
+      "why_it_matters_here": "This is useful framing context: Curry County's own taxing districts (fire, school, library, etc.) operate in the same funding-constrained environment as the rest of rural Oregon. It's not unique to Curry County that districts periodically go back to voters -- it's a statewide pattern worth a sentence of context so residents don't read every local levy request as some kind of local mismanagement.",
+      "source": "Oregon School Boards Association and Oregon Capital Chronicle coverage of the May 2026 primary."
     }
   },
   "headline_stats": {
@@ -5415,7 +5539,7 @@
         ],
         "history_note": "Formed in 1950 when the Brookings and Harbor districts consolidated.",
         "enrollment_note": null,
-        "current_news_note": "A school bond measure (Measure 8-118) is on the May 2026 ballot for facility repairs and upgrades. If it passes, it would add roughly $0.55 per $1,000 assessed value to this district's tax rate and bring in about $6.1 million in state matching funds (OSCIM) -- not reflected in the current FY2025-26 rate shown above.",
+        "current_news_note": "A school bond measure (Measure 8-118) for facility repairs and upgrades was on the May 2026 ballot and failed (about 58% against). The district does not receive the $6.1 million in state matching funds (OSCIM) that were contingent on it passing, and the current School 17-C tax rate shown above is unaffected. See the Recent & Upcoming Changes tab for details.",
         "funding": {
           "name": "Brookings-Harbor SD 17C",
           "code_in_tax_data": [
@@ -5517,6 +5641,53 @@
       "generated_note": "Generated by scripts/build_school_funding.py from a locally-downloaded copy of ODE's statewide Actual Revenue Data CSV (not checked into this repo). Re-download the current year's CSV and re-run this script annually alongside the tax-rate data refresh.",
       "bucketing_note": "Local = source codes 1000-1999 (property tax plus other local revenue like investment earnings and fees). State operating = 3000-3999 landed in a district's operating funds (mainly the State School Fund and Common School Fund). State capital/OSCIM = 3000-3999 landed specifically in a Capital Projects Fund -- a one-time bond-matching grant, not ongoing operating support; see state_capital_oscim_note on any district where this applies. Federal = 4000-4999. Other = 2000-2999 intermediate sources (county school funds, ESD pass-through funds) plus minor one-time items like sale of fixed assets. Beginning Fund Balance and Interfund Transfers are excluded from every total: neither is new revenue for the year.",
       "swocc_note": "Southwestern Oregon Community College does not appear in this K-12/ESD dataset -- it reports through a separate community college fiscal system, not ODE's K-12 Fiscal Transparency portal. No funding breakdown is available for it here."
+    },
+    "enrollment_funding_explainer": {
+      "allocation": {
+        "headline": "Oregon doesn't fund school districts with a flat budget -- it pays per student, and adjusts that payment based on what kind of support each student needs.",
+        "the_basic_formula": "Each district's State School Fund grant = (a statewide base amount per student) x (the district's 'weighted' student count, called ADMw) -- with an adjustment for local teacher experience and a further adjustment so the total fits the money the Legislature has actually allocated statewide.",
+        "why_weighted_not_just_a_headcount": "A straight per-student amount wouldn't reflect that some students cost more to educate. Oregon 'weights' its student count so districts with more students who need extra support get proportionally more funding -- without the state having to track and reimburse every individual cost.",
+        "weighting_categories": [
+          {
+            "category": "Special education (students with disabilities)",
+            "weight_note": "Each qualifying student counts as roughly double (adds 1.0 extra weight on top of the base 1.0), capped at 11% of a district's enrollment without special state approval."
+          },
+          {
+            "category": "English language learners",
+            "weight_note": "Adds an extra 0.5 weight per qualifying student."
+          },
+          {
+            "category": "Students in poverty",
+            "weight_note": "Adds extra weight, calculated using a poverty-concentration measure for the district."
+          },
+          {
+            "category": "Foster children",
+            "weight_note": "Adds extra weight, similar in spirit to the poverty and English-learner weights."
+          },
+          {
+            "category": "Small and remote high schools",
+            "weight_note": "Small/isolated districts get an additional per-student adjustment, since they can't achieve the same economies of scale as larger districts -- relevant for a county like Curry with several small rural districts."
+          },
+          {
+            "category": "Teacher experience",
+            "weight_note": "Not a per-student weight, but a district-wide adjustment: districts with a more experienced (and therefore more expensive) teaching staff than the state average receive a corresponding funding bump; districts with less experienced staff receive slightly less."
+          }
+        ],
+        "the_smoothing_rule": "If a district's enrollment drops from one year to the next, the state uses whichever of the current or prior year's weighted count ('extended ADMw') is higher, so a district doesn't see its funding crash the same year enrollment does. This softens the year-to-year swing but doesn't prevent a real, sustained enrollment drop from eventually reducing funding.",
+        "state_vs_local_share": "Statewide, roughly two-thirds of total school funding comes from the State School Fund and about one-third from local sources (mostly property tax). Oregon deliberately equalizes this: districts that raise more from local property tax receive correspondingly less from the state, and vice versa, so two districts with the same weighted enrollment end up funded similarly overall regardless of local property wealth."
+      },
+      "charter_transfer": {
+        "headline": "When a student who lives in a district's boundary enrolls in a charter school instead -- including a fully online one -- the per-student state funding that would have gone to the local district follows the student to the charter school.",
+        "plain_language_summary": "Public charter schools (including online/virtual ones) are funded per-student just like regular public schools. But a charter school doesn't collect its own local property tax and doesn't get a direct State School Fund grant the way a district does. Instead, the district the student would otherwise have attended is required by law to pass along a large share of that per-student funding to the charter school -- effectively 'transferring out' funding for every resident student who enrolls elsewhere.",
+        "statutory_minimum_transfer_rates": {
+          "source": "ORS 338.155(2)",
+          "grades_k_through_8": "At least 80% of the district's General Purpose Grant per weighted student (ADMw)",
+          "grades_9_through_12": "At least 95% of the district's General Purpose Grant per weighted student (ADMw)",
+          "note": "These are legal minimums -- a district and a charter school can negotiate a higher transfer rate in their contract, but not lower. The district keeps the remaining share (as little as 5-20%) to cover its own administrative overhead related to the charter arrangement."
+        },
+        "how_this_applies_to_online_charter_schools": "Virtual/online public charter schools in Oregon (governed by additional rules under ORS 338.120) are still public charter schools under this same funding law -- there's no separate, lower funding mechanism just because instruction happens online. A well-known example: Oregon Virtual Academy (ORVA), a statewide online charter school, is authorized by the North Bend School District, not by a student's home district. When a Curry County family enrolls their child in ORVA (or a similar statewide virtual charter), the student's home district doesn't directly write a check to ORVA -- instead, the state's funding formula counts that student toward the authorizing/sponsoring district's enrollment for State School Fund purposes, which functionally means the family's home district loses the per-student funding it would otherwise have received for that student, even though the district never has to educate them directly.",
+        "the_takeaway_for_a_small_rural_county": "For small districts like Curry County's three K-12 districts, this matters more than it would for a large district: losing even a handful of students to an online charter school is a proportionally bigger hit to total enrollment (and therefore total state funding) than the same number of students leaving a large urban district. It's also a real, ongoing dynamic -- unlike a one-time budget cut, it recurs every year a student stays enrolled elsewhere."
+      }
     }
   }
 }

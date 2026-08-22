@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "purpose": "Explains Oregon's enrollment-based school funding formula (the State School Fund) and how districts must transfer a share of that per-student funding to charter schools -- including online/virtual charter schools -- when a resident student enrolls there instead of the local district. For the 'Schools' drill-down in the tax breakdown app.",
+    "sources": [
+      "ORS 327.013 (State School Fund distribution computations)",
+      "ORS 338.155 (Distributions of State School Fund amounts; charter school payments)",
+      "ORS 338.120 (Additional requirements for virtual public charter schools)",
+      "Oregon School Boards Association, 'Funding Formula 101' (2023)",
+      "Oregon Legislative Policy and Research Office, K-12 Education Funding background report (2023)"
+    ],
+    "created": "2026-08-21",
+    "accuracy_note": "The mechanism, weights, and statutory percentages below are accurate as of the sources cited. The specific dollar amount a district receives per weighted student changes every year (the state recalculates a 'Funding Percentage' to fit the total budget the Legislature allocates), so this file deliberately does NOT state a current per-student dollar figure. If the app wants to show 'about $X per student this year,' that figure should be pulled fresh from ODE's most recent State School Fund estimates -- see 'current_year_data_note' below."
+  },
+
+  "how_state_funding_is_allocated": {
+    "headline": "Oregon doesn't fund school districts with a flat budget -- it pays per student, and adjusts that payment based on what kind of support each student needs.",
+    "the_basic_formula": "Each district's State School Fund grant = (a statewide base amount per student) x (the district's 'weighted' student count, called ADMw) -- with an adjustment for local teacher experience and a further adjustment so the total fits the money the Legislature has actually allocated statewide.",
+    "why_weighted_not_just_a_headcount": "A straight per-student amount wouldn't reflect that some students cost more to educate. Oregon 'weights' its student count so districts with more students who need extra support get proportionally more funding -- without the state having to track and reimburse every individual cost.",
+    "weighting_categories": [
+      {"category": "Special education (students with disabilities)", "weight_note": "Each qualifying student counts as roughly double (adds 1.0 extra weight on top of the base 1.0), capped at 11% of a district's enrollment without special state approval."},
+      {"category": "English language learners", "weight_note": "Adds an extra 0.5 weight per qualifying student."},
+      {"category": "Students in poverty", "weight_note": "Adds extra weight, calculated using a poverty-concentration measure for the district."},
+      {"category": "Foster children", "weight_note": "Adds extra weight, similar in spirit to the poverty and English-learner weights."},
+      {"category": "Small and remote high schools", "weight_note": "Small/isolated districts get an additional per-student adjustment, since they can't achieve the same economies of scale as larger districts -- relevant for a county like Curry with several small rural districts."},
+      {"category": "Teacher experience", "weight_note": "Not a per-student weight, but a district-wide adjustment: districts with a more experienced (and therefore more expensive) teaching staff than the state average receive a corresponding funding bump; districts with less experienced staff receive slightly less."}
+    ],
+    "the_smoothing_rule": "If a district's enrollment drops from one year to the next, the state uses whichever of the current or prior year's weighted count ('extended ADMw') is higher, so a district doesn't see its funding crash the same year enrollment does. This softens the year-to-year swing but doesn't prevent a real, sustained enrollment drop from eventually reducing funding.",
+    "state_vs_local_share": "Statewide, roughly two-thirds of total school funding comes from the State School Fund and about one-third from local sources (mostly property tax). Oregon deliberately equalizes this: districts that raise more from local property tax receive correspondingly less from the state, and vice versa, so two districts with the same weighted enrollment end up funded similarly overall regardless of local property wealth."
+  },
+
+  "charter_school_funding_transfer": {
+    "headline": "When a student who lives in a district's boundary enrolls in a charter school instead -- including a fully online one -- the per-student state funding that would have gone to the local district follows the student to the charter school.",
+    "plain_language_summary": "Public charter schools (including online/virtual ones) are funded per-student just like regular public schools. But a charter school doesn't collect its own local property tax and doesn't get a direct State School Fund grant the way a district does. Instead, the district the student would otherwise have attended is required by law to pass along a large share of that per-student funding to the charter school -- effectively 'transferring out' funding for every resident student who enrolls elsewhere.",
+    "statutory_minimum_transfer_rates": {
+      "source": "ORS 338.155(2)",
+      "grades_k_through_8": "At least 80% of the district's General Purpose Grant per weighted student (ADMw)",
+      "grades_9_through_12": "At least 95% of the district's General Purpose Grant per weighted student (ADMw)",
+      "note": "These are legal minimums -- a district and a charter school can negotiate a higher transfer rate in their contract, but not lower. The district keeps the remaining share (as little as 5-20%) to cover its own administrative overhead related to the charter arrangement."
+    },
+    "how_this_applies_to_online_charter_schools": "Virtual/online public charter schools in Oregon (governed by additional rules under ORS 338.120) are still public charter schools under this same funding law -- there's no separate, lower funding mechanism just because instruction happens online. A well-known example: Oregon Virtual Academy (ORVA), a statewide online charter school, is authorized by the North Bend School District, not by a student's home district. When a Curry County family enrolls their child in ORVA (or a similar statewide virtual charter), the student's home district doesn't directly write a check to ORVA -- instead, the state's funding formula counts that student toward the authorizing/sponsoring district's enrollment for State School Fund purposes, which functionally means the family's home district loses the per-student funding it would otherwise have received for that student, even though the district never has to educate them directly.",
+    "the_takeaway_for_a_small_rural_county": "For small districts like Curry County's three K-12 districts, this matters more than it would for a large district: losing even a handful of students to an online charter school is a proportionally bigger hit to total enrollment (and therefore total state funding) than the same number of students leaving a large urban district. It's also a real, ongoing dynamic -- unlike a one-time budget cut, it recurs every year a student stays enrolled elsewhere."
+  },
+
+  "worked_example_guidance": {
+    "purpose": "Guidance for building a simple illustrative calculator in the app, without hardcoding a dollar figure that will go stale.",
+    "suggested_interaction": "Let the user enter (or pick from a slider) a number of resident students who leave for an online charter school. Show, in relative terms: 'If N students who live in [district] enroll in an online charter school instead, the district loses funding for roughly N weighted students -- at minimum 80% of its normal per-K-8-student funding, or 95% for high schoolers -- for as long as those students stay enrolled elsewhere.' Avoid stating 'this costs the district $X' with a specific number unless that dollar figure is pulled fresh from ODE's current State School Fund per-ADMw estimate (see below) -- otherwise the number will be wrong within a year.",
+    "current_year_data_note": "If a live dollar-per-ADMw figure is wanted, it should come from ODE's most recently published State School Fund estimates/distribution documents (search oregon.gov for 'State School Fund Estimate' current biennium) -- not from this file. This is a genuinely fetchable, ODE-published number, similar to how the earlier revenue-by-source CSV was sourced, but wasn't pulled for this pass since the mechanism was the priority."
+  },
+
+  "glossary_additions": [
+    {
+      "term": "ADMw (Weighted Average Daily Membership)",
+      "short_definition": "A district's student count, adjusted upward for students who need extra support -- this is what Oregon actually uses to calculate state funding, not a simple headcount.",
+      "longer_note": "A district with 500 students might have an ADMw of 600+ once special education, English-learner, poverty, and other weights are added in."
+    },
+    {
+      "term": "State School Fund",
+      "short_definition": "Oregon's main pot of state money for K-12 schools, distributed to districts based on their weighted enrollment (ADMw).",
+      "longer_note": "Makes up roughly two-thirds of total school funding statewide, with local property tax making up most of the rest."
+    },
+    {
+      "term": "General Purpose Grant",
+      "short_definition": "A district's main annual funding amount from the State School Fund -- calculated per weighted student (ADMw).",
+      "longer_note": "This is the number that charter school 'in lieu of' transfer payments are calculated as a percentage of."
+    },
+    {
+      "term": "Public Charter School",
+      "short_definition": "A publicly funded school that operates outside the traditional district structure but is still funded per-student through the same state formula -- including online/virtual charter schools.",
+      "longer_note": "A student's home district is required to transfer most of that student's per-student state funding to the charter school they attend, whether it's a physical charter school or a fully online one."
+    }
+  ]
+}

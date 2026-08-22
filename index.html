@@ -10,9 +10,12 @@
 </head>
 <body>
 <header class="site-header">
-  <div class="wrap">
-    <h1>Curry County Property Tax Breakdown</h1>
-    <p class="subtitle">Where does a Curry County property tax dollar actually go? <span class="fy-badge">FY 2025&ndash;26</span></p>
+  <div class="wrap header-row">
+    <div>
+      <h1>Curry County Property Tax Breakdown</h1>
+      <p class="subtitle">Where does a Curry County property tax dollar actually go? <span class="fy-badge">FY 2025&ndash;26</span></p>
+    </div>
+    <button type="button" class="print-btn" id="print-summary-btn">Print Summary</button>
   </div>
 </header>
 
@@ -20,6 +23,7 @@
   <div class="wrap tabs-inner">
     <button class="tab-btn active" role="tab" aria-selected="true" data-tab="bill">Your Tax Bill</button>
     <button class="tab-btn" role="tab" aria-selected="false" data-tab="county">County's Own Budget</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="changes">Recent &amp; Upcoming Changes</button>
     <button class="tab-btn" role="tab" aria-selected="false" data-tab="about">About &amp; Sources</button>
   </div>
 </nav>
@@ -139,6 +143,28 @@
         </div>
       </div>
     </div>
+
+    <div class="card" style="margin-top:1.5rem">
+      <h2>Where county government's OTHER money comes from</h2>
+      <p id="nonprop-headline" class="school-card-total" style="font-size:0.9rem"></p>
+      <div class="chart-area">
+        <div class="donut-wrap" id="nonprop-donut"></div>
+        <div class="legend" id="nonprop-legend"></div>
+      </div>
+      <p class="school-note school-heads-up" id="nonprop-pullquote"></p>
+    </div>
+  </section>
+
+  <!-- RECENT & UPCOMING CHANGES TAB -->
+  <section id="tab-changes" class="tab-panel" aria-hidden="true" hidden>
+    <div class="card">
+      <h2>Recent &amp; Upcoming Changes</h2>
+      <p class="hint">Ballot measures and other changes that affect (or nearly affected) Curry
+        County's taxing districts. This is the fastest-moving part of the app &mdash;
+        checked after each election, not tied to the annual data refresh.</p>
+      <div id="recent-measures"></div>
+      <div class="school-card" id="statewide-context-card" style="margin-top:0.9rem"></div>
+    </div>
   </section>
 
   <!-- ABOUT TAB -->
@@ -215,6 +241,30 @@
       See the About tab for full sources and limitations.</p>
   </div>
 </footer>
+
+<!-- Print-only condensed summary. Hidden on screen (see style.css); shown
+     exclusively when printing, in place of everything else on the page,
+     since the interactive tabs/tooltips/sliders don't translate to paper.
+     Populated by assets/app.js so it always reflects whatever area/value
+     the visitor last selected. -->
+<div id="print-summary">
+  <h1>Curry County Property Tax Breakdown</h1>
+  <p class="print-fy">FY 2025&ndash;26 estimate &mdash; not an official tax bill</p>
+
+  <div id="print-headline"></div>
+
+  <h2 id="print-area-title"></h2>
+  <div id="print-rate-summary"></div>
+  <table id="print-table">
+    <thead><tr><th>Category</th><th>What it funds</th><th>Your share</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <p class="print-caveat" id="print-caveat"></p>
+  <p class="print-source">Data: Curry County FY2025&ndash;26 Proposed Budget &middot; Tax Roll Summary by
+    Taxing District &middot; Tax Rates by Code Area (Curry County Assessor's Office). Estimate only &mdash;
+    contact the Assessor's Office for your exact bill.</p>
+</div>
 
 <script src="assets/app.js"></script>
 </body>

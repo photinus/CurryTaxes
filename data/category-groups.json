@@ -41,8 +41,8 @@
       "id": "health",
       "label": "Health District",
       "source_categories": ["health"],
-      "one_liner": "Supports local public health services and facilities.",
-      "explanation": "Curry County has a health district that funds public health programs and, in part, healthcare facility costs. This includes a voter-approved bond for specific health facility projects.",
+      "one_liner": "Funds Curry County's only hospital (Curry General in Gold Beach) plus clinics in Brookings and Port Orford -- not the same thing as county government's public health office, which is now run by the state.",
+      "explanation": "Curry Health District (doing business as Curry Health Network) owns and operates Curry General Hospital plus several clinics. This includes a voter-approved bond for the current hospital building. It is a separate special district from county government's Public Health department, which Curry County transferred to the Oregon Health Authority in 2021.",
       "icon_suggestion": "heart-pulse"
     },
     {

@@ -74,19 +74,25 @@ SCHOOL_CODE_TO_KEY = {
 # an override -- but check new ones for the same mixed-audience problem
 # before trusting the fallback.
 NEWS_NOTE_OVERRIDES = {
+    # Originally a "heads up, this may pass" note about a pending May 2026
+    # bond vote. The vote has since happened (see upcoming-changes.json) --
+    # updated here to report the actual outcome rather than leaving stale
+    # future-tense language about a measure that already failed.
     "School 17-C": (
-        "A school bond measure (Measure 8-118) is on the May 2026 ballot for "
-        "facility repairs and upgrades. If it passes, it would add roughly "
-        "$0.55 per $1,000 assessed value to this district's tax rate and "
-        "bring in about $6.1 million in state matching funds (OSCIM) -- not "
-        "reflected in the current FY2025-26 rate shown above."
+        "A school bond measure (Measure 8-118) for facility repairs and "
+        "upgrades was on the May 2026 ballot and failed (about 58% against). "
+        "The district does not receive the $6.1 million in state matching "
+        "funds (OSCIM) that were contingent on it passing, and the current "
+        "School 17-C tax rate shown above is unaffected. See the Recent & "
+        "Upcoming Changes tab for details."
     ),
 }
 
-# Explicit slugs for glossary.json terms, so the app can look up a
-# definition by a stable key instead of matching on the display string.
-# Add an entry here (and use the term verbatim from glossary.json) whenever
-# a new term is added to the glossary.
+# Explicit slugs for glossary terms (glossary.json's `terms` plus
+# enrollment-funding-explainer.json's `glossary_additions`), so the app can
+# look up a definition by a stable key instead of matching on the display
+# string. Add an entry here (using the term string verbatim from its source
+# file) whenever a new term is added to either file.
 GLOSSARY_SLUGS = {
     "Assessed Value": "assessed_value",
     "Real Market Value": "real_market_value",
@@ -99,6 +105,10 @@ GLOSSARY_SLUGS = {
     "Code Area": "code_area",
     "Taxing District": "taxing_district",
     "Compression / Measure 5 (M5) Limit": "compression_m5",
+    "ADMw (Weighted Average Daily Membership)": "admw",
+    "State School Fund": "state_school_fund",
+    "General Purpose Grant": "general_purpose_grant",
+    "Public Charter School": "public_charter_school",
 }
 
 
@@ -116,6 +126,11 @@ def main():
     headline_stats_doc = load("headline-stats.json")
     school_districts_doc = load("school-districts.json")
     school_funding_doc = load("school-funding-fy2024-25.json")
+    enrollment_funding_doc = load("enrollment-funding-explainer.json")
+    non_property_tax_revenue_doc = load("non-property-tax-revenue.json")
+    health_explainer_doc = load("health-district-explainer.json")
+    upcoming_changes_doc = load("upcoming-changes.json")
+    fire_context_doc = load("fire-district-context.json")
 
     districts = districts_doc["districts"]
     rate_by_name = {d["name"]: d["bill_rate"] for d in districts}
@@ -150,8 +165,10 @@ def main():
 
     # Glossary: key by an explicit slug (GLOSSARY_SLUGS) rather than the
     # display string, so the app can look up a definition by a stable key.
+    # Merges glossary.json's terms with enrollment-funding-explainer.json's
+    # glossary_additions into the same lookup -- one glossary UI, not two.
     glossary_by_slug = {}
-    for term in glossary_doc["terms"]:
+    for term in glossary_doc["terms"] + enrollment_funding_doc["glossary_additions"]:
         slug = GLOSSARY_SLUGS.get(term["term"])
         if slug is None:
             raise SystemExit(
@@ -235,6 +252,28 @@ def main():
                 "code_areas": codes_out,
             }
         )
+
+    # health-district-explainer.json's own scope note is written as an
+    # instruction to whoever builds this ("worth double-checking that
+    # mapping"), not reader copy -- verify it here against the actual code
+    # area data and write a clean, reader-facing note from what's actually
+    # true, rather than passing the instruction through verbatim.
+    health_code_count = sum(len(a["code_areas"]) for a in areas_out)
+    health_covered = sum(
+        1 for a in areas_out for ca in a["code_areas"] if any(d["name"].startswith("Health District") for d in ca["districts"])
+    )
+    fully_uncovered_areas = [
+        a["area_name"]
+        for a in areas_out
+        if not any(any(d["name"].startswith("Health District") for d in ca["districts"]) for ca in a["code_areas"])
+    ]
+    health_scope_note = (
+        f"The Health District's boundaries do not cover the entire county -- only "
+        f"{health_covered} of the county's {health_code_count} code areas include a "
+        f"Health District rate"
+        + (f", and the {fully_uncovered_areas[0]} has none of it at all" if len(fully_uncovered_areas) == 1 else "")
+        + ". Unlike the county's own permanent rate, not every Curry County property pays this one."
+    )
 
     # County budget: build display-friendly groupings.
     # Non-Departmental is a pass-through hub (transfers), so it is excluded
@@ -325,6 +364,15 @@ def main():
         "regional_education_entities": regional_out,
         "already_sourced_facts": school_districts_doc["already_sourced_facts"],
         "funding_meta": school_funding_doc["_meta"],
+        # Only the two reader-facing content blocks are passed through.
+        # enrollment_funding_doc's `worked_example_guidance` is addressed to
+        # whoever builds this feature (it says so explicitly: "guidance for
+        # building..."), not reader copy -- the app builds its own live
+        # interactive sentence instead of rendering that field verbatim.
+        "enrollment_funding_explainer": {
+            "allocation": enrollment_funding_doc["how_state_funding_is_allocated"],
+            "charter_transfer": enrollment_funding_doc["charter_school_funding_transfer"],
+        },
     }
 
     app_data = {
@@ -365,9 +413,39 @@ def main():
             "non_departmental": non_dept,
             "road_capital_reserve": road_reserve,
             "officials": budget["county_officials_fy2025_26"],
+            "non_property_tax_revenue": {
+                "headline": non_property_tax_revenue_doc["headline"],
+                "sources": non_property_tax_revenue_doc["revenue_sources"],
+                "pull_quote": non_property_tax_revenue_doc["app_display_guidance"]["good_pull_quote"],
+            },
         },
         "category_groups": category_groups_doc["display_groups"],
         "glossary": glossary_by_slug,
+        "health_district_explainer": {
+            "official_name": health_explainer_doc["official_name"],
+            "what_it_is": health_explainer_doc["what_it_is"],
+            "important_scope_note": health_scope_note,
+            "what_it_operates": health_explainer_doc["what_it_operates"],
+            "why_this_matters_for_a_rural_coastal_county": health_explainer_doc[
+                "why_this_matters_for_a_rural_coastal_county"
+            ],
+        },
+        "fire_district_context": {
+            "headline": fire_context_doc["general_context"]["headline"],
+            # fire-district-context.json's own text ends with "...see
+            # 'known_gaps' below" -- a reference to that JSON file's own
+            # sibling key, meaningless to a reader of the app. The app
+            # already renders its own honest-gap sentence separately
+            # (assets/app.js's fireDrilldownMarkup), so trim the dangling
+            # citation rather than pass it through verbatim.
+            "why_rates_vary_generally": fire_context_doc["general_context"]["why_rates_vary_generally"].split(
+                " None of these specifics"
+            )[0],
+        },
+        "upcoming_changes": {
+            "recent_measures": upcoming_changes_doc["recent_measures"],
+            "statewide_context": upcoming_changes_doc["statewide_context_worth_including"],
+        },
         "headline_stats": {
             "headline_facts": headline_stats_doc["headline_facts"],
             "dollar_story_formula": headline_stats_doc["dollar_story_formula"],
