@@ -841,12 +841,16 @@
       }
       body += schoolCardHTML(k12, extraNote);
     }
-    DATA.schools.regional_education_entities.forEach((e) => {
-      body += regionalCardHTML(e);
-    });
+    // The "how does per-student funding work?" explainer sits right after
+    // the resident's own K-12 district card -- the most relevant spot --
+    // rather than after the ESD/SWOCC cards, so it's not easy to miss by
+    // stopping short of scrolling past those.
     if (isOpen) {
       body += enrollmentExplainerMarkup(k12);
     }
+    DATA.schools.regional_education_entities.forEach((e) => {
+      body += regionalCardHTML(e);
+    });
 
     return `
       <div class="school-drilldown-toggle">
