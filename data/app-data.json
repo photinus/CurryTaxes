@@ -5396,7 +5396,7 @@
       "formula": "annual_dollar_amount = (bill_rate / 1000) * assessed_value",
       "example_for_copy_only": "A $300,000 assessed home at a rate of $0.6609 per $1,000 pays about $198/year to that one district. (300000/1000)*0.6609 = 198.27"
     },
-    "opening_section_copy": "Curious where your property tax dollars actually go? Curry County collects tax on behalf of about 48 different local agencies -- your county government is just one of them, and usually the smallest slice. Enter your home's assessed value below to see your own estimated breakdown, or explore the countywide averages.",
+    "opening_section_copy": "Curious where your property tax dollars actually go? Curry County collects tax on behalf of about 48 different local agencies -- your county government is just one of them, and usually the smallest slice. Pick your area below to see the percentage breakdown, then estimate your own dollar amount if you want one.",
     "caveat_copy": "This is an estimate based on published FY2025-26 tax rates and your area's typical mix of districts. Your actual bill may vary slightly and is set by the Curry County Assessor's Office -- see your tax statement or contact the Assessor for the exact figure."
   },
   "schools": {

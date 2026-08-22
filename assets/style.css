@@ -563,14 +563,9 @@ select, input[type="number"] {
   font-variant-numeric: tabular-nums;
 }
 
-.group-row-amount {
-  font-weight: 700;
-  font-size: 0.92rem;
-}
-
 .group-row-pct {
-  font-size: 0.76rem;
-  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.98rem;
 }
 
 .group-row-chevron {
@@ -601,7 +596,35 @@ select, input[type="number"] {
 .group-detail-line:last-child { border-bottom: none; }
 
 .group-detail-name { color: var(--text); }
+.group-detail-rate { color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.78rem; }
 .group-detail-amount { color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.link-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-btn:hover, .link-btn:focus-visible { text-decoration: none; }
+
+.calc-callout {
+  margin-top: 0.9rem;
+  background: var(--bg-card);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.calc-callout p { margin: 0; }
 
 .estimate-caveat {
   font-size: 0.76rem;

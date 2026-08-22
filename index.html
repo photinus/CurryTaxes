@@ -21,7 +21,8 @@
 
 <nav class="tabs" role="tablist" aria-label="Views">
   <div class="wrap tabs-inner">
-    <button class="tab-btn active" role="tab" aria-selected="true" data-tab="bill">Your Tax Bill</button>
+    <button class="tab-btn active" role="tab" aria-selected="true" data-tab="bill">Where It Goes</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="calculator">Estimate Your Bill</button>
     <button class="tab-btn" role="tab" aria-selected="false" data-tab="county">County's Own Budget</button>
     <button class="tab-btn" role="tab" aria-selected="false" data-tab="changes">Recent &amp; Upcoming Changes</button>
     <button class="tab-btn" role="tab" aria-selected="false" data-tab="about">About &amp; Sources</button>
@@ -30,7 +31,7 @@
 
 <main class="wrap">
 
-  <!-- TAX BILL TAB -->
+  <!-- WHERE IT GOES TAB (percentage-focused landing view) -->
   <section id="tab-bill" class="tab-panel" aria-hidden="false">
 
     <div class="card intro-card">
@@ -40,7 +41,7 @@
 
     <div class="panel-grid">
       <div class="controls-card card">
-        <h2>1. Pick where the property is</h2>
+        <h2>Pick where the property is</h2>
         <div id="area-picker" class="area-picker"></div>
 
         <div class="advanced-toggle">
@@ -56,7 +57,33 @@
 
         <div id="rate-mismatch-banner" class="mismatch-banner" hidden></div>
 
-        <h2>2. Enter your property value</h2>
+        <div class="calc-callout">
+          <p>Want to see this in dollars for a specific property value?
+            <button type="button" id="goto-calculator-btn" class="link-btn">Estimate your bill &rarr;</button>
+          </p>
+        </div>
+      </div>
+
+      <div class="chart-card card">
+        <h2 id="bill-chart-title">Tax bill breakdown</h2>
+        <div class="chart-area">
+          <div class="donut-wrap" id="bill-donut"></div>
+        </div>
+        <div class="group-accordion" id="bill-groups"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR TAB (dollar estimate for a specific property value) -->
+  <section id="tab-calculator" class="tab-panel" aria-hidden="true" hidden>
+
+    <div class="card intro-card">
+      <p id="calc-area-readout"></p>
+    </div>
+
+    <div class="panel-grid">
+      <div class="controls-card card">
+        <h2>Enter your property value</h2>
         <div class="input-mode-toggle" role="group" aria-label="Input mode">
           <button class="mode-btn active" data-mode="assessed">Assessed value</button>
           <button class="mode-btn" data-mode="bill">Total annual tax bill</button>
@@ -76,11 +103,10 @@
       </div>
 
       <div class="chart-card card">
-        <h2 id="bill-chart-title">Tax bill breakdown</h2>
+        <h2>Your estimated tax bill</h2>
         <div class="chart-area">
-          <div class="donut-wrap" id="bill-donut"></div>
+          <div class="donut-wrap" id="calc-donut"></div>
         </div>
-        <div class="group-accordion" id="bill-groups"></div>
 
         <div class="full-detail-toggle">
           <button type="button" class="full-detail-btn" id="full-detail-btn" aria-expanded="false">Show full detail &mdash; every taxing district</button>

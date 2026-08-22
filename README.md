@@ -14,14 +14,17 @@ FY2025-26 and a handful of files are tied to specific election dates.
 
 ## What this shows
 
-Four views:
+Five views:
 
-1. **Your Tax Bill** — pick one of six named areas (Port Orford/Langlois,
-   Agness, Ophir/Nesika Beach, Gold Beach, Pistol River, Brookings-Harbor),
-   enter an assessed value or an annual tax bill amount, and see the amount
-   split into 8 plain-language groups (Schools, Fire & Emergency, County
-   Government, City Government, Health, Library, Roads, Other Local
-   Districts) — each expandable to the exact districts and rates behind it.
+1. **Where It Goes** — the landing page, focused on the percentage
+   breakdown rather than a dollar calculator. Pick one of six named areas
+   (Port Orford/Langlois, Agness, Ophir/Nesika Beach, Gold Beach, Pistol
+   River, Brookings-Harbor) and see the composite rate split into 8
+   plain-language groups (Schools, Fire & Emergency, County Government,
+   City Government, Health, Library, Roads, Other Local Districts), each
+   shown as a percentage of the whole and expandable to the exact districts
+   and per-$1,000 rates behind it — no property value needed, since a
+   group's share of the bill doesn't depend on it.
    - The **Schools** group drills down further: the K-12 district that
      actually serves the selected code area, plus the countywide ESD and
      SWOCC, each with a full state/local/federal/other funding breakdown —
@@ -29,9 +32,10 @@ Four views:
      of an Oregon school district's real revenue — plus a "how does
      per-student funding work?" explainer covering Oregon's enrollment-based
      (State School Fund) funding formula and the charter-school funding
-     transfer mechanism, with a simple illustrative slider (no dollar
-     figures, since that requires a current-year number this app doesn't
-     fetch).
+     transfer mechanism, with a simple illustrative slider, and each
+     district's own General Fund expenditure breakdown (Instruction /
+     Support Services / Other) with program-level detail where the source
+     supports it.
    - The **Health District** group drills down into what Curry Health
      Network actually operates (the county's only hospital plus three
      clinics) and clarifies it's a separate special district from county
@@ -41,22 +45,27 @@ Four views:
      so much district to district (volunteer vs. paid staffing, coverage
      differences) — general context only, since per-district specifics
      weren't researched and the app won't guess at them from rate levels.
-   - A "Show full detail" toggle reveals the full ~40-district,
-     full-precision table for anyone who wants it, and an "advanced" toggle
-     exposes all ~45 actual code areas for more precision than the six named
-     areas.
-2. **County's Own Budget** — Curry County government's FY2025-26 proposed
+   - An "advanced" toggle exposes all ~45 actual code areas for more
+     precision than the six named areas. A callout links to the Calculator
+     for anyone who wants an actual dollar figure.
+2. **Estimate Your Bill** — the calculator, split out from the landing page
+   so the percentage breakdown isn't gated behind entering a property value.
+   Enter an assessed value or an annual tax bill amount for the area picked
+   on Where It Goes (with a "change" link back if you want a different one)
+   and see the resulting dollar total, composite rate, and a "Show full
+   detail" toggle with the full ~40-district, full-precision table.
+3. **County's Own Budget** — Curry County government's FY2025-26 proposed
    budget broken down by department/fund (Sheriff's Office, Road Fund,
    General Fund departments, Vehicle Services, other funds), plus a second
    chart on where the county's non-property-tax revenue comes from (O&C
    timber payments, federal PILT, transient lodging tax, franchise fees,
    state-shared taxes) — property tax is the single biggest source but,
    combined, these others add up to more than it.
-3. **Recent & Upcoming Changes** — ballot measures affecting Curry County's
+4. **Recent & Upcoming Changes** — ballot measures affecting Curry County's
    taxing districts (currently: the Brookings-Harbor school bond that failed
    in the May 2026 election), plus brief statewide context. The
    fastest-moving part of the app; see `MAINTENANCE.md`.
-4. **About & Sources** — data provenance, limitations, and the full list of
+5. **About & Sources** — data provenance, limitations, and the full list of
    code areas where this app's recomputed rate disagrees with the source
    PDF's printed subtotal.
 
