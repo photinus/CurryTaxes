@@ -473,6 +473,15 @@
     document.getElementById("bill-chart-title").textContent =
       `Tax bill breakdown — ${currentArea().area_name}, code ${ca.code}`;
 
+    const calcReadout = document.getElementById("calc-area-readout");
+    calcReadout.innerHTML =
+      `Estimating for: <strong>${escapeHtml(currentArea().area_name)}, code ${escapeHtml(ca.code)}</strong> ` +
+      `<button type="button" id="calc-change-area-btn" class="link-btn">change</button>`;
+    document.getElementById("calc-change-area-btn").addEventListener("click", () => {
+      document.querySelector('.tab-btn[data-tab="bill"]').click();
+      document.getElementById("area-picker").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
     // Per-district dollar amounts
     const districtAmounts = ca.districts.map((d) => ({
       name: d.name,
@@ -498,15 +507,20 @@
       .filter((g) => g.value > 0)
       .sort((a, b) => b.value - a.value);
 
-    renderDonut(
-      document.getElementById("bill-donut"),
-      groupSegments.map((g) => ({ label: g.meta.label, value: g.value, color: GROUP_COLORS[g.groupId] })),
-      {
-        ariaLabel: "Tax bill by category",
-        centerTop: fmtUSD(totalBill),
-        centerBottom: "per year",
-      }
-    );
+    const donutSegments = groupSegments.map((g) => ({ label: g.meta.label, value: g.value, color: GROUP_COLORS[g.groupId] }));
+    const topGroup = groupSegments[0];
+
+    renderDonut(document.getElementById("bill-donut"), donutSegments, {
+      ariaLabel: "Tax bill by category",
+      centerTop: topGroup && totalBill > 0 ? fmtPct(topGroup.value / totalBill) : "—",
+      centerBottom: topGroup ? topGroup.meta.label : "",
+    });
+
+    renderDonut(document.getElementById("calc-donut"), donutSegments, {
+      ariaLabel: "Tax bill by category",
+      centerTop: fmtUSD(totalBill),
+      centerBottom: "per year",
+    });
 
     renderGroupAccordion(groupSegments, totalBill, ca.school_district_key);
 
@@ -588,8 +602,8 @@
         .map(
           (d) => `
             <div class="group-detail-line">
-              <span class="group-detail-name">${autoGlossify(d.name)} <span class="dim">(${d.bill_rate.toFixed(4)}/$1,000)</span></span>
-              <span class="group-detail-amount">${fmtUSD2(d.amount)}</span>
+              <span class="group-detail-name">${autoGlossify(d.name)}</span>
+              <span class="group-detail-rate">${d.bill_rate.toFixed(4)}/$1,000</span>
             </div>`
         )
         .join("");
@@ -607,7 +621,6 @@
             <span class="group-row-oneliner">${g.meta.one_liner}</span>
           </span>
           <span class="group-row-amounts">
-            <span class="group-row-amount">${fmtUSD(g.value)}</span>
             <span class="group-row-pct">${totalBill > 0 ? fmtPct(g.value / totalBill) : "0%"}</span>
           </span>
           <span class="group-row-chevron" aria-hidden="true">&#9656;</span>
@@ -1137,6 +1150,10 @@
   }
 
   function setupBillControls() {
+    document.getElementById("goto-calculator-btn").addEventListener("click", () => {
+      document.querySelector('.tab-btn[data-tab="calculator"]').click();
+    });
+
     document.getElementById("advanced-toggle").addEventListener("change", (e) => {
       state.advanced = e.target.checked;
       document.getElementById("code-picker-wrap").hidden = !state.advanced;
