@@ -753,3 +753,136 @@ select, input[type="number"] {
   color: var(--text-muted);
   font-style: italic;
 }
+
+/* ---------- Enrollment funding explainer ---------- */
+
+.explainer-toggle {
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--border);
+}
+
+.explainer-body {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.explainer-body[hidden] { display: none; }
+
+.explainer-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  background: var(--bg-card);
+}
+
+.explainer-headline {
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin: 0 0 0.4rem;
+}
+
+.explainer-card p {
+  font-size: 0.83rem;
+  margin: 0 0 0.5rem;
+}
+
+.explainer-card p:last-child { margin-bottom: 0; }
+
+.weighting-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+
+.weighting-chip {
+  font-size: 0.76rem;
+  background: var(--table-row-alt);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  color: var(--text-muted);
+}
+
+.weighting-more-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.weighting-full-list {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+}
+
+.weighting-full-list[hidden] { display: none; }
+
+.weighting-full-item {
+  font-size: 0.78rem;
+  margin: 0 0 0.5rem;
+}
+
+.weighting-full-item:last-child { margin-bottom: 0; }
+
+.weighting-full-item strong { display: block; color: var(--text); }
+.weighting-full-item span { color: var(--text-muted); }
+
+.charter-rate-badges {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+  flex-wrap: wrap;
+}
+
+.charter-rate-badge {
+  flex: 1 1 140px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  background: var(--table-row-alt);
+}
+
+.charter-rate-badge .big-pct {
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: block;
+}
+
+.charter-rate-badge .badge-caption {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.charter-slider-row {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--border);
+}
+
+.charter-slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.charter-slider-row input[type="range"] {
+  width: 100%;
+}
+
+.charter-slider-output {
+  margin-top: 0.5rem;
+  font-size: 0.83rem;
+  background: var(--table-row-alt);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}

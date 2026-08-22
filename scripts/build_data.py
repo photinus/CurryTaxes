@@ -83,10 +83,11 @@ NEWS_NOTE_OVERRIDES = {
     ),
 }
 
-# Explicit slugs for glossary.json terms, so the app can look up a
-# definition by a stable key instead of matching on the display string.
-# Add an entry here (and use the term verbatim from glossary.json) whenever
-# a new term is added to the glossary.
+# Explicit slugs for glossary terms (glossary.json's `terms` plus
+# enrollment-funding-explainer.json's `glossary_additions`), so the app can
+# look up a definition by a stable key instead of matching on the display
+# string. Add an entry here (using the term string verbatim from its source
+# file) whenever a new term is added to either file.
 GLOSSARY_SLUGS = {
     "Assessed Value": "assessed_value",
     "Real Market Value": "real_market_value",
@@ -99,6 +100,10 @@ GLOSSARY_SLUGS = {
     "Code Area": "code_area",
     "Taxing District": "taxing_district",
     "Compression / Measure 5 (M5) Limit": "compression_m5",
+    "ADMw (Weighted Average Daily Membership)": "admw",
+    "State School Fund": "state_school_fund",
+    "General Purpose Grant": "general_purpose_grant",
+    "Public Charter School": "public_charter_school",
 }
 
 
@@ -116,6 +121,7 @@ def main():
     headline_stats_doc = load("headline-stats.json")
     school_districts_doc = load("school-districts.json")
     school_funding_doc = load("school-funding-fy2024-25.json")
+    enrollment_funding_doc = load("enrollment-funding-explainer.json")
 
     districts = districts_doc["districts"]
     rate_by_name = {d["name"]: d["bill_rate"] for d in districts}
@@ -150,8 +156,10 @@ def main():
 
     # Glossary: key by an explicit slug (GLOSSARY_SLUGS) rather than the
     # display string, so the app can look up a definition by a stable key.
+    # Merges glossary.json's terms with enrollment-funding-explainer.json's
+    # glossary_additions into the same lookup -- one glossary UI, not two.
     glossary_by_slug = {}
-    for term in glossary_doc["terms"]:
+    for term in glossary_doc["terms"] + enrollment_funding_doc["glossary_additions"]:
         slug = GLOSSARY_SLUGS.get(term["term"])
         if slug is None:
             raise SystemExit(
@@ -325,6 +333,15 @@ def main():
         "regional_education_entities": regional_out,
         "already_sourced_facts": school_districts_doc["already_sourced_facts"],
         "funding_meta": school_funding_doc["_meta"],
+        # Only the two reader-facing content blocks are passed through.
+        # enrollment_funding_doc's `worked_example_guidance` is addressed to
+        # whoever builds this feature (it says so explicitly: "guidance for
+        # building..."), not reader copy -- the app builds its own live
+        # interactive sentence instead of rendering that field verbatim.
+        "enrollment_funding_explainer": {
+            "allocation": enrollment_funding_doc["how_state_funding_is_allocated"],
+            "charter_transfer": enrollment_funding_doc["charter_school_funding_transfer"],
+        },
     }
 
     app_data = {

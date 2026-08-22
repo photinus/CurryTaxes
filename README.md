@@ -22,10 +22,15 @@ Two views:
    actually serves the selected code area, plus the countywide ESD and
    SWOCC, each with a full state/local/federal/other funding breakdown —
    not just the property tax slice, since that's typically well under half
-   of an Oregon school district's real revenue. A "Show full detail" toggle
-   reveals the full ~40-district, full-precision table for anyone who wants
-   it, and an "advanced" toggle exposes all ~45 actual code areas for more
-   precision than the six named areas.
+   of an Oregon school district's real revenue. A further "how does
+   per-student funding work?" explainer covers Oregon's enrollment-based
+   (State School Fund) funding formula and the charter-school funding
+   transfer mechanism, including a simple illustrative slider — no
+   dollar figures, since that requires a current-year number this app
+   doesn't fetch (see the file's own accuracy note). A "Show full detail"
+   toggle reveals the full ~40-district, full-precision table for anyone
+   who wants it, and an "advanced" toggle exposes all ~45 actual code
+   areas for more precision than the six named areas.
 2. **County's Own Budget** — Curry County government's FY2025-26 proposed
    budget broken down by department/fund (Sheriff's Office, Road Fund,
    General Fund departments, Vehicle Services, other funds). This is the
@@ -69,7 +74,16 @@ runtime fetching, no backend). Fiscal year **2025-2026**.
   district's total revenue into state/local/federal/other buckets. The
   raw statewide CSV is not checked in — see "Updating the school funding
   data" below.
-- `data/app-data.json` — **generated**. Combines and reconciles all eight
+- `data/enrollment-funding-explainer.json` — explains Oregon's per-student
+  (State School Fund) funding formula and the charter-school funding
+  transfer mechanism, shown as a "how does per-student funding work?"
+  explainer inside the Schools drill-down, plus 4 more glossary terms
+  (ADMw, State School Fund, General Purpose Grant, Public Charter School)
+  merged into the same glossary. Doesn't change annually — it explains a
+  legal mechanism, not a dollar figure — except its 80%/95% statutory
+  minimum transfer rates, which should be reconfirmed against ORS
+  338.155(2) if Oregon amends that statute.
+- `data/app-data.json` — **generated**. Combines and reconciles all nine
   files above into the shape the app consumes, and validates that every
   district category has a display group, every glossary term has a
   stable lookup key, and every code area matches exactly one K-12 school

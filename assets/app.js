@@ -90,18 +90,26 @@
   // in a short, dynamically-rendered snippet of text (e.g. a district's
   // source note). Order matters: first match wins, and only one term is
   // linked per snippet so a short note doesn't turn into a wall of tooltips.
+  // Each pattern tolerates a trailing "s" (code area/areas, bond/bonds, ...)
+  // so a plural in the source text doesn't get cut in half by the match --
+  // e.g. matching only "public charter school" inside "public charter
+  // schools" would wrap the term and strand a bare "s" right after it.
   const GLOSSARY_KEYWORD_PATTERNS = [
-    ["real_market_value", /real market value/i],
-    ["assessed_value", /assessed value/i],
-    ["local_option_levy", /local option(?: levy)?/i],
-    ["permanent_rate", /permanent rate/i],
-    ["tax_rate", /\b(?:tax rate|bill rate)\b/i],
-    ["levy", /\blevy\b/i],
-    ["bond", /\bbond\b/i],
+    ["real_market_value", /real market values?/i],
+    ["assessed_value", /assessed values?/i],
+    ["local_option_levy", /local option(?: levy| levies)?/i],
+    ["permanent_rate", /permanent rates?/i],
+    ["tax_rate", /\b(?:tax rates?|bill rates?)\b/i],
+    ["levy", /\blev(?:y|ies)\b/i],
+    ["bond", /\bbonds?\b/i],
     ["urban_renewal", /urban renewal/i],
-    ["code_area", /code area/i],
-    ["taxing_district", /taxing district/i],
+    ["code_area", /code areas?/i],
+    ["taxing_district", /taxing districts?/i],
     ["compression_m5", /compression|measure 5/i],
+    ["state_school_fund", /state school fund/i],
+    ["general_purpose_grant", /general purpose grants?/i],
+    ["public_charter_school", /public charter schools?/i],
+    ["admw", /\bADMw\b/],
   ];
 
   const fmtUSD = (n) =>
@@ -121,6 +129,9 @@
     openGroups: new Set(),
     fullDetailOpen: false,
     schoolDrilldownOpen: false,
+    enrollmentExplainerOpen: false,
+    weightingListOpen: false,
+    charterStudents: 3,
   };
 
   // ---------- Inline glossary tooltips ----------
@@ -151,18 +162,25 @@
     </span>`;
   }
 
-  // For short dynamic strings (e.g. a district's source note): link the
-  // first glossary term that appears, if any, leaving the rest as plain text.
+  // For dynamic strings (e.g. a district's source note or an explainer
+  // paragraph): link the glossary term that appears earliest in the text,
+  // if any, leaving the rest as plain text. Picking by text position
+  // (rather than by GLOSSARY_KEYWORD_PATTERNS array order) matters once a
+  // paragraph mentions multiple terms -- a reader expects the first term
+  // they read to be the one that's clickable, not whichever pattern
+  // happens to sit first in this list.
   function autoGlossify(text) {
+    let best = null;
     for (const [key, re] of GLOSSARY_KEYWORD_PATTERNS) {
       const m = text.match(re);
-      if (m && DATA.glossary[key]) {
-        const before = text.slice(0, m.index);
-        const after = text.slice(m.index + m[0].length);
-        return escapeHtml(before) + glossSpan(key, m[0]) + escapeHtml(after);
+      if (m && DATA.glossary[key] && (best === null || m.index < best.index)) {
+        best = { key, match: m, index: m.index };
       }
     }
-    return escapeHtml(text);
+    if (!best) return escapeHtml(text);
+    const before = text.slice(0, best.index);
+    const after = text.slice(best.index + best.match[0].length);
+    return escapeHtml(before) + glossSpan(best.key, best.match[0]) + escapeHtml(after);
   }
 
   // Converts static `<span class="gloss-anchor" data-gloss="key">Label</span>`
@@ -536,6 +554,40 @@
           state.schoolDrilldownOpen = !state.schoolDrilldownOpen;
           renderBillTab();
         });
+
+        const explainerToggle = row.querySelector('[data-role="explainer-toggle"]');
+        if (explainerToggle) {
+          explainerToggle.addEventListener("click", () => {
+            state.enrollmentExplainerOpen = !state.enrollmentExplainerOpen;
+            renderBillTab();
+          });
+        }
+
+        const weightingMore = row.querySelector('[data-role="weighting-more"]');
+        if (weightingMore) {
+          weightingMore.addEventListener("click", () => {
+            state.weightingListOpen = !state.weightingListOpen;
+            renderBillTab();
+          });
+        }
+
+        const charterSlider = row.querySelector("#charter-slider");
+        if (charterSlider) {
+          // Update the label/output text directly rather than calling
+          // renderBillTab(): a full re-render would destroy and recreate
+          // this <input type="range"> on every tick, which interrupts an
+          // in-progress drag in some browsers.
+          const k12ForSlider = DATA.schools.k12_districts.find((d) => d.key === schoolDistrictKey);
+          const districtName = k12ForSlider ? k12ForSlider.official_name : "a Curry County district";
+          charterSlider.addEventListener("input", (e) => {
+            const n = parseInt(e.target.value, 10);
+            state.charterStudents = n;
+            const label = row.querySelector(".charter-slider-label strong");
+            const output = row.querySelector(".charter-slider-output");
+            if (label) label.textContent = n;
+            if (output) output.innerHTML = charterSliderOutputText(n, districtName);
+          });
+        }
       }
 
       row.querySelector(".group-row-header").addEventListener("click", () => {
@@ -676,6 +728,9 @@
     DATA.schools.regional_education_entities.forEach((e) => {
       body += regionalCardHTML(e);
     });
+    if (isOpen) {
+      body += enrollmentExplainerMarkup(k12);
+    }
 
     return `
       <div class="school-drilldown-toggle">
@@ -683,6 +738,107 @@
           ${isOpen ? "Hide" : "See where the rest of the money comes from"} &mdash; state, federal &amp; more
         </button>
         <div class="school-drilldown-body" ${isOpen ? "" : "hidden"}>${isOpen ? body : ""}</div>
+      </div>
+    `;
+  }
+
+  function charterSliderOutputText(n, districtName) {
+    if (n <= 0) {
+      return `Move the slider to see the effect of resident students enrolling in an online charter school instead of ${escapeHtml(districtName)}.`;
+    }
+    const s = n === 1 ? "" : "s";
+    const verbS = n === 1 ? "s" : "";
+    return (
+      `If ${n} student${s} who live${verbS} in ${escapeHtml(districtName)}'s boundary enroll${verbS} in an online ` +
+      `charter school instead, the district loses funding for roughly ${n} weighted student${s} &mdash; at least 80% ` +
+      `of normal per-K-8-student funding, or 95% for high schoolers &mdash; for as long as they stay enrolled elsewhere.`
+    );
+  }
+
+  function enrollmentExplainerMarkup(k12) {
+    const ex = DATA.schools.enrollment_funding_explainer;
+    const alloc = ex.allocation;
+    const charter = ex.charter_transfer;
+    const isOpen = state.enrollmentExplainerOpen;
+
+    if (!isOpen) {
+      return `
+        <div class="explainer-toggle">
+          <button type="button" class="school-drilldown-btn" data-role="explainer-toggle" aria-expanded="false">
+            How does per-student funding actually work?
+          </button>
+        </div>
+      `;
+    }
+
+    const chipCategories = alloc.weighting_categories.slice(0, 4);
+    const chips = chipCategories
+      .map((c) => `<span class="weighting-chip">${escapeHtml(c.category.replace(/\s*\(.*\)$/, ""))}</span>`)
+      .join("");
+
+    const weightingListOpen = state.weightingListOpen;
+    const fullList = alloc.weighting_categories
+      .map(
+        (c) => `
+          <p class="weighting-full-item"><strong>${escapeHtml(c.category)}</strong><span>${escapeHtml(c.weight_note)}</span></p>`
+      )
+      .join("");
+
+    const districtName = k12 ? k12.official_name : "a Curry County district";
+    const n = state.charterStudents;
+    const sliderOutput = charterSliderOutputText(n, districtName);
+
+    return `
+      <div class="explainer-toggle">
+        <button type="button" class="school-drilldown-btn" data-role="explainer-toggle" aria-expanded="true">
+          Hide &mdash; how per-student funding works
+        </button>
+        <div class="explainer-body">
+
+          <div class="explainer-card">
+            <p class="explainer-headline">${escapeHtml(alloc.headline)}</p>
+            <p>${autoGlossify(alloc.the_basic_formula)}</p>
+            <p>${escapeHtml(alloc.why_weighted_not_just_a_headcount)}</p>
+            <p class="dim" style="font-size:0.78rem">Districts get more funding for:</p>
+            <div class="weighting-chips">${chips}</div>
+            <button type="button" class="weighting-more-btn" data-role="weighting-more">
+              ${weightingListOpen ? "Show less" : `Show all ${alloc.weighting_categories.length} weighting categories`}
+            </button>
+            <div class="weighting-full-list" ${weightingListOpen ? "" : "hidden"}>
+              ${fullList}
+              <p class="dim" style="font-size:0.78rem;margin-top:0.5rem">${escapeHtml(alloc.the_smoothing_rule)}</p>
+              <p class="dim" style="font-size:0.78rem">${escapeHtml(alloc.state_vs_local_share)}</p>
+            </div>
+          </div>
+
+          <div class="explainer-card">
+            <p class="explainer-headline">${escapeHtml(charter.headline)}</p>
+            <p>${autoGlossify(charter.plain_language_summary)}</p>
+            <div class="charter-rate-badges">
+              <div class="charter-rate-badge">
+                <span class="big-pct">80%</span>
+                <span class="badge-caption">minimum transfer, grades K&ndash;8</span>
+              </div>
+              <div class="charter-rate-badge">
+                <span class="big-pct">95%</span>
+                <span class="badge-caption">minimum transfer, grades 9&ndash;12</span>
+              </div>
+            </div>
+            <p class="dim" style="font-size:0.76rem">${escapeHtml(charter.statutory_minimum_transfer_rates.note)} (${escapeHtml(charter.statutory_minimum_transfer_rates.source)})</p>
+            <p>${autoGlossify(charter.how_this_applies_to_online_charter_schools)}</p>
+            <p>${escapeHtml(charter.the_takeaway_for_a_small_rural_county)}</p>
+
+            <div class="charter-slider-row">
+              <div class="charter-slider-label">
+                <span>Students leaving for an online charter school</span>
+                <strong>${n}</strong>
+              </div>
+              <input type="range" min="0" max="15" step="1" value="${n}" id="charter-slider" />
+              <p class="charter-slider-output">${sliderOutput}</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     `;
   }
