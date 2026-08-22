@@ -1,0 +1,66 @@
+{
+  "_meta": {
+    "source": "Curry County 2025-2026 Proposed Budget",
+    "source_url": "https://cms6.revize.com/revize/currycounty/document_center/finance/PROPOSED%2025-26FY%20Budget.pdf",
+    "fiscal_year": "2025-2026",
+    "status": "Proposed (figures may shift slightly at Approved/Adopted stage)",
+    "extracted": "2026-08-21",
+    "notes": "All dollar figures are 'TOTAL REQUIREMENTS, 2025-2026 Proposed' pulled directly from the PDF's department-by-department tables. This is what the County itself controls and spends -- it is NOT the same as an individual taxpayer's full property tax bill, which also includes school districts, fire districts, cities, ports, libraries, and other special districts collected on the County's behalf. See data-sources.md for those."
+  },
+  "county_permanent_tax_rate": {
+    "rate_per_1000_assessed_value": 0.5996,
+    "description": "Curry County's own permanent property tax rate. This funds County government only and is the '7 cents per dollar' figure -- it excludes school/fire/library/city/port/etc. levies.",
+    "estimated_fy2025_26_revenue": 2008500
+  },
+  "total_combined_budget": {
+    "all_funds_all_revenue_and_expenditure": 64276759,
+    "total_excluding_road_fund_reserves": 26732761,
+    "note": "The combined figure includes internal transfers between funds, so it is not simply additive with the department list below without double-counting."
+  },
+  "general_fund_departments": [
+    {"department": "Board of Property Tax Appeals (BOPTA)", "total_requirements": 6570},
+    {"department": "County Clerk - Elections & Recording", "total_requirements": 645306},
+    {"department": "County Treasurer", "total_requirements": 152427},
+    {"department": "County Assessor", "total_requirements": 1167858},
+    {"department": "Tax Collection", "total_requirements": 219791},
+    {"department": "District Attorney", "total_requirements": 823280},
+    {"department": "Juvenile Department", "total_requirements": 590173},
+    {"department": "Non-Departmental (contingency, transfers to other funds/departments)", "total_requirements": 8359592,
+     "note": "This is largely a pass-through hub: property tax, O&C timber revenue, PILT, etc. come in here and get transferred out to fund Assessor, DA, Sheriff sub-funds, Juvenile, Road, etc. Do not sum this with the department lines above without netting out transfers, or you will double-count."}
+  ],
+  "road_fund": [
+    {"fund": "Road - Operations", "total_requirements": 6290387},
+    {"fund": "Road - Bike and Footpath", "total_requirements": 163084},
+    {"fund": "Road - Capital Improvement Fund", "total_requirements": 18680000,
+     "note": "Mostly a reserve for future road capital expenditure, not a single year's operating spend."},
+    {"fund": "Road - Equipment Self Insurance", "total_requirements": 1157000}
+  ],
+  "general_vehicle_services_fund": [
+    {"fund": "Gen Vehicle Services - Gen Equip Self Insurance", "total_requirements": 5480},
+    {"fund": "Gen Vehicle Services - General Vehicle Services", "total_requirements": 420700},
+    {"fund": "Gen Vehicle Services - Vehicle Replacement", "total_requirements": 325008}
+  ],
+  "other_funds": [
+    {"fund": "County Clerk Records Fund", "total_requirements": 124296},
+    {"fund": "Law Library", "total_requirements": 35426}
+  ],
+  "sheriff_special_revenue_sub_funds": [
+    {"fund": "Sheriff - Special Projects (K9, Sonar, donations)", "total_requirements": 15000},
+    {"fund": "Sheriff - Search and Rescue (SAR)", "total_requirements": 96120},
+    {"fund": "Sheriff - Marine Patrol", "total_requirements": 123376},
+    {"fund": "Sheriff - Jail Custody Services", "total_requirements": 40600},
+    {"fund": "Sheriff - Jail", "total_requirements": 2457734},
+    {"fund": "Sheriff - Civil/Criminal/Patrol", "total_requirements": 1726025},
+    {"fund": "Sheriff - Communications (911)", "total_requirements": 1163002},
+    {"fund": "Sheriff - Parole and Probation", "total_requirements": 1282966},
+    {"fund": "Sheriff - Emergency Management", "total_requirements": 725091}
+  ],
+  "county_officials_fy2025_26": {
+    "board_of_commissioners": ["Jay Trost (Chair)", "Patrick Hollinger (Vice Chair)", "Lynn Coker"],
+    "county_assessor": "Kiley Wegner",
+    "county_clerk": "Shelley Denney",
+    "district_attorney": "Josh Spansail",
+    "sheriff": "John Ward",
+    "treasurer": "Nicholas Vicino"
+  }
+}

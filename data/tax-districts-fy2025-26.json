@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "source": "Curry County 2025-26 Tax Roll Summary by Taxing Districts (Table 4a certified cross-checked)",
+    "fiscal_year": "2025-2026",
+    "certified_by": "Kiley Wegner, Curry County Assessor",
+    "extracted": "2026-08-21",
+    "notes": "bill_rate is per $1,000 of assessed value. taxes_imposed and assessed_value are dollar totals across the whole county for that district (not per-property). Categories match the summary sheet's own groupings. County-wide totals: taxes subtotal $34,719,147.85, grand total taxes (incl. penalties/fees/assessments) $35,405,025.35."
+  },
+  "county_wide_pie_breakdown_as_published": {
+    "note": "Percentages as shown on the official summary sheet's pie chart -- share of total taxes imposed by district group.",
+    "schools": 0.5565,
+    "cities": 0.1465,
+    "brookings_urban_renewal": 0.0253,
+    "gold_beach_urban_renewal": 0.0036,
+    "health_districts": 0.0468,
+    "port_districts": 0.0243,
+    "road_districts": 0.0011,
+    "fire_districts": 0.0342,
+    "cemeteries": 0.0057,
+    "library_districts": 0.0553,
+    "water_districts": 0.0009,
+    "sanitary_districts": 0.0020,
+    "county": 0.0678,
+    "other": 0.0185
+  },
+  "districts": [
+    {"name": "County General", "category": "county", "bill_rate": 0.5996, "assessed_value": 3995037266, "taxes_imposed": 2395433.06},
+    {"name": "Curry Soil/Water Conservation", "category": "county", "bill_rate": 0.0000, "assessed_value": 3995037266, "taxes_imposed": 0.00},
+    {"name": "CC 4-H & Extension", "category": "county", "bill_rate": 0.1021, "assessed_value": 3995037266, "taxes_imposed": 407968.17},
+
+    {"name": "ESD (Education Service District)", "category": "school", "bill_rate": 0.4432, "assessed_value": 3995037266, "taxes_imposed": 1770157.47},
+    {"name": "SWOCC (Southwestern Oregon Community College)", "category": "school", "bill_rate": 0.7017, "assessed_value": 3995037266, "taxes_imposed": 2802625.38},
+    {"name": "School 2CJ", "category": "school", "bill_rate": 3.9596, "assessed_value": 525552290, "taxes_imposed": 2078818.66},
+    {"name": "School 17-C", "category": "school", "bill_rate": 3.2494, "assessed_value": 2395690221, "taxes_imposed": 7784631.74},
+    {"name": "School CC 1", "category": "school", "bill_rate": 3.9171, "assessed_value": 1073794755, "taxes_imposed": 4203963.95},
+    {"name": "School CC 1 Bond (2023)", "category": "school", "bill_rate": 0.9545, "assessed_value": 1087716430, "taxes_imposed": 1038225.40},
+
+    {"name": "City of Port Orford", "category": "city", "bill_rate": 4.0688, "assessed_value": 178494990, "taxes_imposed": 726260.20, "note": "includes permanent rate 2.2688 + local option 0.18"},
+    {"name": "City of Gold Beach", "category": "city", "bill_rate": 2.3360, "assessed_value": 326479175, "taxes_imposed": 762668.18},
+    {"name": "City of Gold Beach Local Option", "category": "city", "bill_rate": 0.0000, "assessed_value": null, "taxes_imposed": 0.00},
+    {"name": "City of Brookings", "category": "city", "bill_rate": 3.7630, "assessed_value": 977046531, "taxes_imposed": 3676715.11},
+
+    {"name": "Port of Port Orford", "category": "port", "bill_rate": 0.3591, "assessed_value": 384922570, "taxes_imposed": 138225.84},
+    {"name": "Port of Gold Beach", "category": "port", "bill_rate": 0.4132, "assessed_value": 981694715, "taxes_imposed": 405670.19},
+    {"name": "Port of Brookings", "category": "port", "bill_rate": 0.1316, "assessed_value": 2401551791, "taxes_imposed": 316062.92},
+
+    {"name": "Cemetery - Langlois", "category": "cemetery", "bill_rate": 0.0847, "assessed_value": 140698160, "taxes_imposed": 11917.08},
+    {"name": "Cemetery - Port Orford", "category": "cemetery", "bill_rate": 0.0451, "assessed_value": 384922570, "taxes_imposed": 17359.95},
+    {"name": "Cemetery - Rogue River", "category": "cemetery", "bill_rate": 0.0772, "assessed_value": 942967295, "taxes_imposed": 72816.37},
+    {"name": "Cemetery - Pistol River", "category": "cemetery", "bill_rate": 0.1254, "assessed_value": 79765110, "taxes_imposed": 10002.54},
+    {"name": "Cemetery - South Curry", "category": "cemetery", "bill_rate": 0.0368, "assessed_value": 2401551791, "taxes_imposed": 88412.41},
+
+    {"name": "Fire - Gold Beach & Wedderburn", "category": "fire", "bill_rate": 1.2609, "assessed_value": 197065700, "taxes_imposed": 248480.04},
+    {"name": "Fire - Cedar Valley/North Bank", "category": "fire", "bill_rate": 0.6312, "assessed_value": 51032370, "taxes_imposed": 32211.63},
+    {"name": "Fire - Cape Ferrelo", "category": "fire", "bill_rate": 0.4811, "assessed_value": 218547950, "taxes_imposed": 105143.32},
+    {"name": "Fire - Winchuck", "category": "fire", "bill_rate": 0.8971, "assessed_value": 57951440, "taxes_imposed": 51988.22},
+    {"name": "Fire - Upper Chetco", "category": "fire", "bill_rate": 0.7126, "assessed_value": 32495970, "taxes_imposed": 23156.66},
+    {"name": "Fire - Harbor", "category": "fire", "bill_rate": 0.2332, "assessed_value": 702055700, "taxes_imposed": 163719.38},
+    {"name": "Fire - Brookings RFPD", "category": "fire", "bill_rate": 0.3345, "assessed_value": 235150440, "taxes_imposed": 78657.75},
+    {"name": "Fire - Ophir", "category": "fire", "bill_rate": 0.6868, "assessed_value": 161514060, "taxes_imposed": 110927.78},
+    {"name": "Fire - Langlois", "category": "fire", "bill_rate": 1.5974, "assessed_value": 78151840, "taxes_imposed": 124839.85},
+    {"name": "Fire - Port Orford", "category": "fire", "bill_rate": 1.3202, "assessed_value": 111716950, "taxes_imposed": 147488.76},
+    {"name": "Fire - Sixes", "category": "fire", "bill_rate": 1.8900, "assessed_value": 40617460, "taxes_imposed": 76767.21, "note": "permanent rate 0.5150 + local option 0.1375"},
+    {"name": "Fire - Pistol River", "category": "fire", "bill_rate": 0.9873, "assessed_value": 58872550, "taxes_imposed": 58124.85},
+    {"name": "Fire - Agness-Illahe RFPD", "category": "fire", "bill_rate": 0.0000, "assessed_value": 47590804, "taxes_imposed": 0.00},
+
+    {"name": "Sanitary - Wedderburn", "category": "sanitary", "bill_rate": 0.6701, "assessed_value": 107106000, "taxes_imposed": 71771.72},
+    {"name": "Sanitary - Harbor", "category": "sanitary", "bill_rate": 0.0000, "assessed_value": 396599820, "taxes_imposed": 0.00},
+    {"name": "Sanitary - Cameron Park", "category": "sanitary", "bill_rate": 0.0000, "assessed_value": 17349130, "taxes_imposed": 0.00},
+
+    {"name": "Water - Nesika Beach/Ophir", "category": "water", "bill_rate": 0.0000, "assessed_value": 116676320, "taxes_imposed": 0.00},
+    {"name": "Water - Harbor PUD", "category": "water", "bill_rate": 0.0000, "assessed_value": 700780850, "taxes_imposed": 0.00},
+    {"name": "Water - Langlois", "category": "water", "bill_rate": 1.4414, "assessed_value": 21960310, "taxes_imposed": 31653.59},
+
+    {"name": "Health District - Curry", "category": "health", "bill_rate": 0.7425, "assessed_value": 1393180605, "taxes_imposed": 1034459.71},
+    {"name": "Health District - Curry Bond", "category": "health", "bill_rate": 0.4264, "assessed_value": 1407102280, "taxes_imposed": 599989.17},
+
+    {"name": "Library - Agness", "category": "library", "bill_rate": 0.6634, "assessed_value": 40703360, "taxes_imposed": 27002.56},
+    {"name": "Library - Langlois", "category": "library", "bill_rate": 0.7707, "assessed_value": 140002120, "taxes_imposed": 107899.59},
+    {"name": "Library - Port Orford", "category": "library", "bill_rate": 0.4975, "assessed_value": 384922570, "taxes_imposed": 191498.94},
+    {"name": "Library - Curry", "category": "library", "bill_rate": 0.6609, "assessed_value": 916319065, "taxes_imposed": 605605.21},
+    {"name": "Library - Chetco", "category": "library", "bill_rate": 0.4256, "assessed_value": 2401551791, "taxes_imposed": 1022147.18},
+
+    {"name": "Road District - Mountain Drive", "category": "road", "bill_rate": 1.4700, "assessed_value": 26813240, "taxes_imposed": 39415.39},
+
+    {"name": "Brookings Urban Renewal", "category": "urban_renewal", "bill_rate": 0.8557, "assessed_value": 97293849, "taxes_imposed": 138951.67, "note": "urban renewal division-of-tax district; not a direct additional levy on individual parcels the way other districts are -- rate shown is a reference/summary rate"},
+    {"name": "Gold Beach Urban Renewal", "category": "urban_renewal", "bill_rate": 0.4082, "assessed_value": 13921675, "taxes_imposed": 0.00, "note": "same caveat as Brookings Urban Renewal"}
+  ],
+  "other_countywide_totals": {
+    "late_filing_penalties": 36972.70,
+    "fire_patrol_surcharge": 201666.00,
+    "mfg_community_rsrc_fee": 16180.00,
+    "sanitary_dist_s_a": 3643.20,
+    "fire_patrol": 356873.86,
+    "other_assessments": 70541.74,
+    "taxes_subtotal": 34719147.85,
+    "grand_total_taxes": 35405025.35
+  }
+}

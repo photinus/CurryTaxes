@@ -1,0 +1,199 @@
+#!/usr/bin/env python3
+"""
+Build data/app-data.json from the raw source files in data/.
+
+Rerun this each year after refreshing the three raw source files:
+  data/county-budget-fy2025-26.json
+  data/tax-districts-fy2025-26.json
+  data/code-areas-fy2025-26.json
+(rename them for the new fiscal year and update the paths below).
+
+This script does NOT fetch anything from the network. It only reconciles
+and reshapes data that has already been transcribed from the official PDFs.
+
+Key job: for every code area, compute the composite tax rate by summing
+`bill_rate` across the districts listed for that code area, rather than
+trusting the source PDF's own printed subtotal (which was OCR'd from a
+dense multi-column table and did not always reconcile cleanly). Any code
+area where the computed sum and the printed total disagree by more than a
+rounding error is flagged so the app can surface it instead of silently
+picking a number.
+"""
+import json
+import os
+
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(BASE, "data")
+
+# Some code-area district lists use abbreviated names that differ from the
+# master list's full names. Map those here.
+NAME_ALIASES = {
+    "ESD": "ESD (Education Service District)",
+    "SWOCC": "SWOCC (Southwestern Oregon Community College)",
+}
+
+ROUNDING_TOLERANCE = 0.02  # $ per $1,000 assessed value
+
+
+def load(name):
+    with open(os.path.join(DATA, name)) as f:
+        return json.load(f)
+
+
+def main():
+    budget = load("county-budget-fy2025-26.json")
+    districts_doc = load("tax-districts-fy2025-26.json")
+    code_areas_doc = load("code-areas-fy2025-26.json")
+
+    districts = districts_doc["districts"]
+    rate_by_name = {d["name"]: d["bill_rate"] for d in districts}
+    district_by_name = {d["name"]: d for d in districts}
+
+    def resolve(name):
+        return NAME_ALIASES.get(name, name)
+
+    flagged = []
+    areas_out = []
+
+    for area in code_areas_doc["geographic_areas"]:
+        codes_out = []
+        for ca in area["code_areas"]:
+            resolved_names = [resolve(n) for n in ca["districts"]]
+            unknown = [n for n in resolved_names if n not in rate_by_name]
+            if unknown:
+                raise SystemExit(
+                    f"Unknown district name(s) {unknown} in code area "
+                    f"{area['area_name']} / {ca['code']} -- fix NAME_ALIASES "
+                    f"or the source data."
+                )
+
+            computed = round(sum(rate_by_name[n] for n in resolved_names), 4)
+            printed = ca.get("total_code_rate_as_printed")
+            diff = round(computed - printed, 4) if printed is not None else None
+            is_flagged = diff is None or abs(diff) > ROUNDING_TOLERANCE
+
+            entry = {
+                "code": ca["code"],
+                "representative": bool(ca.get("representative", False)),
+                "districts": [
+                    {
+                        "name": n,
+                        "category": district_by_name[n]["category"],
+                        "bill_rate": district_by_name[n]["bill_rate"],
+                        "note": district_by_name[n].get("note"),
+                    }
+                    for n in resolved_names
+                ],
+                "computed_rate": computed,
+                "printed_rate_as_source": printed,
+                "rate_diff": diff,
+                "flagged": is_flagged,
+                "source_note": ca.get("note"),
+            }
+            codes_out.append(entry)
+
+            if is_flagged:
+                flagged.append(
+                    {
+                        "area": area["area_name"],
+                        "code": ca["code"],
+                        "computed_rate": computed,
+                        "printed_rate_as_source": printed,
+                        "diff": diff,
+                    }
+                )
+
+        areas_out.append(
+            {
+                "area_name": area["area_name"],
+                "nearest_city": area.get("nearest_city"),
+                "code_areas": codes_out,
+            }
+        )
+
+    # County budget: build display-friendly groupings.
+    # Non-Departmental is a pass-through hub (transfers), so it is excluded
+    # from the "where your county tax dollar goes" department chart to avoid
+    # double counting, but its total is still shown separately for context.
+    gf = budget["general_fund_departments"]
+    gf_chart = [d for d in gf if not d["department"].startswith("Non-Departmental")]
+    non_dept = next(
+        (d for d in gf if d["department"].startswith("Non-Departmental")), None
+    )
+
+    # The Road Capital Improvement Fund is mostly a multi-year reserve, not a
+    # single year's operating spend (per its note in the source budget), so it
+    # would swamp every other department if mixed into a one-year spending
+    # chart. Exclude it the same way as Non-Departmental, and surface it
+    # separately for context instead.
+    road_all = budget["road_fund"]
+    road_chart = [d for d in road_all if d["fund"] != "Road - Capital Improvement Fund"]
+    road_reserve = next(
+        (d for d in road_all if d["fund"] == "Road - Capital Improvement Fund"), None
+    )
+    gvs = budget["general_vehicle_services_fund"]
+    other = budget["other_funds"]
+    sheriff = budget["sheriff_special_revenue_sub_funds"]
+
+    county_departments_chart = (
+        [{"department": d["department"], "group": "General Fund", "total_requirements": d["total_requirements"]} for d in gf_chart]
+        + [{"department": d["fund"], "group": "Sheriff's Office", "total_requirements": d["total_requirements"]} for d in sheriff]
+        + [{"department": d["fund"], "group": "Road Fund", "total_requirements": d["total_requirements"]} for d in road_chart]
+        + [{"department": d["fund"], "group": "Vehicle Services", "total_requirements": d["total_requirements"]} for d in gvs]
+        + [{"department": d["fund"], "group": "Other Funds", "total_requirements": d["total_requirements"]} for d in other]
+    )
+    county_chart_total = sum(d["total_requirements"] for d in county_departments_chart)
+
+    app_data = {
+        "meta": {
+            "fiscal_year": "2025-2026",
+            "generated_note": (
+                "Generated by scripts/build_data.py from the raw source files "
+                "in data/. Do not hand-edit; re-run the script after updating "
+                "the raw sources for a new fiscal year."
+            ),
+            "sources": [
+                {
+                    "label": "Curry County 2025-2026 Proposed Budget",
+                    "url": budget["_meta"]["source_url"],
+                    "status": budget["_meta"]["status"],
+                },
+                {
+                    "label": "Curry County 2025-26 Tax Roll Summary by Taxing Districts (certified)",
+                    "url": None,
+                    "status": "Certified by Kiley Wegner, Curry County Assessor",
+                },
+                {
+                    "label": "Curry County Tax Rates by Code Area, 2025-2026",
+                    "url": None,
+                    "status": "Assessor's Office; composite rates recomputed from district-level rates, see data notes",
+                },
+            ],
+        },
+        "county_permanent_tax_rate": budget["county_permanent_tax_rate"],
+        "county_wide_pie_breakdown_as_published": districts_doc["county_wide_pie_breakdown_as_published"],
+        "districts": districts,
+        "geographic_areas": areas_out,
+        "flagged_code_areas": flagged,
+        "county_budget": {
+            "total_combined_budget": budget["total_combined_budget"],
+            "departments_chart": county_departments_chart,
+            "departments_chart_total": county_chart_total,
+            "non_departmental": non_dept,
+            "road_capital_reserve": road_reserve,
+            "officials": budget["county_officials_fy2025_26"],
+        },
+    }
+
+    out_path = os.path.join(DATA, "app-data.json")
+    with open(out_path, "w") as f:
+        json.dump(app_data, f, indent=2)
+
+    print(f"Wrote {out_path}")
+    print(f"{len(flagged)} of {sum(len(a['code_areas']) for a in areas_out)} code areas flagged for rate discrepancy > {ROUNDING_TOLERANCE}")
+    for f_ in flagged:
+        print(f"  {f_['area']} / {f_['code']}: computed={f_['computed_rate']} printed={f_['printed_rate_as_source']} diff={f_['diff']}")
+
+
+if __name__ == "__main__":
+    main()

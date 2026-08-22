@@ -1,0 +1,104 @@
+{
+  "_meta": {
+    "source": "Curry County Tax Rates by Code Area 2025-2026 (Assessor's Office)",
+    "fiscal_year": "2025-2026",
+    "extracted": "2026-08-21",
+    "accuracy_note": "IMPORTANT: this file was hand-transcribed from a dense, multi-column, OCR-extracted PDF. The district composition list (which districts apply in each code area) is high-confidence. The 'total_code_rate_as_printed' field is lower-confidence -- some subtotal arithmetic in the source did not cleanly reconcile during transcription, likely due to column-order ambiguity in extraction. RECOMMENDED: compute each code area's actual composite rate in the app by summing the 'bill_rate' values from tax-districts-fy2025-26.json for the districts listed here, rather than trusting total_code_rate_as_printed at face value. Treat total_code_rate_as_printed as a sanity-check cross-reference only, and flag any code area where your computed sum and the printed total disagree by more than a rounding error.",
+    "geography_note": "Each code area is a small polygon, not a whole city -- e.g. 'Gold Beach area' contains many distinct code numbers (3-1, 3-2, 3-4, etc.) because different parcels within/around Gold Beach have different combinations of fire district, sanitary district, or urban renewal overlap. For a simple 'pick your town' UI, pick one representative/most-common code per named area (flagged below as representative: true where identifiable) rather than exposing all ~45 codes to the user.",
+    "district_name_key": "District names below are abbreviated as printed on the source (e.g. 'FIRE-OPHIR', 'LIB-CURRY'). Map these to the fuller 'name' fields in tax-districts-fy2025-26.json via the 'name_in_master_list' field."
+  },
+  "geographic_areas": [
+    {
+      "area_name": "Port Orford / Langlois area",
+      "nearest_city": "Port Orford",
+      "code_areas": [
+        {"code": "1-3", "representative": true, "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Fire - Port Orford", "Health District - Curry", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.1970},
+        {"code": "1-4", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.8909},
+        {"code": "1-5", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "Fire - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 7.4883},
+        {"code": "1-6", "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Fire - Port Orford", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.0281},
+        {"code": "2-0", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "Water - Langlois", "Library - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.1030},
+        {"code": "2-1", "districts": ["School 2CJ", "ESD", "SWOCC", "City of Port Orford", "Port of Port Orford", "Health District - Curry", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General", "Health District - Curry Bond"], "total_code_rate_as_printed": 11.9456},
+        {"code": "2-3", "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Health District - Curry", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General", "Health District - Curry Bond"], "total_code_rate_as_printed": 7.8768},
+        {"code": "2-4", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.8909},
+        {"code": "2-5", "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Fire - Sixes", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.5979},
+        {"code": "2-6", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "Fire - Langlois", "Water - Langlois", "Library - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 9.7004},
+        {"code": "2-7", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "Fire - Langlois", "Library - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.2590},
+        {"code": "22-1", "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.7079},
+        {"code": "22-2", "districts": ["School 2CJ", "ESD", "SWOCC", "Health District - Curry", "CC 4-H & Extension", "County General", "Health District - Curry Bond"], "total_code_rate_as_printed": 6.9751},
+        {"code": "22-4", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "Water - Langlois", "Library - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.1030},
+        {"code": "22-5", "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Fire - Sixes", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.5979},
+        {"code": "22-6", "districts": ["School 2CJ", "ESD", "SWOCC", "Cemetery - Langlois", "Fire - Sixes", "Library - Langlois", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 8.5516},
+        {"code": "22-7", "districts": ["School 2CJ", "ESD", "SWOCC", "Port of Port Orford", "Fire - Sixes", "Health District - Curry", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.7668}
+      ]
+    },
+    {
+      "area_name": "Agness area",
+      "nearest_city": null,
+      "code_areas": [
+        {"code": "4-1", "representative": true, "districts": ["School CC 1", "ESD", "SWOCC", "Health District - Curry", "Library - Agness", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 8.5505},
+        {"code": "4-4", "districts": ["School CC 1", "ESD", "SWOCC", "Health District - Curry", "Library - Agness", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 7.1696}
+      ]
+    },
+    {
+      "area_name": "Ophir / Nesika Beach area",
+      "nearest_city": "Gold Beach",
+      "code_areas": [
+        {"code": "12-1", "representative": true, "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.0384},
+        {"code": "12-2", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Port Orford", "Health District - Curry", "Library - Port Orford", "Cemetery - Port Orford", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 8.7888},
+        {"code": "12-3", "districts": ["School CC 1", "ESD", "SWOCC", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 7.9643},
+        {"code": "12-4", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Fire - Ophir", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.7252},
+        {"code": "12-5", "districts": ["School CC 1", "ESD", "SWOCC", "Cemetery - Rogue River", "Fire - Ophir", "Health District - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 8.6511},
+        {"code": "12-7", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Fire - Ophir", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)"], "total_code_rate_as_printed": null, "note": "printed total did not reconcile cleanly during transcription -- recompute from district list"},
+        {"code": "12-8", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "Water - Nesika Beach/Ophir", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.7252}
+      ]
+    },
+    {
+      "area_name": "Gold Beach area",
+      "nearest_city": "Gold Beach",
+      "code_areas": [
+        {"code": "3-1", "representative": true, "districts": ["School CC 1", "ESD", "SWOCC", "City of Gold Beach", "City of Gold Beach Local Option", "Port of Gold Beach", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "Gold Beach Urban Renewal", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 11.3744},
+        {"code": "3-2", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.6696},
+        {"code": "3-4", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Fire - Gold Beach & Wedderburn", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 10.2993},
+        {"code": "3-6", "districts": ["School CC 1", "ESD", "SWOCC", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 7.9643},
+        {"code": "3-8", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Fire - Gold Beach & Wedderburn", "Sanitary - Wedderburn", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 10.9694},
+        {"code": "13-0", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Rogue River", "Sanitary - Wedderburn", "Health District - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.7085},
+        {"code": "31-UR", "districts": ["School CC 1", "ESD", "SWOCC", "City of Gold Beach", "City of Gold Beach Local Option", "Port of Gold Beach", "Cemetery - Rogue River", "Health District - Curry", "Library - Curry", "CC 4-H & Extension", "County General", "Gold Beach Urban Renewal", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 11.3744, "note": "urban renewal variant of code 3-1"}
+      ]
+    },
+    {
+      "area_name": "Pistol River area",
+      "nearest_city": "Gold Beach / Brookings corridor",
+      "code_areas": [
+        {"code": "16-1", "representative": true, "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Pistol River", "Fire - Pistol River", "Health District - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 9.1430},
+        {"code": "16-2", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Cemetery - Pistol River", "Health District - Curry", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 8.4257},
+        {"code": "16-3", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)"], "total_code_rate_as_printed": 7.3122},
+        {"code": "16-4", "districts": ["School CC 1", "ESD", "SWOCC", "Cemetery - Pistol River", "Fire - Pistol River", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)"], "total_code_rate_as_printed": 7.8309},
+        {"code": "16-5", "districts": ["School CC 1", "ESD", "SWOCC", "Cemetery - Pistol River", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)"], "total_code_rate_as_printed": 6.8436},
+        {"code": "16-7", "districts": ["School CC 1", "ESD", "SWOCC", "Port of Gold Beach", "Fire - Pistol River", "CC 4-H & Extension", "County General", "School CC 1 Bond (2023)", "Health District - Curry Bond"], "total_code_rate_as_printed": 10.0257}
+      ]
+    },
+    {
+      "area_name": "Brookings-Harbor area",
+      "nearest_city": "Brookings",
+      "code_areas": [
+        {"code": "17-1", "representative": true, "districts": ["School 17-C", "ESD", "SWOCC", "City of Brookings", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "CC 4-H & Extension", "County General", "Brookings Urban Renewal"], "total_code_rate_as_printed": 9.4530},
+        {"code": "17-1-UR", "districts": ["School 17-C", "ESD", "SWOCC", "City of Brookings", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "CC 4-H & Extension", "County General", "Brookings Urban Renewal"], "total_code_rate_as_printed": 9.4530, "note": "urban renewal variant of 17-1"},
+        {"code": "17-2", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.6900},
+        {"code": "17-3", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.6900, "note": "printed total matches 17-2 despite differing district list in transcription -- verify Library-Chetco inclusion against source"},
+        {"code": "17-4", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Harbor", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.5871},
+        {"code": "17-5", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Harbor", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.9232},
+        {"code": "17-6", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.6900},
+        {"code": "17-7", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Brookings RFPD", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.0245},
+        {"code": "17-8", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Harbor", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.9232},
+        {"code": "17-9", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Harbor", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.9232},
+        {"code": "27-3", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Winchuck", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.5871},
+        {"code": "27-4", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Winchuck", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.5871},
+        {"code": "27-5", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Upper Chetco", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.4026},
+        {"code": "27-6", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Cape Ferrelo", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 6.1711},
+        {"code": "27-7", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "Road District - Mountain Drive", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 7.1600},
+        {"code": "27-8", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Fire - Brookings RFPD", "Library - Chetco", "Road District - Mountain Drive", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 7.4945},
+        {"code": "37-1", "districts": ["School 17-C", "ESD", "SWOCC", "Port of Brookings", "Cemetery - South Curry", "Library - Chetco", "CC 4-H & Extension", "County General"], "total_code_rate_as_printed": 5.6900}
+      ]
+    }
+  ]
+}
