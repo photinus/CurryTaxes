@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Curry County Property Tax Breakdown</title>
+<meta name="description" content="Interactive breakdown of where a Curry County, Oregon property tax dollar goes, by taxing district and by county department." />
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <h1>Curry County Property Tax Breakdown</h1>
+    <p class="subtitle">Where does a Curry County property tax dollar actually go? <span class="fy-badge">FY 2025&ndash;26</span></p>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Views">
+  <div class="wrap tabs-inner">
+    <button class="tab-btn active" role="tab" aria-selected="true" data-tab="bill">Your Tax Bill</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="county">County's Own Budget</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="about">About &amp; Sources</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- TAX BILL TAB -->
+  <section id="tab-bill" class="tab-panel" aria-hidden="false">
+    <div class="panel-grid">
+      <div class="controls-card card">
+        <h2>1. Pick where the property is</h2>
+        <div id="area-picker" class="area-picker"></div>
+
+        <div class="advanced-toggle">
+          <label>
+            <input type="checkbox" id="advanced-toggle" />
+            Show exact code areas (advanced &mdash; ~45 sub-areas)
+          </label>
+        </div>
+        <div id="code-picker-wrap" class="code-picker-wrap" hidden>
+          <label for="code-picker">Exact code area</label>
+          <select id="code-picker"></select>
+        </div>
+
+        <div id="rate-mismatch-banner" class="mismatch-banner" hidden></div>
+
+        <h2>2. Enter your property value</h2>
+        <div class="input-mode-toggle" role="group" aria-label="Input mode">
+          <button class="mode-btn active" data-mode="assessed">Assessed value</button>
+          <button class="mode-btn" data-mode="bill">Total annual tax bill</button>
+        </div>
+        <div class="value-input-row">
+          <span class="dollar-prefix">$</span>
+          <input type="number" id="value-input" inputmode="numeric" min="0" step="1000" value="300000" />
+        </div>
+        <p class="hint" id="value-hint">Assessed value is usually well below market value in Oregon &mdash; check your tax statement or the Assessor's records for your parcel's actual figure.</p>
+
+        <div class="rate-summary" id="rate-summary"></div>
+      </div>
+
+      <div class="chart-card card">
+        <h2 id="bill-chart-title">Tax bill breakdown</h2>
+        <div class="chart-area">
+          <div class="donut-wrap" id="bill-donut"></div>
+          <div class="legend" id="bill-legend"></div>
+        </div>
+        <div class="district-table-wrap">
+          <table class="district-table" id="bill-table">
+            <thead>
+              <tr><th>Taxing district</th><th>Category</th><th>Rate&nbsp;/$1,000</th><th>Your&nbsp;share</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTY BUDGET TAB -->
+  <section id="tab-county" class="tab-panel" aria-hidden="true" hidden>
+    <div class="panel-grid">
+      <div class="controls-card card">
+        <h2>The county's own slice</h2>
+        <p>Curry County government itself keeps only its permanent rate of
+          <strong>$0.5996 per $1,000</strong> of assessed value &mdash; roughly
+          <strong>7&cent; of every property tax dollar</strong> collected in the county.
+          Everything else on a tax bill (schools, fire districts, cities, ports,
+          libraries, health districts, urban renewal) is collected by the County
+          Assessor but spent by ~48 separate independent taxing jurisdictions,
+          not by county government.</p>
+        <p>This view shows only what the county government itself budgets and
+          spends, from the FY2025&ndash;26 <em>proposed</em> budget.</p>
+        <div id="county-total" class="rate-summary"></div>
+        <p class="hint">"Non-Departmental" is excluded from the chart at right: it is
+          mostly a pass-through fund (property tax, timber revenue, PILT payments)
+          that gets transferred out to fund the departments shown, so including
+          both would double count. The Road Capital Improvement Fund is also
+          excluded: it's mostly a multi-year reserve for future road projects,
+          not one year's operating spend, and would swamp every other department
+          if included at face value.</p>
+      </div>
+      <div class="chart-card card">
+        <h2>County budget by department / fund</h2>
+        <div class="chart-area">
+          <div class="donut-wrap" id="county-donut"></div>
+          <div class="legend" id="county-legend"></div>
+        </div>
+        <div class="district-table-wrap">
+          <table class="district-table" id="county-table">
+            <thead>
+              <tr><th>Department / fund</th><th>Fund group</th><th>Budget</th><th>Share</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT TAB -->
+  <section id="tab-about" class="tab-panel" aria-hidden="true" hidden>
+    <div class="card about-card">
+      <h2>About this app</h2>
+      <p>This is an unofficial, independently built estimator. It is meant to make
+        Curry County, Oregon's property tax system easier to understand &mdash;
+        it is <strong>not</strong> an official tax calculator and should not be
+        used to predict an exact bill. Actual bills depend on your parcel's exact
+        code area, any exemptions, compression (Oregon's Measure 5 rate limits),
+        special assessments, and mid-year changes. For your exact bill, contact
+        the <strong>Curry County Assessor's Office</strong>.</p>
+
+      <h3>Data vintage</h3>
+      <p>All figures are for fiscal year <strong>2025&ndash;2026</strong>. Tax
+        rates and county budgets are set annually &mdash; this data will be out of
+        date starting July 2026 and should be refreshed for FY2026&ndash;27.</p>
+
+      <h3>Sources</h3>
+      <ul id="sources-list"></ul>
+
+      <h3>How composite rates were computed</h3>
+      <p>The source "Tax Rates by Code Area" document is a dense, multi-column,
+        OCR-scanned PDF. Rather than trust its printed per-code-area subtotal at
+        face value, this app <strong>recomputes each code area's composite rate
+        by summing the individual district rates</strong> that apply to it, using
+        the certified per-district rates from the Tax Roll Summary. The printed
+        subtotal is kept only as a cross-check.</p>
+      <p>In <span id="flagged-count"></span> of the ~45 code areas, the recomputed
+        sum disagrees with the source PDF's printed subtotal by more than a
+        rounding error &mdash; including three of the six "representative" areas
+        used for the simple picker (Gold Beach, Pistol River, and
+        Brookings-Harbor). Some of this looks explainable (e.g. the printed total
+        appears to exclude urban renewal division-of-tax rates, which are not an
+        additional line item on a bill), and some looks like OCR/transcription
+        error in the source table. This app uses the <strong>recomputed sum</strong>
+        as the more reliable figure, and flags every affected area below so you
+        can judge for yourself.</p>
+      <div class="district-table-wrap">
+        <table class="district-table" id="flagged-table">
+          <thead><tr><th>Area</th><th>Code</th><th>Recomputed rate</th><th>Source PDF's printed rate</th><th>Difference</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h3>Urban renewal note</h3>
+      <p>Urban renewal districts (Brookings Urban Renewal, Gold Beach Urban
+        Renewal) work by <em>reallocating</em> a portion of the tax already
+        collected within their district boundary, rather than adding a new rate
+        on top of a bill. The rates shown for these are the source document's
+        reference/summary rates and are included in the composite calculation
+        for completeness, but treat them as informational.</p>
+
+      <h3>Limitations</h3>
+      <ul>
+        <li>Estimates only &mdash; not an official calculator.</li>
+        <li>Does not account for exemptions, compression, or special assessments.</li>
+        <li>"Representative" code areas are the most common configuration for a
+          named area, not a guarantee for any specific parcel.</li>
+        <li>County budget figures are from the <em>proposed</em> FY2025&ndash;26
+          budget and may shift slightly at the Approved/Adopted stage.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Data: Curry County FY2025&ndash;26 Proposed Budget &middot; Tax Roll Summary
+      by Taxing District &middot; Tax Rates by Code Area (Curry County Assessor's
+      Office, Kiley Wegner, Assessor). Not affiliated with Curry County government.
+      See the About tab for full sources and limitations.</p>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
