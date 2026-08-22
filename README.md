@@ -128,6 +128,20 @@ Coast ESD's funding figures cover its entire multi-county service area
 its card, since Curry's ESD property tax alone is already shown in the
 district list above it.
 
+**One-time capital grants (OSCIM) are split out of "State" funding**, not
+folded into it. The FY2024-25 CSV has no field that says "OSCIM" outright,
+but a state (3000-series) source code landing in a district's Capital
+Projects Fund rather than its General Fund is a one-time construction-bond
+match, not ongoing State School Fund operating support — and lumping the
+two together would make a district's normal annual state funding look far
+larger (and far less tied to enrollment) than it really is in a year with a
+bond payout. Central Curry SD 1 has a $4,000,000 one this year (lining up
+with its 2023 voter-approved bond); Port Orford-Langlois has a smaller
+$40,000 one; Brookings-Harbor and South Coast ESD have none (Brookings-
+Harbor's own bond measure hasn't passed yet — see its "heads up" note).
+Shown as a distinctly colored, distinctly labeled segment in the funding
+bar rather than merged into "State".
+
 ### Updating for a new fiscal year
 
 1. Get the new year's three source documents from the Curry County Assessor
@@ -158,7 +172,11 @@ if a district category or a new piece of jargon isn't covered yet.
    ESD, and writes `data/school-funding-fy20XX-XX.json`. SWOCC is expected
    to be absent (it reports through a separate community-college fiscal
    system, not this K-12/ESD dataset) — the script notes this rather than
-   erroring.
+   erroring. It also separates one-time capital/OSCIM grants from ongoing
+   state operating aid (see the data-quality note above and the script's
+   own docstring) — check its printed summary for any `OSCIM/capital:`
+   lines and sanity-check them against that year's bond news for each
+   district.
 3. Update the filename and `FISCAL_YEAR`/`SOURCE_URL` constants at the top
    of `scripts/build_school_funding.py`, and the file path in
    `scripts/build_data.py`.
