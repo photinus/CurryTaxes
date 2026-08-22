@@ -18,9 +18,14 @@ Two views:
    split into 8 plain-language groups (Schools, Fire & Emergency, County
    Government, City Government, Health, Library, Roads, Other Local
    Districts) — each expandable to the exact districts and rates behind it.
-   A "Show full detail" toggle reveals the full ~40-district, full-precision
-   table for anyone who wants it, and an "advanced" toggle exposes all ~45
-   actual code areas for more precision than the six named areas.
+   The Schools group has a further drill-down: the K-12 district that
+   actually serves the selected code area, plus the countywide ESD and
+   SWOCC, each with a full state/local/federal/other funding breakdown —
+   not just the property tax slice, since that's typically well under half
+   of an Oregon school district's real revenue. A "Show full detail" toggle
+   reveals the full ~40-district, full-precision table for anyone who wants
+   it, and an "advanced" toggle exposes all ~45 actual code areas for more
+   precision than the six named areas.
 2. **County's Own Budget** — Curry County government's FY2025-26 proposed
    budget broken down by department/fund (Sheriff's Office, Road Fund,
    General Fund departments, Vehicle Services, other funds). This is the
@@ -52,11 +57,24 @@ runtime fetching, no backend). Fiscal year **2025-2026**.
 - `data/headline-stats.json` — the plain-language lead copy and headline
   facts shown above the calculator, plus the caveat text shown near every
   computed estimate.
-- `data/app-data.json` — **generated**. Combines and reconciles all six
+- `data/school-districts.json` — identifies the three K-12 districts
+  (Central Curry SD 1, Port Orford-Langlois SD 2CJ, Brookings-Harbor SD
+  17C) plus the countywide ESD and SWOCC, and cross-references each to its
+  tax-data code. Doesn't duplicate the property-tax data.
+- `data/school-funding-fy2024-25.json` — **generated** by
+  `scripts/build_school_funding.py` from a locally-downloaded copy of
+  Oregon Department of Education's statewide Actual Revenue Data CSV
+  (fiscal year 2024-25, one year behind the tax data since it's the
+  latest ODE had published at data-collection time). Breaks each
+  district's total revenue into state/local/federal/other buckets. The
+  raw statewide CSV is not checked in — see "Updating the school funding
+  data" below.
+- `data/app-data.json` — **generated**. Combines and reconciles all eight
   files above into the shape the app consumes, and validates that every
-  district category has a display group and every glossary term has a
-  stable lookup key. Regenerate it with `python3 scripts/build_data.py`
-  after updating any raw source file; do not hand-edit it.
+  district category has a display group, every glossary term has a
+  stable lookup key, and every code area matches exactly one K-12 school
+  district. Regenerate it with `python3 scripts/build_data.py` after
+  updating any raw source file; do not hand-edit it.
 
 ### A data-quality note worth reading
 
@@ -86,6 +104,30 @@ already shown) and the Road Capital Improvement Fund (a multi-year reserve,
 not a single year's operating spend). Both are still shown as separate
 context figures in the app.
 
+**Which K-12 district applies to a code area** is derived from which
+`School ...` tax line item is actually present in that code area's district
+list (in `tax-districts-fy2025-26.json`), not from `school-districts.json`'s
+own `matches_property_tax_code_areas` area-name hints. The two disagree for
+one case: Pistol River code 16-3 is described there as partly
+Brookings-Harbor, but its actual certified tax roll district is Central
+Curry SD 1 ("School CC 1"). Deriving the match from the same certified data
+already driving the rest of the app is both more precise (per-code-area
+rather than per-named-area — useful since a single named area can span more
+than one school district, as this case shows) and guaranteed consistent
+with the property-tax breakdown the person is already looking at.
+`scripts/build_data.py` fails loudly if any code area ever matches zero or
+more than one K-12 district, so this stays correct as the data changes.
+
+**School funding figures are one fiscal year behind the tax data** (FY2024-25
+actual revenue vs. FY2025-26 tax rates) since FY2024-25 was the latest ODE
+had published at data-collection time — each school card labels its own
+fiscal year, and the property-tax reconciliation note spells out that a
+modest difference between the two years is expected, not an error. South
+Coast ESD's funding figures cover its entire multi-county service area
+(Coos and Curry counties), not Curry County alone — flagged explicitly in
+its card, since Curry's ESD property tax alone is already shown in the
+district list above it.
+
 ### Updating for a new fiscal year
 
 1. Get the new year's three source documents from the Curry County Assessor
@@ -104,6 +146,28 @@ context figures in the app.
 `category-groups.json`, `glossary.json`, and `headline-stats.json` don't
 change annually the way the fiscal-year files do — they only need updating
 if a district category or a new piece of jargon isn't covered yet.
+
+### Updating the school funding data
+
+1. Download the current year's Actual Revenue Data CSV from ODE's Fiscal
+   Transparency portal:
+   https://www.oregon.gov/ode/schools-and-districts/fiscaltransparency/pages/district%20detailed%20revenue.aspx
+2. Run `python3 scripts/build_school_funding.py /path/to/the.csv`. It
+   filters the statewide file down to Central Curry SD 1,
+   Port Orford-Langlois SD 2CJ, Brookings-Harbor SD 17C, and South Coast
+   ESD, and writes `data/school-funding-fy20XX-XX.json`. SWOCC is expected
+   to be absent (it reports through a separate community-college fiscal
+   system, not this K-12/ESD dataset) — the script notes this rather than
+   erroring.
+3. Update the filename and `FISCAL_YEAR`/`SOURCE_URL` constants at the top
+   of `scripts/build_school_funding.py`, and the file path in
+   `scripts/build_data.py`.
+4. Run `python3 scripts/build_data.py` and check the reconciliation numbers
+   it prints against the current tax-roll data still look like a modest,
+   explainable difference (see the data-quality note above).
+5. Commit the regenerated `data/school-funding-fy20XX-XX.json` and
+   `data/app-data.json`. Don't commit the raw statewide CSV — it's ~9,000
+   rows covering every district in Oregon, almost none of it relevant here.
 
 ## Running locally
 

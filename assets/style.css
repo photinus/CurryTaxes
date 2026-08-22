@@ -614,3 +614,142 @@ select, input[type="number"] {
 .full-detail-body {
   margin-top: 1rem;
 }
+
+/* ---------- School funding drill-down ---------- */
+
+.school-drilldown-toggle {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--border);
+}
+
+.school-drilldown-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.school-drilldown-body {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.school-drilldown-body[hidden] { display: none; }
+
+.school-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--bg-card);
+}
+
+.school-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.school-card-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.school-card-meta {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.school-card-total {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0.15rem 0 0.5rem;
+}
+
+.funding-bar {
+  display: flex;
+  height: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.funding-bar-seg {
+  height: 100%;
+}
+
+.funding-legend {
+  margin-top: 0.5rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.funding-legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.4rem;
+  font-size: 0.78rem;
+}
+
+.funding-legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+  margin-top: 0.2em;
+}
+
+.funding-legend-label {
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+
+.funding-legend-amount {
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+
+.funding-legend-explainer {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  flex-basis: 100%;
+  margin: 0 0 0.15rem calc(9px + 0.4rem);
+}
+
+.school-note {
+  margin-top: 0.55rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.school-note.school-heads-up {
+  background: var(--banner-bg);
+  border: 1px solid var(--banner-border);
+  color: var(--banner-text);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  border-top: none;
+  margin-top: 0.6rem;
+}
+
+.school-note-label {
+  font-weight: 700;
+  margin-right: 0.3em;
+}
+
+.school-unavailable {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

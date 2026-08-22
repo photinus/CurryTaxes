@@ -456,6 +456,7 @@
         {
           "code": "1-3",
           "representative": true,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -544,6 +545,7 @@
         {
           "code": "1-4",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -597,6 +599,7 @@
         {
           "code": "1-5",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -657,6 +660,7 @@
         {
           "code": "1-6",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -731,6 +735,7 @@
         {
           "code": "2-0",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -798,6 +803,7 @@
         {
           "code": "2-1",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -886,6 +892,7 @@
         {
           "code": "2-3",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -967,6 +974,7 @@
         {
           "code": "2-4",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1020,6 +1028,7 @@
         {
           "code": "2-5",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1094,6 +1103,7 @@
         {
           "code": "2-6",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1168,6 +1178,7 @@
         {
           "code": "2-7",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1235,6 +1246,7 @@
         {
           "code": "22-1",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1302,6 +1314,7 @@
         {
           "code": "22-2",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1362,6 +1375,7 @@
         {
           "code": "22-4",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1429,6 +1443,7 @@
         {
           "code": "22-5",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1503,6 +1518,7 @@
         {
           "code": "22-6",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1570,6 +1586,7 @@
         {
           "code": "22-7",
           "representative": false,
+          "school_district_key": "port_orford_langlois",
           "districts": [
             {
               "name": "School 2CJ",
@@ -1664,6 +1681,7 @@
         {
           "code": "4-1",
           "representative": true,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -1738,6 +1756,7 @@
         {
           "code": "4-4",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -1804,6 +1823,7 @@
         {
           "code": "12-1",
           "representative": true,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -1892,6 +1912,7 @@
         {
           "code": "12-2",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -1980,6 +2001,7 @@
         {
           "code": "12-3",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2061,6 +2083,7 @@
         {
           "code": "12-4",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2156,6 +2179,7 @@
         {
           "code": "12-5",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2237,6 +2261,7 @@
         {
           "code": "12-7",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2325,6 +2350,7 @@
         {
           "code": "12-8",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2426,6 +2452,7 @@
         {
           "code": "3-1",
           "representative": true,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2535,6 +2562,7 @@
         {
           "code": "3-2",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2623,6 +2651,7 @@
         {
           "code": "3-4",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2718,6 +2747,7 @@
         {
           "code": "3-6",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2799,6 +2829,7 @@
         {
           "code": "3-8",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2901,6 +2932,7 @@
         {
           "code": "13-0",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -2989,6 +3021,7 @@
         {
           "code": "31-UR",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3104,6 +3137,7 @@
         {
           "code": "16-1",
           "representative": true,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3192,6 +3226,7 @@
         {
           "code": "16-2",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3273,6 +3308,7 @@
         {
           "code": "16-3",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3347,6 +3383,7 @@
         {
           "code": "16-4",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3414,6 +3451,7 @@
         {
           "code": "16-5",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3474,6 +3512,7 @@
         {
           "code": "16-7",
           "representative": false,
+          "school_district_key": "central_curry",
           "districts": [
             {
               "name": "School CC 1",
@@ -3554,6 +3593,7 @@
         {
           "code": "17-1",
           "representative": true,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -3635,6 +3675,7 @@
         {
           "code": "17-1-UR",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -3716,6 +3757,7 @@
         {
           "code": "17-2",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -3783,6 +3825,7 @@
         {
           "code": "17-3",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -3843,6 +3886,7 @@
         {
           "code": "17-4",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -3917,6 +3961,7 @@
         {
           "code": "17-5",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -3991,6 +4036,7 @@
         {
           "code": "17-6",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4058,6 +4104,7 @@
         {
           "code": "17-7",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4132,6 +4179,7 @@
         {
           "code": "17-8",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4206,6 +4254,7 @@
         {
           "code": "17-9",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4280,6 +4329,7 @@
         {
           "code": "27-3",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4354,6 +4404,7 @@
         {
           "code": "27-4",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4428,6 +4479,7 @@
         {
           "code": "27-5",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4502,6 +4554,7 @@
         {
           "code": "27-6",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4576,6 +4629,7 @@
         {
           "code": "27-7",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4650,6 +4704,7 @@
         {
           "code": "27-8",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -4731,6 +4786,7 @@
         {
           "code": "37-1",
           "representative": false,
+          "school_district_key": "brookings_harbor",
           "districts": [
             {
               "name": "School 17-C",
@@ -5218,5 +5274,237 @@
     },
     "opening_section_copy": "Curious where your property tax dollars actually go? Curry County collects tax on behalf of about 48 different local agencies -- your county government is just one of them, and usually the smallest slice. Enter your home's assessed value below to see your own estimated breakdown, or explore the countywide averages.",
     "caveat_copy": "This is an estimate based on published FY2025-26 tax rates and your area's typical mix of districts. Your actual bill may vary slightly and is set by the Curry County Assessor's Office -- see your tax statement or contact the Assessor for the exact figure."
+  },
+  "schools": {
+    "k12_districts": [
+      {
+        "key": "central_curry",
+        "official_name": "Central Curry School District 1",
+        "code_in_tax_data": [
+          "School CC 1",
+          "School CC 1 Bond (2023)"
+        ],
+        "current_tax_rate": 4.8716,
+        "hq_city": "Gold Beach, OR",
+        "website": "https://www.ccsd.k12.or.us/",
+        "communities_served": [
+          "Gold Beach",
+          "Nesika Beach",
+          "Pistol River",
+          "Wedderburn",
+          "Agness"
+        ],
+        "schools": [
+          "Gold Beach High School",
+          "Riley Creek Elementary"
+        ],
+        "history_note": "Formed in 1997 when four elementary districts (including the former Ophir and Pistol River elementary districts) and one high school district merged into a single K-12 district.",
+        "enrollment_note": null,
+        "current_news_note": null,
+        "funding": {
+          "name": "Central Curry SD 1",
+          "code_in_tax_data": [
+            "School CC 1",
+            "School CC 1 Bond (2023)"
+          ],
+          "available": true,
+          "multi_county": false,
+          "total_revenue": 13446363.46,
+          "revenue_by_source": {
+            "local": 5927619.69,
+            "state": 6675696.38,
+            "federal": 843047.39,
+            "other": 0.0
+          },
+          "revenue_by_source_pct": {
+            "local": 0.4408,
+            "state": 0.4965,
+            "federal": 0.0627,
+            "other": 0.0
+          },
+          "excluded_from_total": {
+            "Resources - Beginning Fund Balance": 15825612.42,
+            "Interfund Transfers": 158893.44
+          },
+          "tax_data_comparison": {
+            "csv_property_tax_fy2024_25": 4897062.94,
+            "tax_roll_imposed_fy2025_26": 5242189.35,
+            "diff": -345126.41,
+            "diff_pct": -0.0658,
+            "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
+          }
+        }
+      },
+      {
+        "key": "port_orford_langlois",
+        "official_name": "Port Orford-Langlois School District 2CJ",
+        "code_in_tax_data": [
+          "School 2CJ"
+        ],
+        "current_tax_rate": 3.9596,
+        "hq_city": "Port Orford, OR",
+        "website": "http://www.2cj.com",
+        "communities_served": [
+          "Port Orford",
+          "Langlois",
+          "Sixes"
+        ],
+        "schools": [
+          "Pacific High School",
+          "Driftwood Elementary",
+          "Blanco School"
+        ],
+        "history_note": null,
+        "enrollment_note": "One of Oregon's smallest districts -- roughly 230-300 K-12 students district-wide as of recent years.",
+        "current_news_note": null,
+        "funding": {
+          "name": "Port Orford-Langlois SD 2CJ",
+          "code_in_tax_data": [
+            "School 2CJ"
+          ],
+          "available": true,
+          "multi_county": false,
+          "total_revenue": 6356699.98,
+          "revenue_by_source": {
+            "state": 2956813.01,
+            "local": 2717688.98,
+            "federal": 682024.99,
+            "other": 173.0
+          },
+          "revenue_by_source_pct": {
+            "state": 0.4651,
+            "local": 0.4275,
+            "federal": 0.1073,
+            "other": 0.0
+          },
+          "excluded_from_total": {
+            "Resources - Beginning Fund Balance": 3408713.09
+          },
+          "tax_data_comparison": {
+            "csv_property_tax_fy2024_25": 2290021.0,
+            "tax_roll_imposed_fy2025_26": 2078818.66,
+            "diff": 211202.34,
+            "diff_pct": 0.1016,
+            "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
+          }
+        }
+      },
+      {
+        "key": "brookings_harbor",
+        "official_name": "Brookings-Harbor School District 17C",
+        "code_in_tax_data": [
+          "School 17-C"
+        ],
+        "current_tax_rate": 3.2494,
+        "hq_city": "Brookings, OR",
+        "website": "https://www.brookings.k12.or.us/",
+        "communities_served": [
+          "Brookings",
+          "Harbor"
+        ],
+        "schools": [
+          "Brookings-Harbor High School",
+          "Azalea Middle School",
+          "Kalmiopsis Elementary"
+        ],
+        "history_note": "Formed in 1950 when the Brookings and Harbor districts consolidated.",
+        "enrollment_note": null,
+        "current_news_note": "A school bond measure (Measure 8-118) is on the May 2026 ballot for facility repairs and upgrades. If it passes, it would add roughly $0.55 per $1,000 assessed value to this district's tax rate and bring in about $6.1 million in state matching funds (OSCIM) -- not reflected in the current FY2025-26 rate shown above.",
+        "funding": {
+          "name": "Brookings-Harbor SD 17C",
+          "code_in_tax_data": [
+            "School 17-C"
+          ],
+          "available": true,
+          "multi_county": false,
+          "total_revenue": 25604617.7,
+          "revenue_by_source": {
+            "state": 11515318.72,
+            "local": 11149671.6,
+            "federal": 2283468.07,
+            "other": 656159.31
+          },
+          "revenue_by_source_pct": {
+            "state": 0.4497,
+            "local": 0.4355,
+            "federal": 0.0892,
+            "other": 0.0256
+          },
+          "excluded_from_total": {
+            "Interfund Transfers": 1131000.0,
+            "Resources - Beginning Fund Balance": 8833661.1
+          },
+          "tax_data_comparison": {
+            "csv_property_tax_fy2024_25": 7257358.59,
+            "tax_roll_imposed_fy2025_26": 7784631.74,
+            "diff": -527273.15,
+            "diff_pct": -0.0677,
+            "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
+          }
+        }
+      }
+    ],
+    "regional_education_entities": [
+      {
+        "code_in_tax_data": "ESD",
+        "official_name": "South Coast Education Service District (likely -- verify)",
+        "note": "ESD in the tax rate data covers all of Curry County uniformly (rate applies to the full assessed value base, not split by sub-district). Education Service Districts in Oregon provide shared regional services (special education support, technology, professional development) to the K-12 districts within their boundary, rather than running their own schools directly.",
+        "needs_verification": true,
+        "funding": {
+          "name": "South Coast ESD",
+          "code_in_tax_data": [
+            "ESD (Education Service District)"
+          ],
+          "available": true,
+          "multi_county": true,
+          "total_revenue": 18835356.94,
+          "revenue_by_source": {
+            "local": 10020087.69,
+            "state": 4311868.68,
+            "other": 3066081.89,
+            "federal": 1437318.68
+          },
+          "revenue_by_source_pct": {
+            "local": 0.532,
+            "state": 0.2289,
+            "other": 0.1628,
+            "federal": 0.0763
+          },
+          "excluded_from_total": {
+            "Interfund Transfers": 2279508.96,
+            "Resources - Beginning Fund Balance": 4657212.51
+          },
+          "tax_data_comparison": {
+            "csv_property_tax_fy2024_25": 4746005.72,
+            "tax_roll_imposed_fy2025_26": 1770157.47,
+            "diff": 2975848.25,
+            "diff_pct": 1.6811,
+            "note": "These come from two different fiscal years and two different measures (FY2024-25 actual receipts vs. FY2025-26 imposed tax roll), so a modest difference is expected, not an error."
+          }
+        }
+      },
+      {
+        "code_in_tax_data": "SWOCC",
+        "official_name": "Southwestern Oregon Community College",
+        "note": "Community college district. Also applies uniformly across the full Curry County tax base. Not K-12 -- offers 2-year degrees, workforce training, and transfer credit toward 4-year colleges.",
+        "needs_verification": false,
+        "funding": null
+      }
+    ],
+    "already_sourced_facts": [
+      {
+        "fact": "Oregon's Common School Fund -- generated from state-managed school trust lands, not property tax -- distributed $57,779 to Central Curry School District in 2025, as part of a statewide $76.8 million distribution to all Oregon districts.",
+        "source": "northcoastcitizen.com, March 2025",
+        "relevance": "Good example of a genuinely non-property-tax, non-state-School-Fund source -- a third funding stream worth mentioning in a 'where does the rest of the money come from' explainer."
+      }
+    ],
+    "funding_meta": {
+      "source": "Oregon Department of Education Fiscal Transparency -- Actual Revenue Data",
+      "source_url": "https://www.oregon.gov/ode/schools-and-districts/FiscalTransparency/Documents/Act%20Rev%20%26%20Act%20Exp/2024-25%20Actual%20Revenue%20Data.csv",
+      "fiscal_year": "2024-25",
+      "generated_note": "Generated by scripts/build_school_funding.py from a locally-downloaded copy of ODE's statewide Actual Revenue Data CSV (not checked into this repo). Re-download the current year's CSV and re-run this script annually alongside the tax-rate data refresh.",
+      "bucketing_note": "Local = source codes 1000-1999 (property tax plus other local revenue like investment earnings and fees). State = 3000-3999 (mainly the State School Fund and Common School Fund). Federal = 4000-4999. Other = 2000-2999 intermediate sources (county school funds, ESD pass-through funds) plus minor one-time items like sale of fixed assets. Beginning Fund Balance and Interfund Transfers are excluded from every total: neither is new revenue for the year.",
+      "swocc_note": "Southwestern Oregon Community College does not appear in this K-12/ESD dataset -- it reports through a separate community college fiscal system, not ODE's K-12 Fiscal Transparency portal. No funding breakdown is available for it here."
+    }
   }
 }

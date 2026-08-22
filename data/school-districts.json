@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "purpose": "Identifies the actual school districts behind the abbreviated codes already in tax-districts-fy2025-26.json (School 2CJ, School 17-C, School CC 1, ESD, SWOCC), for use in a drill-down view. Cross-references to the existing property-tax data -- does not duplicate it.",
+    "created": "2026-08-21"
+  },
+  "k12_districts": [
+    {
+      "code_in_tax_data": "School CC 1",
+      "code_in_tax_data_bond": "School CC 1 Bond (2023)",
+      "official_name": "Central Curry School District 1",
+      "abbreviation": "CCSD",
+      "hq_city": "Gold Beach, OR",
+      "website": "https://www.ccsd.k12.or.us/",
+      "communities_served": ["Gold Beach", "Nesika Beach", "Pistol River", "Wedderburn", "Agness"],
+      "schools": ["Gold Beach High School", "Riley Creek Elementary"],
+      "history_note": "Formed in 1997 when four elementary districts (including the former Ophir and Pistol River elementary districts) and one high school district merged into a single K-12 district.",
+      "matches_property_tax_code_areas": ["Ophir/Nesika Beach area", "Gold Beach area", "Pistol River area", "Agness area (via School CC 1)"]
+    },
+    {
+      "code_in_tax_data": "School 2CJ",
+      "official_name": "Port Orford-Langlois School District 2CJ",
+      "hq_city": "Port Orford, OR",
+      "website": "http://www.2cj.com",
+      "communities_served": ["Port Orford", "Langlois", "Sixes"],
+      "schools": ["Pacific High School", "Driftwood Elementary", "Blanco School"],
+      "enrollment_note": "One of Oregon's smallest districts -- roughly 230-300 K-12 students district-wide as of recent years.",
+      "matches_property_tax_code_areas": ["Port Orford/Langlois area"]
+    },
+    {
+      "code_in_tax_data": "School 17-C",
+      "official_name": "Brookings-Harbor School District 17C",
+      "hq_city": "Brookings, OR",
+      "website": "https://www.brookings.k12.or.us/",
+      "communities_served": ["Brookings", "Harbor"],
+      "schools": ["Brookings-Harbor High School", "Azalea Middle School", "Kalmiopsis Elementary"],
+      "history_note": "Formed in 1950 when the Brookings and Harbor districts consolidated.",
+      "current_news_note": "As of the FY2025-26 data collection date, the district has a school bond measure (Measure 8-118) on the May 2026 ballot for facility repairs/upgrades, which if passed would add roughly $0.55 per $1,000 assessed value and bring about $6.1 million in Oregon School Capital Improvement Matching (OSCIM) state funds. This is separate from and additional to the current School 17-C tax rate already in tax-districts-fy2025-26.json -- do not include it in current-year totals, but it may be worth a 'heads up, this could change' note in the app.",
+      "matches_property_tax_code_areas": ["Brookings-Harbor area", "Pistol River area (partial, code 16-3)"]
+    }
+  ],
+  "regional_education_entities": [
+    {
+      "code_in_tax_data": "ESD",
+      "official_name": "South Coast Education Service District (likely -- verify)",
+      "note": "ESD in the tax rate data covers all of Curry County uniformly (rate applies to the full assessed value base, not split by sub-district). Education Service Districts in Oregon provide shared regional services (special education support, technology, professional development) to the K-12 districts within their boundary, rather than running their own schools directly.",
+      "needs_verification": true
+    },
+    {
+      "code_in_tax_data": "SWOCC",
+      "official_name": "Southwestern Oregon Community College",
+      "hq_city": "Coos Bay, OR",
+      "note": "Community college district. Also applies uniformly across the full Curry County tax base. Not K-12 -- offers 2-year degrees, workforce training, and transfer credit toward 4-year colleges.",
+      "needs_verification": false
+    }
+  ],
+  "already_sourced_facts": [
+    {
+      "fact": "Oregon's Common School Fund -- generated from state-managed school trust lands, not property tax -- distributed $57,779 to Central Curry School District in 2025, as part of a statewide $76.8 million distribution to all Oregon districts.",
+      "source": "northcoastcitizen.com, March 2025",
+      "relevance": "Good example of a genuinely non-property-tax, non-state-School-Fund source -- a third funding stream worth mentioning in a 'where does the rest of the money come from' explainer."
+    }
+  ]
+}

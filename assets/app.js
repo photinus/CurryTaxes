@@ -51,6 +51,29 @@
     other_local: "#7048e8",
   };
 
+  // Funding-source buckets for the school drill-down (state/federal/local/
+  // other revenue, not property-tax categories, so a distinct palette).
+  const FUNDING_COLORS = {
+    state: "#4c6ef5",
+    local: "#12b886",
+    federal: "#7048e8",
+    other: "#adb5bd",
+  };
+
+  const FUNDING_LABELS = {
+    state: "State",
+    local: "Local",
+    federal: "Federal",
+    other: "Other",
+  };
+
+  const FUNDING_EXPLAINERS = {
+    state: "Mostly Oregon's State School Fund, distributed based on enrollment and student need.",
+    local: "Property tax collected in the district, plus smaller local revenue like fees and interest.",
+    federal: "Targeted programs like Title I and special education funding.",
+    other: "County and ESD pass-through funds, plus small one-time items.",
+  };
+
   // Keyword patterns used to auto-link the first glossary term that shows up
   // in a short, dynamically-rendered snippet of text (e.g. a district's
   // source note). Order matters: first match wins, and only one term is
@@ -85,6 +108,7 @@
     value: 300000,
     openGroups: new Set(),
     fullDetailOpen: false,
+    schoolDrilldownOpen: false,
   };
 
   // ---------- Inline glossary tooltips ----------
@@ -426,7 +450,7 @@
       }
     );
 
-    renderGroupAccordion(groupSegments, totalBill);
+    renderGroupAccordion(groupSegments, totalBill, ca.school_district_key);
 
     // Full-precision district table, sorted by amount desc
     const tbody = document.querySelector("#bill-table tbody");
@@ -458,7 +482,7 @@
     document.getElementById("bill-caveat").textContent = DATA.headline_stats.caveat_copy;
   }
 
-  function renderGroupAccordion(groupSegments, totalBill) {
+  function renderGroupAccordion(groupSegments, totalBill, schoolDistrictKey) {
     const wrap = document.getElementById("bill-groups");
     wrap.innerHTML = "";
     groupSegments.forEach((g) => {
@@ -476,6 +500,8 @@
         )
         .join("");
 
+      const schoolsExtra = g.groupId === "schools" ? schoolDrilldownMarkup(schoolDistrictKey) : "";
+
       row.innerHTML = `
         <button type="button" class="group-row-header" aria-expanded="${isOpen}">
           <span class="group-swatch" style="background:${GROUP_COLORS[g.groupId]}"></span>
@@ -489,8 +515,16 @@
           </span>
           <span class="group-row-chevron" aria-hidden="true">&#9656;</span>
         </button>
-        <div class="group-row-detail" ${isOpen ? "" : "hidden"}>${detailLines}</div>
+        <div class="group-row-detail" ${isOpen ? "" : "hidden"}>${detailLines}${schoolsExtra}</div>
       `;
+
+      if (g.groupId === "schools") {
+        const toggleBtn = row.querySelector(".school-drilldown-btn");
+        toggleBtn.addEventListener("click", () => {
+          state.schoolDrilldownOpen = !state.schoolDrilldownOpen;
+          renderBillTab();
+        });
+      }
 
       row.querySelector(".group-row-header").addEventListener("click", () => {
         if (state.openGroups.has(g.groupId)) {
@@ -503,6 +537,137 @@
 
       wrap.appendChild(row);
     });
+  }
+
+  // ---------- School district drill-down ----------
+  function fundingBarHTML(district) {
+    if (!district.funding || district.funding.available === false) {
+      return `<p class="school-unavailable">${escapeHtml(
+        (district.funding && district.funding.note) ||
+          "A state/local/federal funding breakdown isn't available for this one."
+      )}</p>`;
+    }
+    const f = district.funding;
+    const order = ["local", "state", "federal", "other"];
+    const segs = order
+      .filter((k) => f.revenue_by_source[k] > 0)
+      .map(
+        (k) =>
+          `<span class="funding-bar-seg" style="background:${FUNDING_COLORS[k]};width:${(f.revenue_by_source_pct[k] * 100).toFixed(2)}%"></span>`
+      )
+      .join("");
+    const legend = order
+      .filter((k) => f.revenue_by_source[k] > 0)
+      .map(
+        (k) => `
+          <div class="funding-legend-row">
+            <span class="funding-legend-swatch" style="background:${FUNDING_COLORS[k]}"></span>
+            <span class="funding-legend-label">${FUNDING_LABELS[k]}</span>
+            <span class="funding-legend-amount">${fmtUSD(f.revenue_by_source[k])} (${fmtPct(f.revenue_by_source_pct[k])})</span>
+            <span class="funding-legend-explainer">${FUNDING_EXPLAINERS[k]}</span>
+          </div>`
+      )
+      .join("");
+
+    let reconciliation = "";
+    const cmp = f.tax_data_comparison;
+    if (district.multi_county) {
+      reconciliation = `<p class="school-note">${escapeHtml(district.official_name)} serves more than one county, so these totals cover its whole service area, not just Curry County. The Curry-specific tax line for it is already shown in the district list above.</p>`;
+    } else if (cmp && cmp.tax_roll_imposed_fy2025_26) {
+      reconciliation = `<p class="school-note">Of that local revenue, ${fmtUSD(cmp.csv_property_tax_fy2024_25)} was property tax (FY2024-25 actual) &mdash; this app's own tax roll shows ${fmtUSD(cmp.tax_roll_imposed_fy2025_26)} imposed for FY2025-26. ${cmp.note}</p>`;
+    }
+
+    return `
+      <p class="school-card-total">Total revenue ${DATA.schools.funding_meta.fiscal_year}: <strong>${fmtUSD(f.total_revenue)}</strong></p>
+      <div class="funding-bar">${segs}</div>
+      <div class="funding-legend">${legend}</div>
+      ${reconciliation}
+    `;
+  }
+
+  function schoolCardHTML(district, extraNoteHtml) {
+    const identityBits = [];
+    if (district.communities_served && district.communities_served.length) {
+      identityBits.push(`Serves ${district.communities_served.join(", ")}`);
+    }
+    if (district.schools && district.schools.length) {
+      identityBits.push(district.schools.join(", "));
+    }
+    const identityLine = identityBits.length
+      ? `<p class="school-card-total">${identityBits.map(escapeHtml).join(" · ")}${
+          district.website ? ` · <a href="${escapeHtml(district.website)}" target="_blank" rel="noopener">website</a>` : ""
+        }</p>`
+      : "";
+    const backgroundNote = district.history_note || district.enrollment_note;
+
+    return `
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-card-name">${escapeHtml(district.official_name)}</span>
+          <span class="school-card-meta">current school tax rate: ${district.current_tax_rate.toFixed(4)}/$1,000</span>
+        </div>
+        ${identityLine}
+        ${fundingBarHTML(district)}
+        ${backgroundNote ? `<p class="school-note">${escapeHtml(backgroundNote)}</p>` : ""}
+        ${extraNoteHtml || ""}
+      </div>
+    `;
+  }
+
+  function regionalCardHTML(entity) {
+    if (!entity.funding) {
+      const note =
+        entity.official_name.includes("Southwestern")
+          ? DATA.schools.funding_meta.swocc_note
+          : "A state/local/federal funding breakdown isn't available for this one.";
+      return `
+        <div class="school-card">
+          <div class="school-card-header">
+            <span class="school-card-name">${escapeHtml(entity.official_name)}</span>
+          </div>
+          <p class="school-unavailable">${escapeHtml(note)}</p>
+        </div>
+      `;
+    }
+    return `
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-card-name">${escapeHtml(entity.official_name)}</span>
+          ${entity.needs_verification ? '<span class="school-card-meta">name unverified</span>' : ""}
+        </div>
+        <p class="school-card-total">${escapeHtml(entity.note || "")}</p>
+        ${fundingBarHTML({ funding: entity.funding, multi_county: true, official_name: entity.official_name })}
+      </div>
+    `;
+  }
+
+  function schoolDrilldownMarkup(schoolDistrictKey) {
+    const isOpen = state.schoolDrilldownOpen;
+    const k12 = DATA.schools.k12_districts.find((d) => d.key === schoolDistrictKey);
+
+    let body = "";
+    if (k12) {
+      let extraNote = "";
+      if (k12.key === "central_curry" && DATA.schools.already_sourced_facts[0]) {
+        extraNote += `<p class="school-note">${escapeHtml(DATA.schools.already_sourced_facts[0].fact)}</p>`;
+      }
+      if (k12.current_news_note) {
+        extraNote += `<p class="school-note school-heads-up"><span class="school-note-label">Heads up:</span>${escapeHtml(k12.current_news_note)}</p>`;
+      }
+      body += schoolCardHTML(k12, extraNote);
+    }
+    DATA.schools.regional_education_entities.forEach((e) => {
+      body += regionalCardHTML(e);
+    });
+
+    return `
+      <div class="school-drilldown-toggle">
+        <button type="button" class="school-drilldown-btn" aria-expanded="${isOpen}">
+          ${isOpen ? "Hide" : "See where the rest of the money comes from"} &mdash; state, federal &amp; more
+        </button>
+        <div class="school-drilldown-body" ${isOpen ? "" : "hidden"}>${isOpen ? body : ""}</div>
+      </div>
+    `;
   }
 
   function setupBillControls() {
