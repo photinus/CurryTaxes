@@ -8,9 +8,13 @@ roughly 7 cents per dollar it keeps.
 **Live site:** enable GitHub Pages for this repo (see below) and it will be
 published at `https://<owner>.github.io/<repo>/`.
 
+**Maintaining this project?** See [`MAINTENANCE.md`](MAINTENANCE.md) for
+what needs refreshing and when — almost everything here is tied to
+FY2025-26 and a handful of files are tied to specific election dates.
+
 ## What this shows
 
-Two views:
+Four views:
 
 1. **Your Tax Bill** — pick one of six named areas (Port Orford/Langlois,
    Agness, Ophir/Nesika Beach, Gold Beach, Pistol River, Brookings-Harbor),
@@ -18,25 +22,48 @@ Two views:
    split into 8 plain-language groups (Schools, Fire & Emergency, County
    Government, City Government, Health, Library, Roads, Other Local
    Districts) — each expandable to the exact districts and rates behind it.
-   The Schools group has a further drill-down: the K-12 district that
-   actually serves the selected code area, plus the countywide ESD and
-   SWOCC, each with a full state/local/federal/other funding breakdown —
-   not just the property tax slice, since that's typically well under half
-   of an Oregon school district's real revenue. A further "how does
-   per-student funding work?" explainer covers Oregon's enrollment-based
-   (State School Fund) funding formula and the charter-school funding
-   transfer mechanism, including a simple illustrative slider — no
-   dollar figures, since that requires a current-year number this app
-   doesn't fetch (see the file's own accuracy note). A "Show full detail"
-   toggle reveals the full ~40-district, full-precision table for anyone
-   who wants it, and an "advanced" toggle exposes all ~45 actual code
-   areas for more precision than the six named areas.
+   - The **Schools** group drills down further: the K-12 district that
+     actually serves the selected code area, plus the countywide ESD and
+     SWOCC, each with a full state/local/federal/other funding breakdown —
+     not just the property tax slice, since that's typically well under half
+     of an Oregon school district's real revenue — plus a "how does
+     per-student funding work?" explainer covering Oregon's enrollment-based
+     (State School Fund) funding formula and the charter-school funding
+     transfer mechanism, with a simple illustrative slider (no dollar
+     figures, since that requires a current-year number this app doesn't
+     fetch).
+   - The **Health District** group drills down into what Curry Health
+     Network actually operates (the county's only hospital plus three
+     clinics) and clarifies it's a separate special district from county
+     government's public health office (state-run since 2021) — and notes
+     the district doesn't cover the whole county (only 24 of 56 code areas).
+   - The **Fire & Emergency** group has a short explainer on why rates vary
+     so much district to district (volunteer vs. paid staffing, coverage
+     differences) — general context only, since per-district specifics
+     weren't researched and the app won't guess at them from rate levels.
+   - A "Show full detail" toggle reveals the full ~40-district,
+     full-precision table for anyone who wants it, and an "advanced" toggle
+     exposes all ~45 actual code areas for more precision than the six named
+     areas.
 2. **County's Own Budget** — Curry County government's FY2025-26 proposed
    budget broken down by department/fund (Sheriff's Office, Road Fund,
-   General Fund departments, Vehicle Services, other funds). This is the
-   only piece of a tax bill that county government directly controls and
-   spends; everything else is collected by the County Assessor on behalf of
-   independent districts.
+   General Fund departments, Vehicle Services, other funds), plus a second
+   chart on where the county's non-property-tax revenue comes from (O&C
+   timber payments, federal PILT, transient lodging tax, franchise fees,
+   state-shared taxes) — property tax is the single biggest source but,
+   combined, these others add up to more than it.
+3. **Recent & Upcoming Changes** — ballot measures affecting Curry County's
+   taxing districts (currently: the Brookings-Harbor school bond that failed
+   in the May 2026 election), plus brief statewide context. The
+   fastest-moving part of the app; see `MAINTENANCE.md`.
+4. **About & Sources** — data provenance, limitations, and the full list of
+   code areas where this app's recomputed rate disagrees with the source
+   PDF's printed subtotal.
+
+A **Print Summary** button (top right) opens a condensed, one-page,
+non-interactive view of the current selection — the core breakdown, the
+plain-language one-liners, and the "7 cents to county government" headline
+stat — for anyone who won't use the interactive site itself.
 
 ## Data
 
@@ -83,7 +110,24 @@ runtime fetching, no backend). Fiscal year **2025-2026**.
   legal mechanism, not a dollar figure — except its 80%/95% statutory
   minimum transfer rates, which should be reconfirmed against ORS
   338.155(2) if Oregon amends that statute.
-- `data/app-data.json` — **generated**. Combines and reconciles all nine
+- `data/non-property-tax-revenue.json` — the county's non-tax revenue
+  sources (O&C timber payments, federal PILT, transient lodging tax,
+  franchise fees, state-shared taxes), for the "where county government's
+  other money comes from" chart. Sourced from the same FY2025-26 proposed
+  budget already used elsewhere.
+- `data/health-district-explainer.json` — what Curry Health Network
+  actually operates, for the Health District drill-down. The scope note
+  about the district not covering the whole county is recomputed in
+  `scripts/build_data.py` from the actual code-area data rather than
+  trusted as written (see the data-quality note below).
+- `data/upcoming-changes.json` — ballot measures affecting Curry County's
+  taxing districts, for the Recent & Upcoming Changes tab. The
+  fastest-moving file in the project — see `MAINTENANCE.md`.
+- `data/fire-district-context.json` — general (not per-district) context
+  on why fire district rates vary, for a short explainer on the Fire &
+  Emergency group. Deliberately doesn't claim per-district staffing/service
+  detail that wasn't researched.
+- `data/app-data.json` — **generated**. Combines and reconciles all thirteen
   files above into the shape the app consumes, and validates that every
   district category has a display group, every glossary term has a
   stable lookup key, and every code area matches exactly one K-12 school
@@ -151,10 +195,20 @@ two together would make a district's normal annual state funding look far
 larger (and far less tied to enrollment) than it really is in a year with a
 bond payout. Central Curry SD 1 has a $4,000,000 one this year (lining up
 with its 2023 voter-approved bond); Port Orford-Langlois has a smaller
-$40,000 one; Brookings-Harbor and South Coast ESD have none (Brookings-
-Harbor's own bond measure hasn't passed yet — see its "heads up" note).
-Shown as a distinctly colored, distinctly labeled segment in the funding
-bar rather than merged into "State".
+$40,000 one; Brookings-Harbor and South Coast ESD have none this year
+(Brookings-Harbor's own bond measure was rejected by voters in May 2026 —
+see the Recent & Upcoming Changes tab). Shown as a distinctly colored,
+distinctly labeled segment in the funding bar rather than merged into
+"State".
+
+**A few source files contain notes written for whoever builds this data,
+not for the app's readers** — e.g. one said a fact "should be
+double-checked" against another file, another ended with "see 'known_gaps'
+below" (a reference to that JSON file's own sibling key, meaningless
+on-screen). `scripts/build_data.py` documents each such case where it
+overrides the raw field with clean reader-facing copy instead of passing it
+through verbatim — worth checking new source files for the same pattern
+before trusting a field wholesale.
 
 ### Updating for a new fiscal year
 

@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "purpose": "Surfaces the non-property-tax revenue sources already present in county-budget-fy2025-26.json (Non-Departmental section) but not yet explained in the app. Most residents assume county government runs entirely on property tax -- it doesn't.",
+    "source": "Same FY2025-26 proposed budget PDF already used for county-budget-fy2025-26.json, Non-Departmental revenue lines.",
+    "created": "2026-08-22"
+  },
+  "headline": "Property tax is Curry County government's single biggest revenue source, but it's well under half the story -- federal timber payments, tourism tax, and several smaller fees and shared state taxes round out the rest.",
+  "revenue_sources": [
+    {
+      "name": "Property tax (County General)",
+      "fy2025_26_amount": 2008500,
+      "plain_explanation": "The county's own permanent tax rate, already covered elsewhere in this app -- about 7 cents of every property tax dollar residents pay countywide."
+    },
+    {
+      "name": "O&C Timber Payments",
+      "fy2025_26_amount": 944000,
+      "plain_explanation": "A federal payment tied to \"O&C lands\" -- former Oregon & California Railroad land grant timberland that the federal government now manages and shares timber-harvest-related revenue from with the counties it sits in. This is a distinctly Oregon-coast-counties story, not something most U.S. counties receive.",
+      "note_worth_flagging": "The county's FY2025-26 budget message states Curry County received NO Secure Rural Schools (SRS) funds this year and instead elected to take O&C timber payments -- SRS is a related but separate federal safety-net program for timber counties, and its funding has been uncertain/lapsing in recent years. This is a genuine budget risk worth explaining: a meaningful chunk of county revenue depends on federal decisions Curry County doesn't control."
+    },
+    {
+      "name": "Federal Payment in Lieu of Taxes (PILT)",
+      "fy2025_26_amount": 900000,
+      "plain_explanation": "A federal payment that compensates counties for having large amounts of tax-exempt federal land within their borders (national forests, BLM land, etc.) -- land the county can't collect property tax on, so the federal government sends a substitute payment instead."
+    },
+    {
+      "name": "Transient Lodging Tax (TLT)",
+      "fy2025_26_amount": 535998,
+      "plain_explanation": "A tax on hotel, campground, and short-term rental stays -- paid mostly by visitors, not residents. In early 2025 the Board of Commissioners raised the TLT rate; the increase is estimated to add about $700,000 to the General Fund and about $1.6 million specifically earmarked for tourism and economic development uses (by law, a portion of lodging tax revenue has to go toward tourism promotion, not general spending).",
+      "note_worth_flagging": "This is a good 'visitors help pay for county services too' fact for a tourism-dependent coastal county."
+    },
+    {
+      "name": "Electric Co-Op Franchise Fees",
+      "fy2025_26_amount": 425000,
+      "plain_explanation": "A fee the county charges the local electric cooperative for use of public rights-of-way."
+    },
+    {
+      "name": "State-Shared Marijuana Tax",
+      "fy2025_26_amount": 150000,
+      "plain_explanation": "Curry County's share of Oregon's statewide marijuana tax, distributed back to counties and cities."
+    },
+    {
+      "name": "State-Shared Alcohol Tax",
+      "fy2025_26_amount": 125000,
+      "plain_explanation": "Curry County's share of Oregon's statewide alcohol tax revenue."
+    },
+    {
+      "name": "Cable Franchise Fees",
+      "fy2025_26_amount": 125000,
+      "plain_explanation": "A fee charged to cable providers for use of public infrastructure."
+    },
+    {
+      "name": "State-Shared Tobacco Tax",
+      "fy2025_26_amount": 9500,
+      "plain_explanation": "Curry County's share of Oregon's statewide tobacco tax."
+    }
+  ],
+  "app_display_guidance": {
+    "suggested_placement": "A distinct section or toggle near the 'County Government' category -- e.g. 'Where county government's OTHER money comes from' -- since this is genuinely surprising to most residents and a strong complement to the existing 'only 7 cents of your tax dollar' framing.",
+    "suggested_visual": "A simple bar or donut chart of these revenue sources, separate from the property-tax-by-district chart already in the app, since mixing the two would conflate 'what residents pay in property tax' with 'everything the county collects from all sources.'",
+    "good_pull_quote": "Curry County received zero federal Secure Rural Schools (SRS) funding this year -- a reminder that timber-dependent Oregon coastal counties still depend heavily on federal decisions made far from Gold Beach."
+  }
+}
